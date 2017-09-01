@@ -13,8 +13,7 @@
 	<script src="resources/js/jquery.js"></script>
 	<script src="resources/js/jquery.mobile-1.4.5.js"></script>
 	<!-- 우편번호(다음) -->
-	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-	
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>	
 	<style>
 		th{
 			background-color:#ddd;
