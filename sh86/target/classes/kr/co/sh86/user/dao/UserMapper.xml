@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDao">
+
+<!-- DB주소정리 위한 주소 조회(널제외, 공백인경우는 로직에서 분기) -->
+<select id="selectAddAll" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id,
+		user_address
+	FROM
+		sh86.sh_user
+	WHERE
+		user_address IS NOT NULL
+</select>
+
+<!-- 회원정보 도이름, 시이름 수정 -->
+<update id="updateDoAndCity" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE sh86.sh_user
+	SET 
+		user_do = #{userDo},
+		user_cityname = #{userCityName}
+	WHERE
+		user_id = #{userId}
+</update>
+
+<!-- 모든회원정보조회 -->
+<select id="selectAllUser" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id,
+		user_name,
+		user_cityname,
+		user_job,
+		user_hp,
+		user_img_pass,
+		user_img_old,
+		user_img_new
+	FROM
+		SH86.SH_USER
+</select>
+
+<!-- 모든공지사항 조회 -->
+<select id="selectAllNotice" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no_num,
+		no_subject,
+		no_writer,
+		no_regdate,
+		no_type,
+		no_contentnum,
+		user_id,
+		no_contents
+	FROM
+		SH86.SH_NOTICE
+</select>
+
+<!-- 부의공지내용 조회 -->
+<select id="selectNoticeContent" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*,
+		co.*
+	FROM
+		SH86.SH_CONTENT co,
+		SH86.SH_NOTICE no
+	WHERE
+		co.co_num = no.no_contentnum
+	AND
+		co.co_num = #{noContentNum}
+	AND 
+		no.no_type = 1
+</select>
+
+<!-- 행사공지내용 조회 -->
+<select id="selectNoticeEvent" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*,
+		ev.*
+	FROM
+		SH86.SH_EVENT ev,
+		SH86.SH_NOTICE no
+	WHERE
+		ev.co_num = no.no_contentnum
+	AND 
+		ev.co_num = #{noContentNum}
+	AND 
+		no.no_type = 2
+</select>
+
+<!-- 행사공지내용 조회 -->
+<select id="selectNoticeEventForJoin" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*,
+		ev.*
+	FROM
+		SH86.SH_EVENT ev,
+		SH86.SH_NOTICE no
+	WHERE
+		ev.co_num = no.no_contentnum
+	AND
+		ev.no_num = no.no_num
+	AND
+		no.no_num = #{noNum}
+	AND 
+		no.no_type = 2
+</select>
+
+<!--신보  -->
+<select id="selectSinboRes" parameterType="int" resultType="kr.co.sh86.user.domain.SinboDb">
+	SELECT
+		mem_id
+	FROM 
+		kis_2017.jjac_survey004
+</select>
+
+<select id="selectSinbo" parameterType="int" resultType="kr.co.sh86.user.domain.Sinbo">
+	SELECT 
+		sb_num,
+		sb_company,
+		sb_dateofest,
+		sb_ceo,
+		sb_rrn,
+		sb_add,
+		sb_branch,
+		sb_josaja,
+		sb_hp,
+		sb_upstream
+	FROM
+		ADMIN.SINBO
+	WHERE
+		sb_num = #{memId}
+</select>
+
+<update id="updateSinbo" parameterType="kr.co.sh86.user.domain.Sinbo">
+	UPDATE kis_2017.jjac_survey004
+	SET
+		company = #{sbCompany},
+		dateofest = #{sbdateOfEst},
+		ceo = #{sbCeo},
+		rrn = #{sbRrn},
+		address = #{sbAdd},
+		branch = #{sbBranch},
+		josaja = #{sbJosaja},
+		hp = #{sbHp},
+		job = #{sbUpstream}
+	WHERE
+		mem_id = #{sbNum}
+</update>
+
+<!-- 문자 - 수신자 조회 -->
+<select id="selectUserForMms" parameterType="Map" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		USER_ID,
+		USER_NAME,
+		USER_HP
+	FROM
+		SH86.SH_USER
+	<trim prefix="WHERE" prefixOverrides="AND">
+		<if test="userName neq null and !userName.equals('')">
+			AND USER_NAME LIKE '%'||#{userName}||'%'
+		</if>
+		<if test="userHp neq null and !userHp.equals('')">
+			AND USER_HP LIKE '%'||#{userHp}||'%'
+		</if>
+		<if test="userAddress neq null and !userAddress.equals('')">
+			AND USER_ADDRESS LIKE '%'||#{userAddress}||'%'
+		</if>
+		AND USER_HP IS NOT NULL
+	</trim>		
+</select>
+
+<!-- 문자 - 수신자 전체조회 -->
+<select id="selectAllUserForMms" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		USER_ID,
+		USER_NAME,
+		USER_HP
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_HP IS NOT NULL		
+</select>
+
+<!--문자발송  -->
+<insert id="sendMmsToSelected" parameterType="kr.co.sh86.user.domain.Mms">
+	INSERT INTO XROSHOT.SDK_MMS_SEND(
+		msg_id, 
+		user_id, 
+		schedule_type, 
+		subject, 
+		now_date, 
+		send_date, 
+		callback, 
+		dest_count, 
+		dest_info, 
+		mms_msg)
+	VALUES(
+		XROSHOT.SDK_MMS_SEQ.NEXTVAL,
+		'mystat03',
+		#{scheduleType},
+		#{subject},
+		TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+		TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+		#{callback},
+		#{destCount},
+		#{destInfo},
+		#{mmsMsg})
+</insert>
+
+<!-- 소식 > 공지사항(부의) 등록 전 작성자 조회 -->
+<select id="selectWriter" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT 
+		user_id,
+		user_name
+	FROM 
+		SH86.SH_USER
+	WHERE
+		user_hp = #{writerHp}
+</select>
+
+<!-- 소식 > 공지사항(부의) 등록 -->
+<insert id="insertNotice" parameterType="kr.co.sh86.user.domain.Notice">
+	<selectKey keyProperty="noNum" resultType="int" order="BEFORE">
+		select notice_seq.nextval FROM DUAL
+	</selectKey>
+	INSERT INTO SH86.SH_NOTICE(
+		no_num,
+		no_subject,
+		no_writer,
+		no_regdate,
+		no_type,
+		user_id
+		<if test="noType eq 3">
+			,no_contents
+		</if>
+		)
+	VALUES(
+		#{noNum},
+		#{noSubject},
+		#{noWriter},
+		to_char(sysdate,'YYYY-MM-DD'),
+		#{noType},
+		#{userId}
+		<if test="noType eq 3">
+			,#{noContents}
+		</if>
+		)	
+</insert>
+
+<!-- 소식 > 공지사항(부의) 컨텐트 등록 -->
+<insert id="insertContent" parameterType="kr.co.sh86.user.domain.Content">
+	<selectKey keyProperty="coNum" resultType="int" order="BEFORE">
+		select content_seq.nextval FROM DUAL
+	</selectKey>
+	INSERT INTO SH86.SH_CONTENT(
+		co_num,
+		co_place,
+		co_handdate,
+		co_content,
+		co_payname,
+		co_payaccount,
+		no_num)
+	VALUES(
+		#{coNum},
+		#{coPlace},
+		#{coHanddate},
+		#{coContent},
+		#{coPayName},
+		#{coPayAccount},
+		#{noNum})
+</insert>
+
+<!--소식 > 공지사항(부의) > 컨텐트등록 후 pk값 공지테이블에 수정처리 -->
+<update id="updateNoticeContentNum" parameterType="kr.co.sh86.user.domain.Notice">
+	UPDATE SH86.SH_NOTICE
+	SET
+		no_contentnum = #{noContentNum}
+	WHERE
+		no_num = #{noNum}
+	
+</update>
+	
+<!-- 소식 > 공지사항(행사) 행사 등록 -->
+<insert id="insertEvent" parameterType="kr.co.sh86.user.domain.Event">
+	<selectKey keyProperty="coNum" resultType="int" order="BEFORE">
+		select event_seq.nextval FROM DUAL
+	</selectKey>
+	INSERT INTO SH86.SH_EVENT(
+		co_num,
+		co_place,
+		co_eventdate,
+		co_content,
+		co_money,
+		co_payname,
+		co_payaccount,
+		no_num)
+	VALUES(
+		#{coNum},
+		#{coPlace},
+		#{coEventDate},
+		#{coContent},
+		#{coMoney},
+		#{coPayName},
+		#{coPayAccount},
+		#{noNum})
+</insert>
+
+<!-- 공지 > 공지목록 > 참여/불참체크 -->
+<insert id="insertJoin" parameterType="kr.co.sh86.user.domain.Join">
+	INSERT INTO SH86.SH_JOIN(
+		jo_num,
+		user_id,
+		<if test="joDate != null and joDate != ''">
+			jo_date,
+		</if>
+		jo_joinshape,
+		<if test="joMoney !=null and joMoney != ''">
+			jo_money,
+		</if>
+		jo_regdate,
+		<if test="joPayType !=null and joPayType != ''">
+			jo_paytype,
+		</if>
+		no_num)
+	VALUES(
+		join_seq.nextval,
+		#{userId},
+		<if test="joDate != null and joDate != ''">
+			#{joDate},
+		</if>
+		#{joJoinShape},
+		<if test="joMoney !=null and joMoney != ''">
+			#{joMoney},
+		</if>
+		to_char(sysdate,'YYYY-MM-DD'),
+		<if test="joPayType !=null and joPayType != ''">
+			#{joPayType},
+		</if>
+		#{noNum})	
+</insert>
+
+</mapper>
