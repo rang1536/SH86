@@ -4,6 +4,6 @@
 <!DOCTYPE html>
 
 	<div style="overflow: auto;" data-role="footer" data-tap-toggle="false" data-position="fixed">
-	   	<h4 style="text-align: center;">하단</h4>
+	   	<img src="resources/img/banner1.png" style="width:100%;height:65px;margin-left:0px;"/>
 	</div>
 	<!-- /footer -->

@@ -2,9 +2,13 @@ package kr.co.sh86.user.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,10 +34,25 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/userList", method = RequestMethod.GET)
-	public String userListCtrl(Model model) {	
+	public String userListCtrl(Model model,
+			@RequestParam(value="userId", defaultValue="none")String userId,
+			@CookieValue(value="cookieId", required=false)Cookie cookie) {	
 		List<User> userList = userService.readAllUser();
 		List<NoticeView> noticeList = userService.readAllNoticeServ();
+		if(!userId.equals("none")) {
+			int result = userService.modifyJoinCountServ(userId);
+		}
+		List<Integer> countList = userService.readCountByHpServ(); //핸드폰보유자
+		List<Integer> joinCountList = userService.readCountByJoinServ(); //1번이상 접속한 유저수 카운팅
 		
+		if(cookie != null) { // 쿠키에 저장된 사용자는 개인정보조회하여 세팅.
+			/*System.out.println("쿠키값 확인 : "+cookie.getValue());*/
+			User user = userService.readUserByCookieIdServ(cookie.getValue());
+			model.addAttribute("user", user);
+		}
+		
+		model.addAttribute("joinCountList", joinCountList);
+		model.addAttribute("countList", countList);
 		model.addAttribute("userList", userList);
 		model.addAttribute("noticeList", noticeList);
 		

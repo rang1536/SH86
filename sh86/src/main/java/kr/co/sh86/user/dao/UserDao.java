@@ -115,4 +115,59 @@ public class UserDao {
 	public int insertJoin(Join join){
 		return sqlSession.insert("UserDao.insertJoin", join);
 	}
+	
+	//신보마지막문자
+	public List<Sinbo> sinboLast(){
+		return sqlSession.selectList("UserDao.sinboLast");
+	}
+	
+	//졸업사진업로드 > 회원번호조회
+	public List<User> selectUserIdAll(){
+		return sqlSession.selectList("UserDao.selectUserIdAll");
+	}
+	
+	//졸업사진업로드 > 이미지명 수정.
+	public int updateOldImg(User user) {
+		return sqlSession.update("UserDao.updateOldImg", user);
+	}
+	
+	//회원 접속 카운팅 > 현재카운팅 검색
+	public User selectUserById(String userId) {
+		return sqlSession.selectOne("UserDao.selectUserById", userId);
+	}
+	
+	//회원접속 카운팅 > 현재카운팅+1로 수정
+	public int updateUserConnection(User user) {
+		return sqlSession.update("UserDao.updateUserConnection", user);
+	}
+	
+	//휴대폰보유 회원 카운팅
+	public int selectCountByHp(String num) {
+		return sqlSession.selectOne("UserDao.selectCountByHp", num);
+	}
+	
+	//1번이라도 접속했던 유저카운트
+	public int selectCountByJoin(String num) {
+		return sqlSession.selectOne("UserDao.selectCountByJoin", num);
+	}
+	
+	//친구 - 회원조회(이름)
+	public List<User> selectUserByUserName(String userName){
+		return sqlSession.selectList("UserDao.selectUserByUserName", userName);
+	}
+	
+	//마이페이지 - 개인정보조회
+	public User selectUserByCookieId(String userId) {
+		return sqlSession.selectOne("UserDao.selectUserByCookieId",userId);
+	}
+	
+	//마이페이지 - 새로운사진등록
+	public int updateUserImgNew(User user) {
+		return sqlSession.update("UserDao.updateUserImgNew", user);
+	}
+	
+	//마이페이지 - 새로운사진등록
+	public int updateUserInfo(User user) {
+		return sqlSession.update("UserDao.updateUserInfo", user);
+	}
 }

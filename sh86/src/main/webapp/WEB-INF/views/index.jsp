@@ -6,19 +6,82 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="format-detection" content="telephone=no">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>신흥고등학교 86기 동문회</title>
 	
 	<link rel="stylesheet" href="resources/js/jquery.mobile-1.4.5.css">
 	<script src="resources/js/jquery.js"></script>
 	<script src="resources/js/jquery.mobile-1.4.5.js"></script>
+	
 	<!-- 우편번호(다음) -->
-	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>	
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+		
 	<style>
 		th{
 			background-color:#ddd;
-			font-weight:bold;	
+			font-weight:bold;
+			width:20%;	
+		} 
+		
+		.img-round{
+			border:3px solid #CEF279;
+			width:80%;
+			height:110px;
+			border-radius: 70px;
+			-moz-border-radius : 70px;
+			-khtml-border-radius : 70px;
+			-webkit-border-radius : 70px;
+			
 		}
+		
+		.fileInputDiv {
+		    position:relative;
+		    width:100%;
+		    height:40px;
+		    overflow:hidden;
+		}
+		.fileInputImgBtn {
+		    padding:0 0 0 5px;
+		    width:35px;
+		    height:35px;
+		    float:right;
+		    border-radius: 70px;
+			-moz-border-radius : 70px;
+			-khtml-border-radius : 70px;
+			-webkit-border-radius : 70px;
+		}
+		.fileInputHidden {
+		    font-size:29px;
+		    position:absolute;
+		    right:0px;
+		    top:0px;
+		    opacity:0;
+		    filter: alpha(opacity=0);
+		    -ms-filter: alpha(opacity=0);
+		    cursor:pointer;
+		}
+
+		.filePreviewDiv {
+		    position:relative;
+		    width:100%;
+		    height:109px;
+		    overflow:hidden;
+		}
+		.fileView {
+		    padding:0 0 0 5px;
+		    width:80%;
+		    height:110px;
+		    border-radius: 70px;
+			-moz-border-radius : 70px;
+			-khtml-border-radius : 70px;
+			-webkit-border-radius : 70px;
+		}
+		
+		.inputNone{
+			border:0px;
+		}
+
 	</style>
 	<script>
 		//문자 - 회원검색
@@ -568,6 +631,94 @@
             $("#imgInp").change(function(){
                 //alert(this.value); //선택한 이미지 경로 표시
                 readURL(this);
+                console.log($('#imgInp').val())
+                $("#blah").css('display','');
+            });
+            
+            function readURL2(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+                    reader.onload = function (e) {
+                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        $('#filePreviewImg').attr('src', e.target.result);
+                        //이미지 Tag의 SRC속성에 읽어들인 File내용을 지정
+                        //(아래 코드에서 읽어들인 dataURL형식)
+                    }                   
+                    reader.readAsDataURL(input.files[0]);
+                    //File내용을 읽어 dataURL형식의 문자열로 저장
+                }
+            }//readURL()--
+   
+            //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
+            $("#userImgNew").change(function(){
+                //alert(this.value); //선택한 이미지 경로 표시
+                readURL2(this);
+                console.log($('#userImgNew').val());
+                
+                $("#filePreviewImg").css('display','');
+            });
+            
+            function readURL3(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+                    reader.onload = function (e) {
+                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        $('#filePreviewImg2').attr('src', e.target.result);
+                        //이미지 Tag의 SRC속성에 읽어들인 File내용을 지정
+                        //(아래 코드에서 읽어들인 dataURL형식)
+                    }                   
+                    reader.readAsDataURL(input.files[0]);
+                    //File내용을 읽어 dataURL형식의 문자열로 저장
+                }
+            }//readURL()--
+   
+            //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
+            $("#userImgNew2").change(function(){
+                //alert(this.value); //선택한 이미지 경로 표시
+                readURL3(this);
+               	$("#filePreviewImg2").css('display','');
+            });
+            
+            function readURL4(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+                    reader.onload = function (e) {
+                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        $('#filePreviewImg3').attr('src', e.target.result);
+                        //이미지 Tag의 SRC속성에 읽어들인 File내용을 지정
+                        //(아래 코드에서 읽어들인 dataURL형식)
+                    }                   
+                    reader.readAsDataURL(input.files[0]);
+                    //File내용을 읽어 dataURL형식의 문자열로 저장
+                }
+            }//readURL()--
+   
+            //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
+            $("#userImgNew3").change(function(){
+                //alert(this.value); //선택한 이미지 경로 표시
+                readURL4(this);
+                $("#filePreviewImg3").css('display','');
+            });
+            
+            function readURL5(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+                    reader.onload = function (e) {
+                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        $('#filePreviewImg4').attr('src', e.target.result);
+                        //이미지 Tag의 SRC속성에 읽어들인 File내용을 지정
+                        //(아래 코드에서 읽어들인 dataURL형식)
+                    }                   
+                    reader.readAsDataURL(input.files[0]);
+                    //File내용을 읽어 dataURL형식의 문자열로 저장
+                }
+            }//readURL()--
+   
+            //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
+            $("#userImgNew4").change(function(){
+                //alert(this.value); //선택한 이미지 경로 표시
+                readURL5(this);
+                $("#filePreviewImg4").css('display','');
             });
          });
 
@@ -591,49 +742,205 @@
 	        });
 		});
 		
+		function userModify(){
+			var formData = new FormData($("#userModifyForm")[0]);
+			console.log(formData);
+			
+			var userHp = $('#userHpModify').val();
+			var userAddress = $('#userAddressModify').val();
+			
+			console.log(userHp,userAddress);
+			
+			/* var formData = new FormData(); 
+			formData.append("userHp", $('#userHpModify').val()); 
+			formData.append("userEmail", $('#userEmailModify').val()); 
+			formData.append("userAddress", $('#userAddressModify').val()); 
+			formData.append("file", $("#userImgNew")[0].files[0]); */
+
+	        $.ajax({
+	            type : 'post',
+	            url : 'userModify',
+	            data : formData ,
+	            processData : false,
+	            contentType : false,
+	            success : function(data) {
+	            	if(data.check){
+	            		//파일업로드완료
+	            	}else{
+	            		alert("파일 업로드에 실패하였습니다.");
+	            	}
+	                
+	            },
+	            error : function(error) {
+	                alert("파일 업로드에 실패하였습니다.");
+	                console.log(error);
+	                console.log(error.status);
+	            }
+	        });
+			
+			$.ajax({
+				type : 'post',
+				url : 'userModifyText',
+				data : {'userHp':userHp,'userAddress':userAddress} ,
+				dataType: 'json',
+				success:function(data){
+					if(data.check) {
+						alert('수정처리가 완료되었습니다');
+						console.log("최종입력체크 : "+data.check);
+						setTimeout(function(){
+							location.href='localhost:8080/sh86/';  //로컬
+							/* location.href='http://sh86.kr/'; */  //호스팅
+							submit();
+						},3000);
+						
+					}
+				}
+			});
+		}
+		function searchUser(){
+			var userName = $('#searchUserByName').val();
+			var sessionId = '${sessionId}';
+			console.log("세션값 확인 : "+sessionId);
+			
+			if(userName != null && userName != ''){
+				$.ajax({
+					url : 'searchUserByName',
+					type : 'post',
+					data : {'userName':userName},
+					dataType : 'json',
+					success:function(data){
+						$('#searchUserListDiv').empty();
+						
+						var html = '';
+						html += '<div>';
+						html += '<button type="button" style="background-color:#B7F0B1;width:100%;font-weight:bold;">검색결과 '+data.length+' 명</button>';
+						html += '<table style="width:100%;">'
+							
+						$.each(data, function(i, result){
+							html += '<tr>';
+							html += '<td>';
+							if(result.userImgOld != null && result.userImgOld != ''){
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:40px;height:40px;margin-top:10px;">'
+							}else{
+								html += '<img src="resources/img/ready.jpg" style="width:40px;height:40px;margin-top:10px;">'
+							}
+							html += '</td><td>'
+							html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
+							if(result.userHp != null && result.userHp != ''){
+								html += result.userHp;
+							}
+							html += '</td><td style="text-align:right;">';
+							if(sessionId == result.userId){
+								html += '<a href="#page9"><img src="resources/img/info.jpg" style="width:43px;height:43px;"/></a>'
+							}
+							html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						});
+						html += '</table>';
+						html += '</div>';
+						$('#searchUserListDiv').html(html);
+					}
+					
+				});
+			}else{
+				alert('검색할 이름을 입력하세요!');
+				$('searchUserByName').focus();
+				return;
+			}
+		}
+		
+		function formClose(){
+			$('#userSearchForm').slideUp(400);
+			$('#userSearchFormOpen').css('display','');
+		}
+		
+		function formOpen(){
+			$('#userSearchFormOpen').css('display','none');
+			$('#userSearchForm').slideDown(400);
+		}
+		
+		function openWriteForm(){
+			$('#writeForm').css('display','');
+		}
 		</script>
 		
 </head>
 <body>
 	<section id="page1" data-role="page">
-	    <header data-role="header" style="background-color:#000000;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png"/>
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="user">친구</a></li>
-	                <li><a href="#page2" data-icon="camera" data-transition="none">포토</a></li>
-	                <li><a href="#page3" data-icon="mail" data-transition="none">문자</a></li>
-	                <li><a href="#page4" data-icon="audio" data-transition="none">소식</a></li>
+	                <li><a href="#" class="ui-btn-active ui-state-persist">친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none">공지</a></li>
+	                <li><a href="#page8" data-transition="none">일상</a></li>
+	                <li><a href="#page7" data-transition="none">관리</a></li>
 	            </ul>
 	        </div><!-- /navbar -->
 	    </header>                   
 	    
-	    <div class="content" data-role="content">
+	    <div class="content" data-role="content" style="margin-top:25px;">
 	    	<div data-role="collapsible-set" data-inset="false">
 	
-				<h2 style="text-align:center;">친구목록</h2>
-				<!-- <h3 style="background-color:blue;color:white;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;반&nbsp;&nbsp;&nbsp;l&nbsp;&nbsp;총원&nbsp;&nbsp;&nbsp;l&nbsp;&nbsp;등록핸드폰번호수&nbsp;&nbsp;&nbsp;l&nbsp;&nbsp;사용&nbsp;&nbsp;&nbsp;</h3> -->
+				<!-- <h2 style="text-align:center;">친구목록</h2> -->
+				<div style="width:100%;" id="userSearchForm">
+					<input type="text" name="searchUserByName" id="searchUserByName" placeholder="검색할 이름을 입력하세요"/>
+					<button type="button" onclick="formClose();" data-icon="arrow-u" style="width:30%;float:right;background-color:#6CC0FF;color:white;">창닫기</button>
+					<button type="button" onclick="searchUser();" data-icon="search" style="width:30%;float:right;background-color:#B3D26C;">검색</button><br/><br/><br/><br/>
+				</div>
+				<div id="userSearchFormOpen" style="display:none;">
+					<button type="button" onclick="formOpen();" data-icon="arrow-d" style="background-color:#489FAE;color:white;">검색 폼 열기</button>
+				</div>
+				
+				<div id="searchUserListDiv">
+				
+				</div>
 				<div data-role="collapsible">
-					<h3>1반(웹사용 30명 / 60명, 핸드폰번호등록수 :40명)</h3>
+					<h3>1반&nbsp;총원 58(핸드폰등록 ${countList.get(0)}명중 ${joinCountList.get(0)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 1 }">
-								<li class="one" data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li class="one" data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li class="one" data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li class="one" data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/1/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
+										
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
 											<h2>${userList.userName }</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
 										</c:if>	
-										<h3>3학년 1반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -643,26 +950,49 @@
 				
 				<!-- 2 -->
 				<div data-role="collapsible">
-					<h3>2반</h3>
+					<h3>2반&nbsp;총원 54(핸드폰등록 ${countList.get(1)}명중 ${joinCountList.get(1)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 2 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
+										
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/2/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-										<h3>3학년 2반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
+										
 									</a>
 								</li>
 							</c:if>
@@ -672,26 +1002,48 @@
 				
 				<!-- 3 -->
 				<div data-role="collapsible">
-					<h3>3반</h3>
+					<h3>3반&nbsp;총원 55(핸드폰등록 ${countList.get(2)}명중 ${joinCountList.get(2)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 3 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/3/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-										<h3>3학년 3반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
+										
 									</a>
 								</li>
 							</c:if>
@@ -701,26 +1053,47 @@
 				
 				<!-- 4 -->
 				<div data-role="collapsible">
-					<h3>4반</h3>
+					<h3>4반&nbsp;총원 57(핸드폰등록 ${countList.get(3)}명중 ${joinCountList.get(3)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 4 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/4/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-										<h3>3학년 4반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -730,26 +1103,47 @@
 				
 				<!-- 5 -->
 				<div data-role="collapsible">
-					<h3>5반</h3>
+					<h3>5반&nbsp;총원 56(핸드폰등록 ${countList.get(4)}명중 ${joinCountList.get(4)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 5 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/5/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-										<h3>3학년 5반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -759,26 +1153,47 @@
 				
 				<!-- 6 -->
 				<div data-role="collapsible">
-					<h3>6반</h3>
+					<h3>6반&nbsp;총원 60(핸드폰등록 ${countList.get(5)}명중 ${joinCountList.get(5)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 6 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/6/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-											<h3>3학년 6반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -788,26 +1203,47 @@
 				
 				<!-- 7 -->
 				<div data-role="collapsible">
-					<h3>7반</h3>
+					<h3>7반&nbsp;총원 57(핸드폰등록 ${countList.get(6)}명중 ${joinCountList.get(6)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 7 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/7/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-											<h3>3학년 7반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -817,26 +1253,47 @@
 				
 				<!-- 8 -->
 				<div data-role="collapsible">
-					<h3>8반</h3>
+					<h3>8반&nbsp;총원 58(핸드폰등록 ${countList.get(7)}명중 ${joinCountList.get(7)}명사용)</h3>
 					<ul data-role="listview">
 						<c:forEach var="userList" items="${userList}">
 							<c:if test="${userList.userId.toString().substring(0,1) eq 8 }">
-								<li data-icon="phone">
-									<input type="hidden" id="userId" value="${userList.userId }"/>
-									<a href="javascript:void(0)" id="detailBtn">
+								<c:choose>
+									<c:when test="${userList.userId eq sessionId }">
+										<li data-icon="edit">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#page8" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
+										<li data-icon="phone">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									</c:when>
+									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
+										<li data-icon="lock">
+											<input type="hidden" id="userId" value="${userList.userId }"/>
+											<a href="#" id="detailBtn">
+									</c:when>
+								</c:choose>
 										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
+												<img src="resources/files/8/${userList.userImgOld }" style="width:80px;height:80px;"/>
+											</c:if>
+											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
+												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
+											</c:if>
 										</c:if>
 										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
 											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
 										</c:if>
-										<c:if test="${userList.userCityName eq null or userList.userCityName eq ''}">
-											<h2>${userList.userName }[--]</h2>
-										</c:if>
-										<c:if test="${userList.userCityName ne null and userList.userCityName ne ''}">
-											<h2>${userList.userName }[${userList.userCityName }]</h2>
+										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
+											<h2>${userList.userName }</h2>
 										</c:if>	
-											<h3>3학년 8반</h3>
+										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
+											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
+										</c:if>	
+										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
+											<h2>${userList.userHp }</h2>
+										</c:if>
 									</a>
 								</li>
 							</c:if>
@@ -850,39 +1307,73 @@
 
 	</section>
 	
+	<!-- 포토 -->
 	<section id="page2" data-role="page">
-	    <header data-role="header" style="background-color:#000000;"><img src="resources/img/logo.png"/>
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#page1" data-icon="user" data-transition="none">친구</a></li>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="camera">포토</a></li>
-	                <li><a href="#page3" data-icon="mail" data-transition="none">문자</a></li>
-	                <li><a href="#page4" data-icon="audio" data-transition="none">소식</a></li>
+	                <li><a href="#page1" data-transition="none">친구</a></li>
+	                <li><a href="#" class="ui-btn-active ui-state-persist" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none">공지</a></li>
+	                <li><a href="#page8" data-transition="none">일상</a></li>
+	                <li><a href="#page7" data-transition="none">관리</a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;">
-	    	<form id="photoForm" enctype="multipart/form-data" method="post">
-		        <input type="file" name="photo" id="imgInp" accept="image/*" multiple="multiple">
-		        <div style="width:100%;height:70%">
-		        	<img id="blah" src="#" style="width:100%;height:100%" />
-		        </div>
-		        <a href="#" data-role="button" id="imgAddBtn">등록하기</a>
-			</form>
-
-			
-	       
+	    <div class="content" data-role="content" style="height:70%;margin-top:25px;">
+		    <!-- 사진등록 가기 버튼 
+		    <div>
+		    	<a href="#page6" data-role="button" data-icon="plus" style="width:25%" data-transition="none">사진등록</a>
+		    </div> -->
+		    
+		    <div data-role="collapsible-set" data-inset="false">
+				<div data-role="collapsible">
+					<h3>총동문회 무주 체육대회 (2017.07)</h3>
+					<ul data-role="listview">
+						<li class="one" data-icon="edit">
+							<a>
+							
+							</a>
+						</li>
+					</ul>
+				</div> 
+				<div data-role="collapsible">
+					<h3>30주년 행사 (2017.07)</h3>
+					<ul data-role="listview">
+						<li class="one" data-icon="edit">
+							<a>
+							
+							</a>
+						</li>
+					</ul>
+				</div> 	
+				<div data-role="collapsible">
+					<h3>고등학교 시절 </h3>
+					<ul data-role="listview">
+						<li class="one" data-icon="edit">
+							<a>
+							
+							</a>
+						</li>
+					</ul>
+				</div> 	
+			</div>
 	    </div>
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
 
 	</section>
+
 	
-	
+	<!-- 문자 -->
 	<section id="page3" data-role="page">
-	    <header data-role="header" style="background-color:#000000;"><img src="resources/img/logo.png"/>
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
 	    	<div data-role="navbar">
 	            <ul>
 	                <li><a href="#page1" data-icon="user" data-transition="none">친구</a></li>
@@ -890,11 +1381,12 @@
 	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="mail">문자</a></li>
 	                <li><a href="#page4" data-icon="audio" data-transition="none">소식</a></li>
 	            </ul>
+	           
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content">
+	    <div class="content" data-role="content" style="margin-top:50px;">
         	
         	<label for="sendTel">발송번호 : </label>
         	<input name="sendTel" id="sendTel" type="tel" placeholder="발송자 휴대폰번호 입력">
@@ -936,26 +1428,31 @@
 
 	</section>
 	
+	<!-- 공지 > 목록-->
 	<section id="page4" data-role="page">
-	    <header data-role="header" style="background-color:#000000;"><img src="resources/img/logo.png"/>
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
 	    	<div data-role="navbar">
-	            <ul>
-	                <li><a href="#page1" data-icon="user" data-transition="none">친구</a></li>
-	                <li><a href="#page2" data-icon="camera" data-transition="none">포토</a></li>
-	                <li><a href="#page3" data-icon="mail" data-transition="none">문자</a></li>
-	                <li><a href="#"  class="ui-btn-active ui-state-persist" data-icon="audio">소식</a></li>
+	             <ul>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none" class="ui-btn-active ui-state-persist">공지</a></li>
+	                <li><a href="#page7" data-transition="none">일상</a></li>
+	                <li><a href="#page8" data-transition="none">관리</a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;">
-	        <div data-role="navbar">
+	    <div class="content" data-role="content" style="height:70%;margin-top:20px;">
+	       <!-- 공지목록 / 공지내용 선택메뉴  
+	       <div data-role="navbar">
 	            <ul>
 	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="bullets" data-transition="none">공지목록</a></li>
 	                <li><a href="#page5" data-icon="plus" data-transition="none">공지등록</a></li>
 	            </ul>
-	        </div>
+	        </div> -->
 	        
 	        <!--공지내용 들어갈부분  -->
 	        <div data-role="collapsible-set" data-inset="false">
@@ -963,30 +1460,31 @@
 	        	<c:forEach var="noticeList" items="${noticeList }" varStatus="i">
 	        		<c:if test="${noticeList.noType eq 1 }">
 	        			<div data-role="collapsible" id="accodianDiv">
-							<h3>[부의공지]${noticeList.noSubject }</h3>
-							<h4>부의공지...인사말</h4>
-							<table data-role="table" class="ui-responsive" id="bodyTable" border="1">
+							<h3>[哀事]${noticeList.noSubject }<font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
+							<h4>삼가 고인의 명복을 빕니다.</h4>
+							<table  id="bodyTable">
 								<thead>
 									<tr>
-										<th>- 내용</th>
-										<th>${noticeList.coContent }</th>
-										<th>- 발인</th>
-										<th>- 장소</th>
-										<th>${noticeList.coPlace }</th>
+										<th>내용</th>
+										<td>${noticeList.coContent }</td>
+									</tr>
+									<tr>
+										<th>발인</th>
+										<td>${noticeList.coHanddate }</td>
+									</tr>
+										<th>장소</th>
+										<td>${noticeList.coPlace }</td>
+									</tr>
+									<tr>
+										<th>조문<br/>일시</th>
+										<td>${noticeList.noRegDateAfter} 오후7시</td>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td></td>
-										<td></td>
-										<td>${noticeList.coHanddate }</td>
-										<td></td>
-										<td></td>
-									</tr>
 								</tbody>
 							</table>
 							
-							<a href="#" class="contentJoinBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
+							<%-- <a href="#" class="contentJoinBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
 							
 							<form id="${noticeList.noNum}Form">
 								<input type="hidden" name="noNum" value="${noticeList.noNum }" id="hiddenNoNum">
@@ -1053,34 +1551,36 @@
 									</table>
 								</div>
 								<a href="#" data-role="button" style="background-color:green;color:white;display:none;" class="contentSubmitBtn">등록</a>
-							</form>
+							</form> 참여체크로직 끝--%>
 						</div>
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 2 }">
 	        			<div data-role="collapsible" id="accodianDiv">
-							<h3>[행사공지]${noticeList.noSubject }</h3>
+							<h3>[行事]${noticeList.noSubject }<font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
 							<h4>행사공지...인사말</h4>
-							<table data-role="table" class="ui-responsive" id="bodyTable">
+							<table id="bodyTable">
 								<thead>
 									<tr>
 										<th>내용</th>
-										<th>행사일</th>
+										<td>${noticeList.coContent }</td>
+									</tr>
+									<tr>
+										<th>행사<br/>일시</th>
+										<td>${noticeList.coEventDate }</td>
+									</tr>
+									<tr>
 										<th>회비</th>
+										<td>${noticeList.coMoney } 원</td>
+									</tr>
 										<th>장소</th>
-										<th>${noticeList.coPlace }</th>
+										<td>${noticeList.coPlace }</td>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>${noticeList.coContent }</td>
-										<td>${noticeList.coEventDate }</td>
-										<td>${noticeList.coMoney } 원</td>
-										<td></td>
-										<td></td>
-									</tr>
+									
 								</tbody>
 							</table>
-							<a href="#" class="eventJoinCheckBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
+							<%-- <a href="#" class="eventJoinCheckBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
 						
 							<form id="${noticeList.noNum}Form">
 								<input type="hidden" name="noNum" value="${noticeList.noNum }" id="hiddenNoNum">
@@ -1140,13 +1640,13 @@
 									</table>
 								</div>
 								<a href="#" data-role="button" style="background-color:green;color:white;display:none;" class="eventSubmitBtn">등록</a>
-							</form>
+							</form> 행사공지 참여체크--%>
 							
 						</div>
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 3 }">
 	        			<div data-role="collapsible">
-							<h3>[일반공지]${noticeList.noSubject }</h3>
+							<h3>[祝賀]${noticeList.noSubject } <font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
 							<h4>${noticeList.noContents }</h4>
 						</div>
 	        		</c:if>
@@ -1159,20 +1659,24 @@
 
 	</section>
 	
+	<!--공지 : 공지등록  -->
 	<section id="page5" data-role="page">
-	    <header data-role="header" style="background-color:#000000;"><img src="resources/img/logo.png"/>
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#page1" data-icon="user" data-transition="none">친구</a></li>
-	                <li><a href="#page2" data-icon="camera" data-transition="none">포토</a></li>
-	                <li><a href="#page3" data-icon="mail" data-transition="none">문자</a></li>
-	                <li><a href="#"  class="ui-btn-active ui-state-persist" data-icon="audio">공지</a></li>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none" class="ui-btn-active ui-state-persist">공지</a></li>
+	                <li><a href="#page8" data-transition="none">일상</a></li>
+	                <li><a href="#page7" data-transition="none">관리</a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;">
+	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
 	        <div data-role="navbar">
 	            <ul>
 	                <li><a href="#page4" data-icon="bullets" data-transition="none">공지목록</a></li>
@@ -1293,5 +1797,182 @@
 
 	</section>
 	
+	<!-- 포토 > 사진등록 -->
+	<section id="page6" data-role="page">
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    	<div data-role="navbar">
+	             <ul>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#" class="ui-btn-active ui-state-persist" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none">공지</a></li>
+	                <li><a href="#page8" data-transition="none">일상</a></li>
+	                <li><a href="#page7" data-transition="none">관리</a></li>
+	            </ul>
+	        </div>
+
+	    </header>                   
+	    
+	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
+	    	<a href="#page2" data-role="button" style="width:25%">목록가기</a>
+	    	
+	    	<!-- <form id="photoForm" enctype="multipart/form-data" method="post">
+		        <input type="file" name="uploadFile[]" accept="image/*" id="imgInp" multiple="multiple">
+		        <div style="width:100%;height:70%">
+		        	<img id="blah" src="#" style="width:100%;height:100%;display:none;" />
+		        </div>
+		        <input type="text" name="albumMsg"/>
+		        <a href="#" data-role="button" id="imgAddBtn">등록하기</a>
+			</form> -->
+
+			
+	       
+	    </div>
+	    
+	    <c:import url="./module/footer.jsp"></c:import>
+
+	</section>
+	
+	<!-- 일상 -->
+	<section id="page7" data-role="page">
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	        <div data-role="navbar">
+	            <ul>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none" >공지</a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">일상</a></li>
+	                <li><a href="#page8" data-transition="none">관리</a></li>
+	            </ul>
+	        </div>
+
+	    </header>                   
+	    
+	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
+	    	<a href="#" onclick="openWriteForm();"><img src="resources/img/write.png" style="width:40px;height:40px;"/></a>
+	    	<div id="writeForm" style="width:100%;display:none;">
+	    		<textarea></textarea>
+	    	</div>
+		</div>
+	    
+	    <c:import url="./module/footer.jsp"></c:import>
+
+	</section>
+	
+	<!--관리  -->
+	<section id="page8" data-role="page">
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	        <div data-role="navbar">
+	             <ul>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none" >공지</a></li>
+	                <li><a href="#page7" data-transition="none" >일상</a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">관리</a></li>
+	            </ul>
+	        </div>
+
+	    </header>                   
+	    
+	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
+	    	관리
+		</div>
+	    
+	    <c:import url="./module/footer.jsp"></c:import>
+
+	</section>
+	
+	<!--마이페이지  -->
+	<section id="page9" data-role="page">
+	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	        <div data-role="navbar">
+	             <ul>
+	                <li><a href="#page1" >친구</a></li>
+	                <li><a href="#page2" data-transition="none">포토</a></li>
+	                <li><a href="#page4" data-transition="none" >공지</a></li>
+	                <li><a href="#page7" data-transition="none" >일상</a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">관리</a></li>
+	            </ul>
+	        </div>
+
+	    </header>                   
+	    
+	    <div class="content" data-role="content" style="margin-top:50px;">
+	    	<form id="userModifyForm" enctype="multipart/form-data" method="post">
+		    	<table style="width:100%;margin-top:10px;">
+		    		<tr>
+		    			<c:if test="${user.userImgOld eq null && user.userImgNew eq null}">
+		 					<!-- <td style="width:50%;"><img src="resources/img/ready.jpg" class="img-round"/></td> -->
+		    				<td colspan="2" style="text-align:center;"><img src="resources/img/ready.jpg" id="filePreviewImg" style="width:40%;height:116px;border-radius:70px;"/></td>
+		 				</c:if>
+		 				<c:if test="${user.userImgOld ne null && user.userImgNew eq null}">
+		 					<td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		    				<td style="width:50%;">
+		    					<img src="#" id="filePreviewImg2" style="display:none;width:80%;height:116px;border-radius:70px;"/>
+		    				</td>
+		 				</c:if>
+		 				<c:if test="${user.userImgOld ne null && user.userImgNew ne null}">
+		 					<td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		    				<td><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round" id="filePreviewImg3"/></td>
+		 				</c:if>
+		 				<c:if test="${user.userImgOld eq null && user.userImgNew ne null}">
+		 					<%-- <td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round"/></td> --%>
+		    				<td colspan="2" style="text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" id="filePreviewImg4" style="width:40%;height:116px;border-radius:70px;"/></td>
+		 				</c:if>
+		    		</tr>
+		    	</table>
+		    	<div class="fileInputDiv">
+					<img src="resources/img/photo.png" class="fileInputImgBtn" alt="사진등록"/>
+					<c:if test="${user.userImgOld eq null && user.userImgNew eq null}">
+						<input type="file" name="userImgNew" id="userImgNew" class="fileInputHidden" accept="image/*" multiple/>
+					</c:if>
+					<c:if test="${user.userImgOld ne null && user.userImgNew eq null}">
+						<input type="file" name="userImgNew" id="userImgNew2" class="fileInputHidden" accept="image/*" multiple/>
+					</c:if>
+					<c:if test="${user.userImgOld ne null && user.userImgNew ne null}">
+						<input type="file" name="userImgNew" id="userImgNew3" class="fileInputHidden" accept="image/*" multiple/>
+					</c:if>
+					<c:if test="${user.userImgOld eq null && user.userImgNew ne null}">
+	 					<input type="file" name="userImgNew" id="userImgNew4" class="fileInputHidden" accept="image/*" multiple/>
+	 				</c:if>
+				</div>
+		    	
+		    	<table style="width:100%;">
+		    		<tr>
+		    			<td style="width:13%;"><img src="resources/img/name.png" style="width:25px;height:25px;"/></td>
+		    			<td style="border-bottom:1px solid #ddd;width:87%;font-weight:bold;">
+		    				${user.userName }
+		    			</td>
+		    		</tr>
+		    		<tr>
+		    			<td style="width:13%;"><img src="resources/img/hp.png" style="width:25px;height:25px;"/></td>
+		    			<td style="border-bottom:1px solid #ddd;width:87%;font-weight:bold;">
+		    				<input type="tel" name="userHp" id="userHpModify" value="${user.userHp }"/>
+		    			</td>
+		    		</tr>
+		    		<tr>
+		    			<td style="width:13%;"><img src="resources/img/address.png" style="width:30px;height:30px;"/></td>
+		    			<td style="border-bottom:1px solid #ddd;width:85%;font-weight:bold;">
+		    				<input type="text" name="userAddress" id="userAddressModify" value="${user.userAddress }"/>
+		    			</td>
+		    		</tr>
+		    		<tr>
+		    			<td colspan="2"><button type="button" onclick="userModify();" style="width:100%">개인정보수정</button></td>
+		    		</tr>
+		    	</table>
+	    	
+	    	</form>
+		</div>
+	    
+	    <c:import url="./module/footer.jsp"></c:import>
+
+	</section>
 </body>
 </html>

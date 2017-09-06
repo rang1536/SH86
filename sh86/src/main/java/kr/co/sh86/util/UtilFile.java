@@ -31,14 +31,16 @@ public class UtilFile {
 		return uploadFileList;	
 	}
 	//단일파일 업로드
-	public UploadFileDTO singleUploadFile(MultipartHttpServletRequest request){
+	public UploadFileDTO singleUploadFile(MultipartHttpServletRequest request, String classNum){
 		//호스팅
-		/*String rootPath = "/home/hosting_users/sh86/tomcat/webapps/files/";*/
+		/*String rootPath = "/home/hosting_users/kis0488/tomcat/webapps/ROOT/resources/files/"+classNum+"/";*/
+		
+		/*String rootPath = "/tomcat/webapps/ROOT/resources/files/"+classNum+"/";*/
 		
 		//로컬
-		String rootPath = "C:\\Users\\FreeUser\\Documents\\workspace-sts-3.9.0.RELEASE\\sh86\\src\\main\\webapp\\resources\\files\\";
+		String rootPath = "C:\\Users\\FreeUser\\git\\SH86\\sh86\\src\\main\\webapp\\resources\\files\\"+classNum+"\\";
 		
-		return uploadFile(request.getFile("uploadFile"), rootPath);
+		return uploadFile(request.getFile("userImgNew"), rootPath);
 	}
 	
 	//파일업로드 메소드 (DTO반환)
@@ -47,10 +49,9 @@ public class UtilFile {
 		try {
 			String originalName = multipartFile.getOriginalFilename(); //원래 파일명
 	    	int index = originalName.lastIndexOf("."); //확장자 구분을 위한 (.)인덱스 찾기
-			String extension = "."+originalName.substring(index+1); //. 뒤의 확장자를 저장
-	        String fileName = UUID.randomUUID().toString(); //DB에 저장될 파일명
+			String extension = "."+originalName.substring(index+1); //. 뒤의 확장자를 저장.일단안씀
+	        String fileName = originalName; //DB에 저장될 파일명
 	        fileName = fileName.replace("-", "");
-	        fileName += extension;
 	        String savePath = rootPath + fileName;
 	        File destFile = new File(savePath); //최종파일을 업로드 패쓰에 업로드
 	        multipartFile.transferTo(destFile);

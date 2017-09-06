@@ -10,7 +10,8 @@
 	<!-- DB 연결 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@192.168.0.100:1521:kis" />
+		<property name="url" value="jdbc:oracle:thin:@175.202.108.60:1521:kis" />
+		<!-- <property name="url" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.0.100(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=kis)(SERVER=DEDICATED)))" /> -->
 		<property name="username" value="admin" />
 		<property name="password" value="sRc0488#" />
 	</bean>

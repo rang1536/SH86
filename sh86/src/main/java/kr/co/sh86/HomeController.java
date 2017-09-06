@@ -4,6 +4,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -27,13 +30,23 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model,
-			@RequestParam(value="userId", defaultValue="none") String userId) {
+			@RequestParam(value="userId", defaultValue="none") String userId,
+			HttpServletResponse response) {
 		logger.info("Welcome home! The client locale is {}.", locale);
+		/*System.out.println(userId);*/
+	
+		if(!userId.equals("none")) {
+			model.addAttribute("sessionId", userId);
+			/*System.out.println("세션값 확인 : "+userId);*/
+			
+			Cookie cookie = new Cookie("cookieId",userId);
+			cookie.setPath("/");
+			cookie.setMaxAge(60*60*24*30);
+			
+			response.addCookie(cookie);
+		}
 		
-		model.addAttribute("sessionId", userId);
-		System.out.println("세션값 확인 : "+userId);
-		
-		return "redirect:userList?noNum="+userId;
+		return "redirect:userList?userId="+userId;
 		
 	}
 	

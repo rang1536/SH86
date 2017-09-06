@@ -20,6 +20,7 @@ import kr.co.sh86.user.domain.Sinbo;
 import kr.co.sh86.user.domain.SinboDb;
 import kr.co.sh86.user.domain.UploadFileDTO;
 import kr.co.sh86.user.domain.User;
+import kr.co.sh86.util.UtilDate;
 import kr.co.sh86.util.UtilFile;
 
 @Service
@@ -78,6 +79,7 @@ public class UserService {
 		List<SinboDb> list = userDao.selectSinboRes();
 		
 		for(int i=0; i<list.size(); i++) {
+			System.out.println(i+" 번째 아이디값 확인 : "+list.get(i).getMemId());
 			Sinbo sinbo = new Sinbo();
 			sinbo = userDao.selectSinbo(list.get(i).getMemId());
 			int result = userDao.updateSinbo(sinbo);
@@ -270,6 +272,7 @@ public class UserService {
 		return result;
 	}
 	
+	//문자 - 직접입력
 	public int sendMmsDirectServ(String userHp ,String msg, String sendTel) {
 		final int scheduleType = 0;
 		final String subject = "신흥고 86회 동문회";
@@ -449,6 +452,7 @@ public class UserService {
 	public List<NoticeView> readAllNoticeServ(){
 		List<NoticeView> noticeList = userDao.selectAllNotice();
 		List<NoticeView> resultList = new ArrayList<NoticeView>();
+		UtilDate utilDate = new UtilDate();
 		
 		for(int i=0; i<noticeList.size(); i++) {
 			NoticeView noticeView = new NoticeView();
@@ -460,6 +464,7 @@ public class UserService {
 			}else if(noticeList.get(i).getNoType() == 3) {
 				noticeView = noticeList.get(i);
 			}
+			noticeView.setNoRegDateAfter(utilDate.getAfterDate(noticeView.getNoRegDate(),1));
 			resultList.add(noticeView);
 		}
 		
@@ -502,10 +507,117 @@ public class UserService {
 	}
 	
 	// 포토 - 사진업로드
-	public int addPhotoServ(MultipartHttpServletRequest request) {
+	public int addPhotoServ(MultipartHttpServletRequest request, String userId) {
 		UtilFile utilFile = new UtilFile();
-		UploadFileDTO uploadFile = utilFile.singleUploadFile(request);
+		UploadFileDTO uploadFile = utilFile.singleUploadFile(request, userId.substring(0,1));
+		User user = new User();
 		
 		return 0;
+	}
+	
+	// 마이페이지 - 새로운사진업로드(사진둘다 없을때)
+	public int addUserNewImgServ(MultipartHttpServletRequest request, String userId) {
+		UtilFile utilFile = new UtilFile();
+		UploadFileDTO uploadFile = utilFile.singleUploadFile(request, userId.substring(0,1));
+		User user = new User();
+		user.setUserImgNew(uploadFile.getFileName());
+		user.setUserId(userId);
+		
+		int result = userDao.updateUserImgNew(user);
+		return result;
+	}
+	
+	// 마이페이지 - 정보업데이트
+	public int modifyUserInfoServ(User user, String userId) {
+		user.setUserId(userId);
+		return userDao.updateUserInfo(user);
+	}
+	
+	//문자 - mms발송
+	public int sendMmsServ1() {
+		final int scheduleType = 0;
+		final String subject = "신용보증재단";
+		final String callback = "0632880488"; //발송번호는 등록된 번호만 가능. 추후 대표님 폰등은 필요하면 따로 등록.
+		String destInfo = null;
+		int destCount = 1; // 수신자목록 개수 최대:100
+		int result = 0;
+		String msg = "전북신용보증재단 서비스 만족도 조사입니다.\r\n" + 
+				"아래 링크를 눌러 조사에 응답해 주시면 더욱 좋은 서비스로 보답 하겠습니다.\r\n" + 
+				"편하신 시간에 응답해 주시기 바랍니다.\r\n" + 
+				"http://bestpoll.kr/19/0726.jsp?sbNum=";
+		
+		Mms mms = new Mms();
+		List<Sinbo> userList = userDao.sinboLast(); // 문자 보낼 회원조회
+		
+		for(int i=3; i<userList.size(); i++) {
+			destInfo = userList.get(i).getSbCeo() + "^" + userList.get(i).getSbHp();
+			msg += userList.get(i).getSbNum();
+			mms = setMms(scheduleType, subject, callback, destInfo, destCount, msg);
+			result = userDao.sendMmsToSelected(mms);
+			System.out.println(i+" 번째 문자전송 결과확인 : "+result);
+		}
+		
+		return result;
+	}
+	
+	// 옛날사진파일명 업로드
+	public int modifyOldImgServ() {
+		List<User> userList = userDao.selectUserIdAll();
+		for(int i=0; i<userList.size();i++) {
+			String oldImgName = "3"+userList.get(i).getUserId().toString()+".jpg";
+			System.out.println(i+ " 번째 파일풀네임 확인 : "+oldImgName);
+			
+			userList.get(i).setUserImgOld(oldImgName);
+			int result = userDao.updateOldImg(userList.get(i));
+			System.out.println(i+" 번째 파일네임변경 확인 : "+result);
+		}
+		return 0;
+	}
+	
+	// 접속시 유저테이블 접속카운팅 ++
+	public int modifyJoinCountServ(String userId) {
+		User user = userDao.selectUserById(userId);
+		user.setUserJoinCheck(user.getUserJoinCheck()+1);
+		
+		int result = userDao.updateUserConnection(user);
+		
+		return result;
+	}
+	
+	// 반별 휴대폰 보유자 수 카운팅
+	public List<Integer> readCountByHpServ(){
+		String[] classList = {"1","2","3","4","5","6","7","8"};
+		List<Integer> countList = new ArrayList<Integer>();
+		int count = 0;
+		
+		for(int i=0; i<classList.length; i++) {
+			count = userDao.selectCountByHp(classList[i]);
+			countList.add(count);
+		}
+		
+		return countList;
+	}
+	
+	//1번이라도 접속했던 유저수 카운팅
+	public List<Integer> readCountByJoinServ(){
+		String[] classList = {"1","2","3","4","5","6","7","8"};
+		List<Integer> joinCountList = new ArrayList<Integer>();
+		int count = 0;
+		
+		for(int i=0; i<classList.length; i++) {
+			count = userDao.selectCountByJoin(classList[i]);
+			joinCountList.add(count);
+		}
+		return joinCountList;
+	}
+	
+	// 친구 - 회원조회(이름)
+	public List<User> readUserByUserNameServ(String userName){
+		return userDao.selectUserByUserName(userName);
+	}
+	
+	//마이페이지 - 개인정보조회
+	public User readUserByCookieIdServ(String userId) {
+		return userDao.selectUserByCookieId(userId);
 	}
 }

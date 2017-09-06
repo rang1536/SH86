@@ -7,6 +7,7 @@ public class NoticeView {
 	private int noContentNum;
 	private String noWriter;
 	private String noRegDate;
+	private String noRegDateAfter;
 	private String noImgPass;
 	private String noImgName;
 	private int noType;
@@ -25,6 +26,13 @@ public class NoticeView {
 	private String coEventDate;
 	private int coMoney;
 	
+	
+	public String getNoRegDateAfter() {
+		return noRegDateAfter;
+	}
+	public void setNoRegDateAfter(String noRegDateAfter) {
+		this.noRegDateAfter = noRegDateAfter;
+	}
 	public int getNoNum() {
 		return noNum;
 	}

@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -207,10 +210,53 @@ public class UserRestController {
 	}
 	
 	//포토 > 사진등록
-	@RequestMapping(value="/photoAdd", method=RequestMethod.POST)
+	/*@RequestMapping(value="/photoAdd", method=RequestMethod.POST)
 	public Map<String, String> photoAddCtrl(MultipartHttpServletRequest request){
 		int result = userService.addPhotoServ(request);
 		
 		return null;
+	}*/
+	
+	//친구 > 회원검색(이름)
+	@RequestMapping(value="/searchUserByName", method=RequestMethod.POST)
+	public List<User> searchUserByNameCtrl(@RequestParam(value="userName") String userName){
+		System.out.println("친구메뉴 회원검색 컨트롤러");
+		System.out.println("폼에서 넘어온 값 확인 : "+userName);
+		
+		List<User> userList = userService.readUserByUserNameServ(userName);
+		
+		return userList;
+	}
+	
+	//마이페이지 > 회원정보수정.
+	@RequestMapping(value="/userModify", method=RequestMethod.POST)
+	public Map<String, String> userModifyCtrl(MultipartHttpServletRequest request,
+			@CookieValue(value="cookieId")Cookie cookie){
+		System.out.println("회원정보수정~ 컨트롤러!!");
+		
+		String userId = cookie.getValue();
+		int result = userService.addUserNewImgServ(request, userId);
+		Map<String, String> check = new HashMap<String, String>();
+		
+		if(result > 0) check.put("check", "true");
+		else check.put("check", "false");
+		
+		return check;
+	}
+	
+	//마이페이지 > 회원정보수정.
+	@RequestMapping(value="/userModifyText", method=RequestMethod.POST)
+	public Map<String, String> userModifyCtrl(User user,
+			@CookieValue(value="cookieId")Cookie cookie){
+		System.out.println("회원정보수정~ 컨트롤러!!");
+		String userId = cookie.getValue();
+		
+		Map<String, String> check = new HashMap<String, String>();
+		int result = userService.modifyUserInfoServ(user, userId);
+		
+		if(result > 0) check.put("check", "true");
+		else check.put("check", "false");
+		
+		return check;
 	}
 }

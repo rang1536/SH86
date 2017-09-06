@@ -30,14 +30,40 @@
 	SELECT
 		user_id,
 		user_name,
+		user_do,
 		user_cityname,
 		user_job,
 		user_hp,
 		user_img_pass,
 		user_img_old,
-		user_img_new
+		user_img_new,
+		user_joincheck
 	FROM
 		SH86.SH_USER
+</select>
+
+<!-- 휴대폰번호 있는 사용자 카운트 -->
+<select id="selectCountByHp" parameterType="String" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_ID LIKE #{userId}||'%'
+	AND 
+		USER_HP IS NOT NULL
+</select>
+
+<!-- 한번이상 접속한 회원 카운팅 -->
+<select id="selectCountByJoin" parameterType="String" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_JOINCHECK > 0
+	AND
+		USER_ID LIKE #{userId}||'%'
 </select>
 
 <!-- 모든공지사항 조회 -->
@@ -111,6 +137,9 @@
 		mem_id
 	FROM 
 		kis_2017.jjac_survey004
+	WHERE
+		mem_id > 599
+	
 </select>
 
 <select id="selectSinbo" parameterType="int" resultType="kr.co.sh86.user.domain.Sinbo">
@@ -338,5 +367,112 @@
 		</if>
 		#{noNum})	
 </insert>
+
+<select id="sinboLast" resultType="kr.co.sh86.user.domain.Sinbo">
+	SELECT 
+		SB_NUM, 
+		SB_CEO, 
+		SB_HP	
+	FROM ADMIN.SINBO 
+	WHERE 
+		SB_ORDERCOUNT = 2 
+	AND SB_RESCHECK='미응답' 
+	AND SB_REJECT=0 
+	AND SB_ARSRESULT IS NOT NULL
+</select>
+
+<select id="selectUserIdAll" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id
+	FROM
+		SH86.SH_USER
+</select>
+
+<update id="updateOldImg" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE
+		SH86.SH_USER
+	SET
+		USER_IMG_OLD = #{userImgOld}
+	WHERE
+		USER_ID = #{userId}
+</update>
+
+<!-- 회원사이트 접속확인 카운팅 > 조회 -->
+<select id="selectUserById" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_id = #{userId}
+</select>
+
+<!-- 회원사이트 접속확인 카운팅 > 카운팅 -->
+<update id="updateUserConnection" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE
+		SH86.SH_USER
+	SET
+		USER_JOINCHECK = #{userJoinCheck}
+	WHERE
+		USER_ID = #{userId}
+</update>
+
+<!-- 친구 > 회원검색(이름) -->
+<select id="selectUserByUserName" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id,
+		user_name,
+		user_cityname,
+		user_job,
+		user_hp,
+		user_img_pass,
+		user_img_old,
+		user_img_new,
+		user_joincheck
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name LIKE '%'||#{userName}||'%'
+</select>
+
+<!-- 마이페이지 > 개인정보조회 -->
+<select id="selectUserByCookieId" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_id,
+		user_name,
+		user_email,
+		user_address,
+		user_hp,
+		user_img_pass,
+		user_img_old,
+		user_img_new
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_Id = #{userId}
+</select>
+
+<!-- 마이페이지 > 새로운 사진등록 -->
+<update id="updateUserImgNew" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE
+		SH86.SH_USER
+	SET
+		USER_IMG_NEW = #{userImgNew}
+	WHERE
+		USER_ID = #{userId}
+</update>
+
+<!-- 마이페이지 > 회원정보수정 -->
+<update id="updateUserInfo" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE
+		SH86.SH_USER
+	SET
+		USER_HP = #{userHp}
+		<if test="userAddress != null and userAddress != ''">
+			,USER_ADDRESS = #{userAddress}
+		</if>
+	WHERE
+		USER_ID = #{userId}
+</update>
 
 </mapper>

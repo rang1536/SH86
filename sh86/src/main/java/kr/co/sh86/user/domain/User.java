@@ -18,6 +18,15 @@ public class User {
 	private String userImgOld; //옛사진 파일이름
 	private String userImgNew; //최신사진 파일이름
 	private String userLevel; //회원등급
+	private int userJoinCheck;
+	
+	
+	public int getUserJoinCheck() {
+		return userJoinCheck;
+	}
+	public void setUserJoinCheck(int userJoinCheck) {
+		this.userJoinCheck = userJoinCheck;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -120,7 +129,8 @@ public class User {
 				+ userCompanyTel + ", userHp=" + userHp + ", userTel=" + userTel + ", userEmail=" + userEmail
 				+ ", userAddress=" + userAddress + ", userDo=" + userDo + ", userCityName=" + userCityName
 				+ ", userDong=" + userDong + ", userSangse=" + userSangse + ", userImgPass=" + userImgPass
-				+ ", userImgOld=" + userImgOld + ", userImgNew=" + userImgNew + ", userLevel=" + userLevel + "]";
+				+ ", userImgOld=" + userImgOld + ", userImgNew=" + userImgNew + ", userLevel=" + userLevel
+				+ ", userJoinCheck=" + userJoinCheck + "]";
 	}
 	
 	
