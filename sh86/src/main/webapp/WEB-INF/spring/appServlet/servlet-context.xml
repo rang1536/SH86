@@ -12,7 +12,7 @@
 						http://www.springframework.org/schema/tx 
 						http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
   						http://www.springframework.org/schema/task
-						http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+						http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 
 	<!-- 인터셉터 -->
 	<!-- <mvc:interceptors>
@@ -47,6 +47,8 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<context:component-scan base-package="kr.co.sh86" />
+	<task:scheduler id="jobScheduler" pool-size="10" /> 
+	<task:annotation-driven scheduler="jobScheduler" />
 
 	<!-- download만을 처리하는 viewResolver -->
 	<bean id="downloadViewResolver"

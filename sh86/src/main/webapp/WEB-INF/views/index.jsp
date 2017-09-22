@@ -8,16 +8,35 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>신흥고등학교 86기 동문회</title>
+	<title>SH86</title>
 	
 	<link rel="stylesheet" href="resources/js/jquery.mobile-1.4.5.css">
 	<script src="resources/js/jquery.js"></script>
 	<script src="resources/js/jquery.mobile-1.4.5.js"></script>
 	
+	<link href="resources/js/jquery.modal.css" type="text/css" rel="stylesheet" />
+	<script src="resources/js/jquery.modal.min.js"></script>
+	
 	<!-- 우편번호(다음) -->
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-		
+	<link href="resources/img/SH86_128r.jpg" rel="shortcut icon" />
+	<link href="resources/img/SH86_128r.jpg" rel="apple-touch-icon"></link>
+	
+	
 	<style>
+		.statTd{
+			text-align:center;
+			font-weight:bold;
+			border-bottom:1px solid #ddd;
+		}
+		
+		.statTd2{
+			text-align:center;
+			font-weight:bold;
+			border-bottom:1px solid #ddd;
+			height:32px;
+		}
+		
 		th{
 			background-color:#ddd;
 			font-weight:bold;
@@ -25,14 +44,8 @@
 		} 
 		
 		.img-round{
-			border:3px solid #CEF279;
 			width:80%;
 			height:110px;
-			border-radius: 70px;
-			-moz-border-radius : 70px;
-			-khtml-border-radius : 70px;
-			-webkit-border-radius : 70px;
-			
 		}
 		
 		.fileInputDiv {
@@ -46,10 +59,6 @@
 		    width:35px;
 		    height:35px;
 		    float:right;
-		    border-radius: 70px;
-			-moz-border-radius : 70px;
-			-khtml-border-radius : 70px;
-			-webkit-border-radius : 70px;
 		}
 		.fileInputHidden {
 		    font-size:29px;
@@ -82,42 +91,142 @@
 			border:0px;
 		}
 
+		.topList{
+				border:1px solid #ddd;
+				border-radius:5px;
+				text-align:center;
+				font-weight:bold;
+		}
+		
+		.topList2{
+			border:2px solid #ddd;
+			width:20%;
+			height:30px;
+			border-radius:5px;
+			text-align:center;
+		}
+		
+		.topList3{
+			border:2px solid #ddd;
+			height:30px;
+			border-radius:5px;
+			text-align:center;
+			font-weight:bold;
+		}
+		.topList4{
+			border:2px solid #ddd;
+			width:25%;
+			height:30px;
+			border-radius:5px;
+			text-align:center;
+			font-weight:bold;
+		}
+		.subject{
+			border-bottom:3px solid #ddd;
+			font-weight:bold;
+			font-size:15px;
+			width:100%;
+		}
+		
+		.photoList{
+			font-weight:bold;
+			color:#000000;
+			border-bottom:1px solid #ddd;
+			padding:7px;
+			
+		}
+		
+		.songListTd{
+			width:25%;
+			text-align:center;
+		}
+		
+		.duesTable{
+			color:#030066;
+		}
+		
+		.duesTr{
+			background-color:#FFA648;
+		}
+		
+		.noticeH3{
+			font-size:15px;
+			font-weight:bold;
+		}
 	</style>
+	
+	
 	<script>
+	
+		function footerBanner(){
+			window.location.href = 'https://www.dcake.co.kr/';
+		}
+		
+		//숫자컴마찍기
+	 	function numberChange(){
+			$('.numberInput').html(function(){
+				var x = $(this).html();
+			    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			});
+		}
+		
+		$(document).ready(function(){
+			numberChange();
+			
+		})
+		/* 바로가기 자동생성 스크립트 */
+		// 접속 핸드폰 정보
+		function createIcon(){
+			var userAgent = navigator.userAgent.toLowerCase();
+			alert(userAgent);
+			// 모바일 홈페이지 바로가기 링크 생성
+			if(confirm('바로가기 아이콘을 생성하시겠습니까?') == true){
+				if(userAgent.match('iphone')) {
+				    document.write('<link href="resources/img/SH86_128r.png" rel="apple-touch-icon">') 
+				} else if(userAgent.match('android')) {
+				    document.write('<link href="resources/img/SH86_128r.png" rel="shortcut icon">') 
+				} else {
+				    document.write('<link href="resources/img/SH86_128r.png" rel="shortcut icon">') 
+				}
+			}else{
+				return;
+			}
+		};
 		//문자 - 회원검색
-		$(document).on('click','#searchUser',function(){
+		function searchForm(){
 			$('#directForm').css('display','none');
 			$('#resultDiv').css('display','none');
 			$('#searchForm').css('display','');
 			$('#searchKey').focus();
-		});
+		};
 		
 		//문자 - 직접입력
-		$(document).on('click','#direct',function(){
+		function direct(){
 			$('#searchForm').css('display','none');
 			$('#resultDiv').css('display','none');
 			$('#directForm').css('display','');
 			$('#userHp').focus();
-		});
+		};
 		
 		//문자 > 회원검색 > 상세정보입력창 포커스시 힌트 바꿔주기
 		$(document).on('focus','#valueDetail',function(){
 			var searchKey=$('#searchKey').val();
-			console.log(searchKey);
 			
 			if(searchKey == 'name'){
+				$('#searchValue').prop('type','text');
 				$('#searchValue').prop('placeholder','성 혹은 이름만 입력하셔도 검색됩니다.');
 			}else if(searchKey == 'hp'){
 				$('#searchValue').prop('type','tel');
 				$('#searchValue').prop('placeholder','뒤 4자리를 입력하세요');
 			}else{
+				$('#searchValue').prop('type','text');
 				$('#searchValue').prop('placeholder','시이름을 입력해주세요');
 			}
 			
 		});
 		
 		// 문자 > 회원검색 > 검색버튼 클릭시 > 검색결과 보여주기
-		$(document).on('click','#searchBtn',function(){
+		function searchUserSms(){
 			var searchKey=$('#searchKey').val();
 			var searchValue=$('#searchValue').val();
 			
@@ -130,41 +239,77 @@
 					console.log("ajax성공.");
 					$('#directForm').css('display','none');
 					$('#searchForm').css('display','none');
-					var html = "<p style='font-weight:bold;font-size:20px;background-color:#ddd;'>"+data.userList[0].userName+"님 외 총 "+data.count+" 명이 선택되었습니다.</p>"
-					html += "<br/><br/>";
-					html += "<a class='ui-shadow ui-btn ui-corner-all ui-btn-b' href='#' id='mmsSendBtn'>문자전송</a>";
+					var html = "<p style='font-weight:bold;font-size:20px;color:#030066'>"+data.userList[0].userName+"님 외 총 "+data.count+" 명이 선택됨</p>"
+					html += "<br/>";
+					html += '<button type="button" style="width:100%;height:30px;" id="mmsSendBtn">문자발송</button>';
 					$('#resultDiv').empty();
 					$('#resultDiv').html(html);
 					$('#resultDiv').css('display','');
 				}
 			});
-		});
+		};
 		
 		// 문자 > 회원검색 > 문자발송버튼 클릭시 > 유효성검사 및 검색된 회원에게 문자발송
 		$(document).on('click','#mmsSendBtn',function(){
 			var searchKey=$('#searchKey').val();
 			var searchValue=$('#searchValue').val();
 			var mmsMsg = $('#msg').val();
-			var sendTel = $('#sendTel').val();
+			console.log(searchKey,searchValue);
 			
-			if(sendTel == null || sendTel == ''){
-				alert('발송자 번호를 입력해주세요.');
-				return;
-			}else if(mmsMsg == null || mmsMsg == ''){
+			if(mmsMsg == null || mmsMsg == ''){
 				alert('메세지를 입력하세요');
+				$('#msg').focus();
+				return;
+			}else if(searchKey == null || searchKey == ''){
+				alert('검색조건을 선택하세요');
+				return;
+			}else if(searchValue == null || searchValue == '' ){
+				alert('반 또는 이름을 입력하세요');
+				$('#searchValue').focus();
 				return;
 			}
 			
 			if(confirm("전송 하시겠습니까?") == true){
 				$.ajax({
 					url: 'mmsSend',
-					data: {'searchKey' : searchKey, 'searchValue':searchValue, 'mmsMsg': mmsMsg,'sendTel': sendTel},
+					data: {'searchKey' : searchKey, 'searchValue':searchValue, 'mmsMsg': mmsMsg},
 					type: 'post',
 					dataType: 'json',
 					success : function(data){
+						
 						if(data.check == '성공'){
 							alert('문자발송에 성공하였습니다.');
-							return;
+							/* window.location.reload(true); */
+							$('#smsSendDiv').empty();
+							var success = 0;
+							var html = '<table style="width:100%;">';
+							html += '<tr>';
+							html += '<th class="duesTr">이름</th>';
+							html += '<th class="duesTr">전화번호</th>';
+							html += '<th class="duesTr">전송</th>';
+							html += '</tr>';
+							
+							$.each(data.userList, function(i,userList){
+								html += '<tr>';
+								html += '<td class="statTd">'+userList.destName+'</td>';
+								html += '<td class="statTd">'+userList.phoneNumber+'</td>';
+								if(userList.result == 2){
+									html += '<td clss="statTd">성공</td>';
+									success++;
+								}else if(userList.result == 6){
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">결번</td>';
+								}else if(userList.result == 22){
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">수신거부</td>';
+								}else{
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">전송실패</td>';
+								}
+								html += '</tr>';
+							});
+							html += '<tr>';
+							html += '<th class="duesTr">결과</th>';
+							html += '<th class="duesTr">-</th>';
+							html += '<th class="duesTr">'+success+'/'+data.userList.length+'</th>';
+							$('#smsSendDiv').append(html);
 						}else{
 							alert('문자발송에 실패하였습니다.');
 						}
@@ -179,12 +324,8 @@
 		$(document).on('click','#sendMmsDirectBtn',function(){
 			var userHp = $('#userHp').val();
 			var mmsMsg = $('#msg').val();
-			var sendTel = $('#sendTel').val();
 			
-			if(sendTel == null || sendTel == ''){
-				alert('발송자 번호를 입력해주세요.');
-				return;
-			}else if(mmsMsg == null || mmsMsg == ''){
+			if(mmsMsg == null || mmsMsg == ''){
 				alert('메세지를 입력하세요');
 				return;
 			}
@@ -192,13 +333,13 @@
 			if(confirm("전송 하시겠습니까?") == true){
 				$.ajax({
 					url: 'mmsSendDirect',
-					data: {'userHp': userHp, 'mmsMsg': mmsMsg,'sendTel': sendTel},
+					data: {'userHp': userHp, 'mmsMsg': mmsMsg},
 					type: 'post',
 					dataType: 'json',
 					success : function(data){
 						if(data.check == '성공'){
 							alert('문자발송에 성공하였습니다.');
-							return;
+							window.location.reload(true);
 						}else{
 							alert('문자발송에 실패하였습니다.');
 						}
@@ -210,14 +351,9 @@
 		});
 		
 		// 문자 > 전체발송 > 휴대폰번호가 입력된 전체 회원에게 문자발송
-		$(document).on('click','#sendAllBtn',function(){
+		function sendAll(){
 			var mmsMsg = $('#msg').val();
-			var sendTel = $('#sendTel').val();
-			
-			if(sendTel == null || sendTel == ''){
-				alert('발송자 번호를 입력해주세요.');
-				return;
-			}else if(mmsMsg == null || mmsMsg == ''){
+			if(mmsMsg == null || mmsMsg == ''){
 				alert('메세지를 입력하세요');
 				return;
 			}
@@ -231,7 +367,37 @@
 					success : function(data){
 						if(data.check == '성공'){
 							alert('문자발송에 성공하였습니다.');
-							return;
+							/* window.location.reload(true); */
+							$('#smsSendDiv').empty();
+							var success = 0;
+							var html = '<table style="width:100%;">';
+							html += '<tr>';
+							html += '<th class="duesTr">이름</th>';
+							html += '<th class="duesTr">전화번호</th>';
+							html += '<th class="duesTr">전송</th>';
+							html += '</tr>';
+							
+							$.each(data.userList, function(i,userList){
+								html += '<tr>';
+								html += '<td class="statTd">'+userList.destName+'</td>';
+								html += '<td class="statTd">'+userList.phoneNumber+'</td>';
+								if(userList.result == 2){
+									html += '<td class="statTd">성공</td>';
+									success++;
+								}else if(userList.result == 6){
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">결번</td>';
+								}else if(userList.result == 22){
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">수신거부</td>';
+								}else{
+									html += '<td class="statTd" style="font-weight:bold;color:#DB0000;text-align:center;">전송실패</td>';
+								}
+								html += '</tr>';
+							});
+							html += '<tr>';
+							html += '<th class="duesTr">결과</th>';
+							html += '<th class="duesTr">-</th>';
+							html += '<th class="duesTr">'+success+'/'+data.userList.length+'</th>';
+							$('#smsSendDiv').append(html);
 						}else{
 							alert('문자발송에 실패하였습니다.');
 						}
@@ -241,7 +407,7 @@
 				return;
 			}
 			
-		});
+		};
 		
 		// 우편번호 찾기 - 부의공지
 		function execDaumPostCodeContent() {
@@ -283,7 +449,7 @@
 		}
 		
 		// 우편번호 찾기 - 부의공지
-		function execDaumPostCodeEvent() {
+		function execDaumPostCode() {
 			new daum.Postcode({
 				oncomplete: function(data) {
 				
@@ -313,9 +479,10 @@
 				}
 				
 				// 우편번호와 주소 정보를 해당 필드에 넣는다.
-				$('#coPlaceEvent').val('('+data.zonecode+') '+fullAddr);
+				$('#userAddressModify').val(fullAddr);
 				// 커서를 상세주소 필드로 이동한다.
-				$('#sangseAddEvent').focus();
+				$('#sangseAdd').css('display','');
+				$('#sangseAdd').focus();
 				
 				}
 			}).open();
@@ -323,16 +490,54 @@
 		
 		// 소식 > 공지등록 > 부의공지 클릭시
 		$(document).on('click','#typeContent',function(){
-			$('#noticeTitle').empty();
-			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 부의공지</h2>");
+			/* $('#noticeTitle').empty();
+			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 부의공지</h2>"); */
 			$('#normalDiv').css('display','none');
 			$('#eventDiv').css('display','none');
 			$('#contentDiv').css('display','');
+			$('.topList3').css('background-color','#FFFFFF');
+			$(this).css('background-color','#C1F2FF');
 		});
 		
 		//소식 > 공지등록 > 부의공지 > 등록버튼 클릭시 > 부의공지 등록하기
 		$(document).on('click','#contentAddBtn',function(){
 			var params = $('#contentForm').serialize();
+			
+			var targetName = $(this).closest('#contentForm').find('#coTargetName').val();
+			var targetClass = $(this).closest('#contentForm').find('#coTargetClass').val();
+			var content = $(this).closest('#contentForm').find('#coContent').val();
+			var place =  $(this).closest('#contentForm').find('#coPlaceContent').val();
+			var handDate =  $(this).closest('#contentForm').find('#coHandDate').val();
+			var date =  $(this).closest('#contentForm').find('#coVisitDate').val();
+			var hour =  $(this).closest('#contentForm').find('#coVisitHour').val();
+			var minute =  $(this).closest('#contentForm').find('#coVisitMinute').val();
+			
+			if(targetName == null || targetName == ''){
+				alert('대상의 이름을 입력하세요');
+				return;
+			}else if(targetClass == null || targetClass == ''){
+				alert('대상의 반을 입력하세요');
+				return;
+			}else if(content == null || content == ''){
+				alert('내용을 입력하세요');
+				return;
+			}else if(place == null || place == ''){
+				alert('장례식장을 입력하세요');
+				return;
+			}else if(handDate == null || handDate == ''){
+				alert('발인날짜를 입력하세요');
+				return;
+			}else if(date == null || date == ''){
+				alert('조문일을 입력하세요');
+				return;
+			}else if(hour == null || hour == ''){
+				alert('조문시간을 입력하세요');
+				return;
+			}else if(minute == null || minute == ''){
+				alert('조문시간을 입력하세요');
+				return;
+			}
+			
 			
 			$.ajax({
 				url : 'noticeContentAdd',
@@ -342,7 +547,7 @@
 				success : function(data){
 					if(data.check == '성공'){
 						alert('부의공지가 등록되었습니다');
-						return;
+						window.location.reload(true);
 					}else{
 						alert('공지등록에 실패하였습니다');
 					}
@@ -352,16 +557,41 @@
 		
 		// 소식 > 공지등록 > 행사공지 클릭시
 		$(document).on('click','#typeEvent',function(){
-			$('#noticeTitle').empty();
-			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 행사공지</h2>");
+			/* $('#noticeTitle').empty();
+			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 행사공지</h2>"); */
 			$('#contentDiv').css('display','none');
 			$('#normalDiv').css('display','none');	
-			$('#eventDiv').css('display','');			
+			$('#eventDiv').css('display','');	
+			$('.topList3').css('background-color','#FFFFFF');
+			$(this).css('background-color','#C1F2FF');
 		});
 		
 		//소식 > 공지등록 > 행사공지 > 등록버튼 클릭시 > 행사공지 등록하기
 		$(document).on('click','#eventAddBtn',function(){
 			var params = $('#eventForm').serialize();
+			
+			var subject = $(this).closest('#eventForm').find('#noSubject').val();
+			var place = $(this).closest('#eventForm').find('#coPlaceContent').val();
+			var money = $(this).closest('#eventForm').find('#coMoney').val();
+			var eventDate = $(this).closest('#eventForm').find('#coEventDate').val();
+			var content = $(this).closest('#eventForm').find('#coContent').val();
+			
+			if(content == null || content == ''){
+				alert('내용을 입력하세요');
+				return;
+			}else if(subject == null || subject == ''){
+				alert('제목을 입력하세요');
+				return;
+			}else if(eventDate == null || eventDate == ''){
+				alert('행사날짜를 입력하세요');
+				return;
+			}else if(place == null || place == ''){
+				alert('장소를 입력하세요');
+				return;
+			}else if(money == null || money == ''){
+				alert('회비를 입력하세요');
+				return;
+			}
 			
 			$.ajax({
 				url : 'noticeEventAdd',
@@ -371,7 +601,7 @@
 				success : function(data){
 					if(data.check == '성공'){
 						alert('행사공지가 등록되었습니다');
-						return;
+						window.location.reload(true);
 					}else{
 						alert('공지등록에 실패하였습니다');
 					}
@@ -381,16 +611,37 @@
 		
 		// 소식 > 공지등록 > 일반공지 클릭시
 		$(document).on('click','#typeNormal',function(){
-			$('#noticeTitle').empty();
-			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 일반공지</h2>");
+			/* $('#noticeTitle').empty();
+			$('#noticeTitle').html("<h2 style='background-color:#D4F4FA;text-align:center;'>공지 카테고리 : 일반공지</h2>"); */
 			$('#contentDiv').css('display','none');
 			$('#eventDiv').css('display','none');
-			$('#normalDiv').css('display','');		
+			$('#normalDiv').css('display','');	
+			$('.topList3').css('background-color','#FFFFFF');
+			$(this).css('background-color','#C1F2FF');
 		});
 		
-		//소식 > 공지등록 > 일반공지 > 등록버튼 클릭시 > 일반공지 등록하기
+		//소식 > 공지등록 > 일반공지 > 등록버튼 클릭시 > 축하공지 등록하기
 		$(document).on('click','#normalAddBtn',function(){
 			var params = $('#normalForm').serialize();
+			
+			var targetName = $(this).closest('#normalForm').find('#noTargetName').val();
+			var targetClass = $(this).closest('#normalForm').find('#noTargetClass').val();
+			var content = $(this).closest('#normalForm').find('#noContents').val();
+			var subject = $(this).closest('#normalForm').find('#noSubject').val();
+			
+			if(content == null || content == ''){
+				alert('내용을 입력하세요');
+				return;
+			}else if(subject == null || subject == ''){
+				alert('글제목을 입력하세요');
+				return;
+			}else if(targetClass == null || targetClass == ''){
+				alert('대상의 반을 입력하세요');
+				return;
+			}else if(targetName == null || targetName == ''){
+				alert('대상의 이름을 입력하세요');
+				return;
+			}
 			
 			$.ajax({
 				url : 'noticeAdd',
@@ -399,8 +650,8 @@
 				type : 'post',
 				success : function(data){
 					if(data.check == '성공'){
-						alert('행사공지가 등록되었습니다');
-						return;
+						alert('축하공지가 등록되었습니다');
+						window.location.reload(true);
 					}else{
 						alert('공지등록에 실패하였습니다');
 					}
@@ -534,18 +785,62 @@
 		$(document).on('click','.eventJoinBtn',function(){
 			$(this).css({'background-color':'#002266','color':'white'});
 			$(this).parent().find('.eventNotJoinBtn').css({'background-color':'#ddd','color':'black'});
-			$(this).closest('#accodianDiv').find('#hiddenTable2').css('display','');
-			$(this).parent().find('#joJoinShape').val('참여');
-			console.log($(this).parent().find('#joJoinShape').val());
+			var noNum = $(this).closest('#bodyTable').find('#noNum').val();
+			var joJoinShape = '참여';
+			var joinCount = parseInt($(this).closest('#bodyTable').find('#joinCount').val());
+			var joinResultTag = $(this).closest('#bodyTable').find('#joinResult');
+			
+			if(confirm("참여 하시겠습니까?") == true){
+				$.ajax({
+					url : 'joinEventAdd',
+					data : {'noNum':noNum,'joJoinShape':joJoinShape} ,
+					dataType : 'json',
+					type : 'post',
+					success : function(data){
+						if(data.check == '성공'){
+							alert('참여체크가 완료되었습니다');
+							/* $(joinResultTag).empty();
+							$(joinResultTag).text('참여'+(joinCount+1)); */
+							window.location.reload(true);
+						}else{
+							alert('이미 체크하셨습니다');
+							return;
+						}
+					}
+				});
+			} 
 		});
 		
 		//행사공지 불참시
 		$(document).on('click','.eventNotJoinBtn',function(){
-			$(this).parent().find('.joinBtn').css({'background-color':'#ddd','color':'black'});
+			$(this).parent().find('.eventJoinBtn').css({'background-color':'#ddd','color':'black'});
 			$(this).css({'background-color':'#002266','color':'white'});
-			$(this).closest('#accodianDiv').find('#hiddenTable2').css('display','none');
-			$(this).parent().find('#joJoinShape').val('불참');
-			console.log($(this).parent().find('#joJoinShape').val());
+			
+			var noNum = $(this).closest('#bodyTable').find('#noNum').val();
+			var joJoinShape = '불참';
+			var notJoinCount = parseInt($(this).closest('#bodyTable').find('#notJoinCount').val());
+			var notJoinResultTag = $(this).closest('#bodyTable').find('#notJoinResult');
+			
+			if(confirm("불참 하시겠습니까?") == true){
+				$.ajax({
+					url : 'joinEventAdd',
+					data : {'noNum':noNum,'joJoinShape':joJoinShape} ,
+					dataType : 'json',
+					type : 'post',
+					success : function(data){
+						if(data.check == '성공'){
+							alert('참여체크가 완료되었습니다');
+							/* $(notJoinResultTag).empty();
+							$(notJoinResultTag).text('불참 '+(notJoinCount+1)); */
+							window.location.reload(true);
+						}else{
+							alert('이미 체크하셨습니다');
+							return;
+						}
+					}
+				});
+			} 
+			
 		});
 		
 		//부의공지 참여체크이벤트
@@ -720,6 +1015,30 @@
                 readURL5(this);
                 $("#filePreviewImg4").css('display','');
             });
+            
+            function readURL6(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+                    reader.onload = function (e) {
+                    //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+                        $('#albumImgView').attr('src', e.target.result);
+                        //이미지 Tag의 SRC속성에 읽어들인 File내용을 지정
+                        //(아래 코드에서 읽어들인 dataURL형식)
+                    }                   
+                    reader.readAsDataURL(input.files[0]);
+                    //File내용을 읽어 dataURL형식의 문자열로 저장
+                }
+            }//readURL()--
+   
+            //file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
+            $("#albumImg").change(function(){
+                //alert(this.value); //선택한 이미지 경로 표시
+               	readURL6(this);
+                $("#albumImgView").css('display','');
+                $('#albumMsg').focus(); 
+            	
+            });
+            
          });
 
 		$(document).on('click','#imgAddBtn',function(){
@@ -742,65 +1061,64 @@
 	        });
 		});
 		
-		function userModify(){
+		function userModify(num){
 			var formData = new FormData($("#userModifyForm")[0]);
-			console.log(formData);
+			var imgValue = $('input[name="userImgNew"]').val();
 			
 			var userHp = $('#userHpModify').val();
 			var userAddress = $('#userAddressModify').val();
+			var userSangseAdd = $('#sangseAdd').val();
+			var userBirthType = $('#birthType').val();
+			var userBirthMonth = $('input[name="userBirthMonth"]').val();
+			var userBirthDay = $('input[name="userBirthDay"]').val();
 			
-			console.log(userHp,userAddress);
-			
+			console.log(userBirthDay)
 			/* var formData = new FormData(); 
 			formData.append("userHp", $('#userHpModify').val()); 
 			formData.append("userEmail", $('#userEmailModify').val()); 
 			formData.append("userAddress", $('#userAddressModify').val()); 
 			formData.append("file", $("#userImgNew")[0].files[0]); */
-
-	        $.ajax({
-	            type : 'post',
-	            url : 'userModify',
-	            data : formData ,
-	            processData : false,
-	            contentType : false,
-	            success : function(data) {
-	            	if(data.check){
-	            		//파일업로드완료
-	            	}else{
-	            		alert("파일 업로드에 실패하였습니다.");
-	            	}
-	                
-	            },
-	            error : function(error) {
-	                alert("파일 업로드에 실패하였습니다.");
-	                console.log(error);
-	                console.log(error.status);
-	            }
-	        });
 			
+			if(imgValue != null && imgValue != ''){
+				$.ajax({
+		            type : 'post',
+		            url : 'userModify',
+		            data : formData ,
+		            processData : false,
+		            contentType : false,
+		            success : function(data) {
+		            	if(data.check == 'true'){
+		            		//파일업로드완료
+		            		alert('체크');
+		            		window.location.reload(true);
+		            	}else{
+		            		alert("파일 업로드에 실패하였습니다.");
+		            	}
+		                
+		            },
+		            error : function(error) {
+		                alert("파일 업로드에 실패하였습니다.");
+		                console.log(error);
+		                console.log(error.status);
+		            }
+		        });
+			}
 			$.ajax({
 				type : 'post',
 				url : 'userModifyText',
-				data : {'userHp':userHp,'userAddress':userAddress} ,
+				data : {'userHp':userHp,'userAddress':userAddress,'userBirthType':userBirthType,'userBirthMonth':userBirthMonth,'userBirthDay':userBirthDay,'userSangseAdd':userSangseAdd} ,
 				dataType: 'json',
 				success:function(data){
 					if(data.check) {
 						alert('수정처리가 완료되었습니다');
-						console.log("최종입력체크 : "+data.check);
-						setTimeout(function(){
-							location.href='localhost:8080/sh86/';  //로컬
-							/* location.href='http://sh86.kr/'; */  //호스팅
-							submit();
-						},3000);
-						
+						window.location.reload(true);
 					}
 				}
-			});
+			}); 
 		}
 		function searchUser(){
 			var userName = $('#searchUserByName').val();
 			var sessionId = '${sessionId}';
-			console.log("세션값 확인 : "+sessionId);
 			
 			if(userName != null && userName != ''){
 				$.ajax({
@@ -810,36 +1128,47 @@
 					dataType : 'json',
 					success:function(data){
 						$('#searchUserListDiv').empty();
-						
+						$('#userListDiv').empty();
 						var html = '';
 						html += '<div>';
-						html += '<button type="button" style="background-color:#B7F0B1;width:100%;font-weight:bold;">검색결과 '+data.length+' 명</button>';
 						html += '<table style="width:100%;">'
 							
 						$.each(data, function(i, result){
 							html += '<tr>';
-							html += '<td>';
-							if(result.userImgOld != null && result.userImgOld != ''){
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:40px;height:40px;margin-top:10px;">'
-							}else{
-								html += '<img src="resources/img/ready.jpg" style="width:40px;height:40px;margin-top:10px;">'
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							if(result.userImgOld != null && result.userImgNew == null){
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
+							}else if(result.userImgOld != null && result.userImgNew != null){
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td style="border-bottom:1px dotted #ddd;">'
+							}else if(result.userImgOld == null && result.userImgNew == null){
+								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
 							}
-							html += '</td><td>'
-							html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
-							if(result.userHp != null && result.userHp != ''){
-								html += result.userHp;
+							if(result.userDo == null || result.userCityName == null){
+								html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
+							}else if(result.userDo != null || result.userCityName != null){
+								html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
+								html += '<font style="font-size:13px;font-weight:bold;">'+result.userDo+' '+result.userCityName+'</font>';
 							}
-							html += '</td><td style="text-align:right;">';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
 							if(sessionId == result.userId){
 								html += '<a href="#page9"><img src="resources/img/info.jpg" style="width:43px;height:43px;"/></a>'
 							}
-							html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							if(result.userHp != null && result.userHp != ''){
+								html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							}else{
+								/* html += '<a href="#page9"><img src="resources/img/nohp.png" style="width:40px;height:40px;"/></a>'; */
+							}
 							html += '</td>';
 							html += '</tr>';
 						});
 						html += '</table>';
 						html += '</div>';
 						$('#searchUserListDiv').html(html);
+						$('#searchUserListDiv').slideDown(400);
 					}
 					
 				});
@@ -850,456 +1179,928 @@
 			}
 		}
 		
-		function formClose(){
-			$('#userSearchForm').slideUp(400);
-			$('#userSearchFormOpen').css('display','');
+		// 친구 > 검색폼 여닫기
+		function formOpen(){
+			var check = $('#userSearchForm').find('#check').val();
+			if(check == 'close'){
+				$('#userSearchForm').slideDown(400);
+				$('#userSearchForm').find('#check').val('open');
+			}else if(check == 'open'){
+				$('#userSearchForm').slideUp(400);
+				$('#userSearchForm').find('#check').val('close');
+			}
+			
 		}
 		
-		function formOpen(){
-			$('#userSearchFormOpen').css('display','none');
-			$('#userSearchForm').slideDown(400);
+		function userListOpen(checkNum){
+			if(checkNum == 2){
+				$('#searchUserListDiv').slideUp(400);
+				$('#searchUserListDiv').empty();
+				$('#userSearchForm').slideUp(400);
+				$('#userSearchForm').find('#check').val('close');
+			}
 		}
 		
 		function openWriteForm(){
-			$('#writeForm').css('display','');
+			$('#writeForm').slideDown();
+			$('#albumMsg').focus();
 		}
-		</script>
 		
+		function closeWriteForm(){
+			$('#writeForm').slideUp();
+		}
+		
+		//일상등록
+		function addAlbum(){
+			var formData = new FormData($("#albumInputForm")[0]);
+			var albumMsg = $('#albumMsg').val();
+			
+			if(albumMsg == null || albumMsg == ''){
+				alert('내용을 입력해주세요')
+				return;
+			}
+			
+			$.ajax({
+				type : 'post',
+	            url : 'addAlbum',
+	            data : formData ,
+	            processData : false,
+	            contentType : false,
+	            success : function(data) {
+	            	if(data.check){
+	            		alert('등록 되었습니다.');
+	            		window.location.reload(true);
+					}
+	            },
+				error : function(error) {
+	                alert("등록에 실패하였습니다.");
+	                console.log(error);
+	                console.log(error.status);
+	            }
+			});
+		}
+		
+		
+		//좋아요 ++
+		$(document).on('click','.goodCountPlusBtn',function(){
+			var goodCountNow = parseInt($(this).closest('#albumButtonTr').find('#goodCountTag').text());
+			var albumNo = $(this).closest('#albumDiv').find('#albumNo').val();
+			console.log(goodCountNow,albumNo);
+			
+			var countPlus = goodCountNow + 1;
+			var goodCountTag = $(this).closest('#albumButtonTr').find('#goodCountTag');
+			
+			
+			$.ajax({
+				url : 'addAlbumGood',
+				type : 'post',
+				data : {'albumNo':albumNo,'albumGood':goodCountNow},
+				dataType : 'json',
+				success : function(data){
+					console.log(data.check)
+					if(data.check == 'true'){
+						$(goodCountTag).empty();
+						$(goodCountTag).text(countPlus);
+					}else{
+						alert('이미 체크 하셨습니다.');
+					}				
+				}
+			});
+		});
+		
+		//일상 댓글 >오픈,클로즈!!
+		$(document).on('click','.openAlbumCommentBtn',function(){
+			var check = $(this).closest('#albumDiv').find('#commentOpenCheck').val();
+			var checkTag = $(this).closest('#albumDiv').find('#commentOpenCheck')
+			var commnetTag = $(this).closest('#albumDiv').find('#albumCommentDiv');
+			console.log(check,checkTag,commnetTag);
+			
+			if(check == 'close'){
+				$(commnetTag).slideDown();
+				$(checkTag).val('open');
+			}else if(check == 'open'){
+				$(commnetTag).slideUp();
+				$(checkTag).val('close');
+			}
+		});
+		
+		
+		//일상 > 댓글 등록
+		$(document).on('click','.addCommentBtn',function(){
+			var comContent = $(this).closest('#albumDiv').find('input[name="comContent"]').val();
+			var albumNo = $(this).closest('#albumDiv').find('#albumNo').val();
+			var commentWriteFormTag = $(this).closest('#commentWriteFormTag');
+			
+			if(comContent == null || comContent == ''){
+				alert('댓글을 입력해주세요!');
+				return;
+			}
+			
+			var html ='';
+			$.ajax({
+				url : 'addAlbumComment',
+				data : {'comContent':comContent,'albumNo':albumNo} ,
+				dataType : 'json' ,
+				type : 'post',
+				success : function(data){
+					if(data.check == 'true'){
+						alert('댓글이 등록되었습니다');
+						window.location.reload(true);
+						
+						/* html += '<table style="width:100%">';
+						html += '<tr>';
+						html += '<td style="border-top:1px solid #ddd;">';
+						if(data.comment.userImgOld != null && data.comment.userImgNew != null){
+							html += '<img src="resources/files/'+data.comment.userId.substring(0,1)+'/'+data.comment.userImgNew+'" style="width:45px;height:45px;border-radius:15px;" />';
+						}else if(data.comment.userImgOld == null && data.comment.userImgNew != null){
+							html += '<img src="resources/files/'+data.comment.userId.substring(0,1)+'/'+data.comment.userImgNew+'" style="width:45px;height:45px;border-radius:15px;" />';
+						}else if(data.comment.userImgOld == null && data.comment.userImgNew == null){
+							html += '<img src="resources/img/ready.jpg" style="width:45px;height:45px;border-radius:15px;" />'
+						}
+						html += '<td style="border-top:1px solid #ddd;">';
+						html += '<font style="font-weight:bold;font-size:14px;">'+data.comment.userName+'</font><br/>';
+						html += '<font style="font-weight:bold;">'+data.comment.comContent+'}</font>';
+						html += '</td>';
+						html += '</td>';
+						html += '</tr>';
+						html += '</table>';
+						
+						$(this).closest('#commentWriteFormTag').before(html);  */
+					}else if(data.check == 'false'){
+						alert('댓글 등록에 실패하였습니다')
+					}
+				}
+			});
+		});
+		
+		function userList(classNum){
+			var sessionId = '${sessionId}';
+			
+			if(classNum != null && classNum != ''){
+				$.ajax({
+					url : 'searchUserByClass',
+					type : 'post',
+					data : {'classNum':classNum},
+					dataType : 'json',
+					success:function(data){
+						$('#searchUserListDiv').empty();
+						
+						var html = '';
+						html += '<div>';
+						html += '<table style="width:100%;">'
+						
+						if(data[0].userId.substring(0,1) == '8'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="border-bottom:1px dotted #ddd;">';
+							html += '<font style="color:#030066;font-weight:bold;">회장 최기호</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-2607-0689"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+							
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3845.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3845new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="border-bottom:1px dotted #ddd;">';
+							html += '<font style="color:#030066;font-weight:bold;">총무 정윤승</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-9476-4884"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '6'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							html += '<td style="border-bottom:1px dotted #ddd;">';
+							html += '<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-3673-1951"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}
+						$.each(data, function(i, result){
+							if(result.userId != '845' && result.userId != '848' && result.userId != '632'){
+								html += '<tr>';
+								html += '<td style="width:61px;border-bottom:1px dotted #ddd;height:75px;">';
+								if(result.userImgOld != null && result.userImgNew == null){
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
+								}else if(result.userImgOld != null && result.userImgNew != null){
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+									html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+									html += '</td><td style="border-bottom:1px dotted #ddd;">';
+								}else if(result.userImgOld == null && result.userImgNew == null){
+									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
+								}
+								if(result.userDo == null || result.userCityName == null){
+									html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
+								}else if(result.userDo != null || result.userCityName != null){
+									html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
+									html += '<font style="font-size:13px;font-weight:bold;">'+result.userDo+' '+result.userCityName+'</font>';
+								}
+								html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+								if(sessionId == result.userId){
+									html += '<a href="#page9"><img src="resources/img/info.jpg" style="width:43px;height:43px;"/></a>'
+								}
+								if(result.userHp != null && result.userHp != ''){
+									html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+								}else{
+									/* html += '<a href="#page9"><img src="resources/img/nohp.png" style="width:40px;height:40px;"/></a>'; */
+								}
+								html += '</td>';
+								html += '</tr>';
+							}
+						});
+						html += '</table>';
+						html += '</div>';
+						$('#userListDiv').html(html);
+						$('#userListDiv').slideDown(400);
+					}
+					
+				});
+			}
+		}
+		
+		function noticeAddCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl1').css('background-color','#C1F2FF');
+			
+			$('#smsSendDiv').css('display','none');
+			$('#accountingDiv').css('display','none');
+			$('#statDiv').css('display','none');
+			$('#allUserViewDiv').css('display','none');
+			$('#connectionDiv').css('display','none');
+			$('#duesCtrlDiv').css('display','');
+		}
+		
+		function allUserViewCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl2').css('background-color','#C1F2FF');
+			
+			$('#duesCtrlDiv').css('display','none');
+			$('#smsSendDiv').css('display','none');
+			$('#accountingDiv').css('display','none');
+			$('#statDiv').css('display','none');
+			$('#connectionDiv').css('display','none');
+			$('#allUserViewDiv').css('display','');
+		}
+		
+		function smsAddCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl3').css('background-color','#C1F2FF');
+			$('#duesCtrlDiv').css('display','none');
+			$('#allUserViewDiv').css('display','none');
+			$('#accountingDiv').css('display','none');
+			$('#statDiv').css('display','none');
+			$('#connectionDiv').css('display','none');
+			$('#smsSendDiv').css('display','');
+		}
+		
+		function accountingCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl4').css('background-color','#C1F2FF');
+			$('#duesCtrlDiv').css('display','none');
+			$('#allUserViewDiv').css('display','none');
+			$('#smsSendDiv').css('display','none');
+			$('#statDiv').css('display','none');
+			$('#connectionDiv').css('display','none');
+			/* $('#accountingDiv').css('display',''); */
+			window.location.href = 'https://m.nonghyup.com/servlet/PMAI1010R.view';
+		}
+		
+		function statCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl5').css('background-color','#C1F2FF');
+			$('#duesCtrlDiv').css('display','none');
+			$('#allUserViewDiv').css('display','none');
+			$('#smsSendDiv').css('display','none');
+			$('#accountingDiv').css('display','none');
+			$('#connectionDiv').css('display','none');
+			$('#statDiv').css('display','');
+		}
+		
+		function connectionCtrl(){
+			$('.topList2').css('background-color','#ffffff');
+			$('#ctrl6').css('background-color','#C1F2FF');
+			$('#duesCtrlDiv').css('display','none');
+			$('#allUserViewDiv').css('display','none');
+			$('#smsSendDiv').css('display','none');
+			$('#accountingDiv').css('display','none');
+			$('#statDiv').css('display','none');
+			$('#connectionDiv').css('display','');
+			
+		}
+		function inputFormClose(noticeType){
+			if(noticeType == 1){
+				$('#contentDiv').slideUp(400);
+			}else if(noticeType == 2){
+				$('#eventDiv').slideUp(400);
+			}else if(noticeType == 3){
+				$('#normalDiv').slideUp(400);
+			}else if(noticeType == 4){
+				$('#noticeModifyDiv').slideUp(400);
+			}
+		}
+		
+		function cencelModifyAlbum(){
+			window.location.reload(true);
+		}
+		//일상 > 글수정 >> 수정폼연결
+		$(document).on('click','.albumModifyBtn',function(){
+			//글수정
+			var albumMsg = $(this).closest('#albumDiv').find('#albumMsgH4').text();
+			
+			$(this).closest('#albumDiv').find('#albumMsgH4').empty();
+			var html = '<table style="width:100%;">';
+			html += '<tr>';
+			html += '<td style="width:70%">';
+			html += '<textarea name="albumMsg" id="albumMsg2" style="width:95%">'+albumMsg+'</textarea>';
+			html += '</td><td>'
+			html += '<button type="button" class="modifyAlbum" style="background-color:#D4F4FA;width:90%;height:36px;border-radius:5px;text-align:center;">수정</button>'
+			html += '</td><td>'
+			html += '<button type="button" onclick="cencelModifyAlbum();" style="background-color:#D4F4FA;width:90%;height:36px;border-radius:5px;text-align:center;">취소</button>'
+			html += '</td>';
+			html += '</tr>';
+			html += '</table>';
+			
+			$(this).closest('#albumDiv').find('#albumMsgH4').append(html);
+			
+		});
+		
+		//일상 > 글삭제
+		$(document).on('click','.albumDeleteBtn',function(){
+			var albumNo = $(this).closest('#albumDiv').find('#albumNo').val();
+			
+			if(confirm("삭제 하시겠습니까?") == true){
+				$.ajax({
+					url : 'removeAlbum',
+					type : 'post',
+					dataType : 'json',
+					data : {'albumNo' : albumNo},
+					success : function(data){
+						if(data.check == 'true'){
+							alert('삭제 되었습니다.');
+							window.location.reload(true);
+						}else{
+							alert('삭제에 실패하였습니다.')
+							window.location.reload(true);
+						}
+					}
+				});
+			}else{
+				return;
+			}
+		});	
+		
+		//일상 수정
+		$(document).on('click','.modifyAlbum',function(){
+			var albumNo = $(this).closest('#albumDiv').find('#albumNo').val();
+			var albumMsg = $(this).parent().parent().find('#albumMsg2').val();
+			
+			console.log(albumNo, albumMsg);
+			if(confirm("수정 하시겠습니까?") == true){
+				$.ajax({
+					url : 'modifyAlbum',
+					type : 'post',
+					dataType : 'json',
+					data : {'albumNo' : albumNo, 'albumMsg':albumMsg},
+					success : function(data){
+						if(data.check == 'true'){
+							alert('수정 되었습니다.');
+							window.location.reload(true);
+						}else{
+							alert('수정에 실패하였습니다.')
+							window.location.reload(true);
+						}
+					}
+				});
+			}else{
+				window.location.reload(true);
+			}
+		});
+		
+		// 공지 > 공지 > 삭제
+		$(document).on('click','.noticeDeleteBtn',function(){
+			var noNum = $(this).closest('#bodyTable').find('#noNum').val();
+			
+			if(confirm("삭제 하시겠습니까?") == true){
+				$.ajax({
+					url : 'deleteNotice',
+					type : 'post',
+					dataType : 'json',
+					data : {'noNum' : noNum},
+					success : function(data){
+						if(data.check == 'true'){
+							alert('삭제 되었습니다.');
+							window.location.reload(true);
+						}else{
+							alert('삭제에 실패하였습니다.')
+							window.location.reload(true);
+						}
+					}
+				});
+			}else{
+				return;
+			}
+		});
+		
+		//공지 > 행사 > 수정 > 폼생성
+		$(document).on('click','.noticeModifyBtn',function(){
+			var noNum = $(this).closest('#accodianDiv').find('#noNum').val();
+			var noType = $(this).closest('#accodianDiv').find('#noType').val();
+			
+			$.ajax({
+				url : 'readNoticeForModify',
+				type : 'post',
+				dataType : 'json',
+				data : {'noNum' : noNum,'noType':noType},
+				success : function(data){
+					$('#noticeModifyDiv').empty();
+					if(data.noType == 1){
+						var html = '<form id="noticeModifyForm">';
+						html += '<input type="hidden" name="noType" value="'+data.noType+'"/>';
+						html += '<input type="hidden" name="noNum" value="'+data.noNum+'"/>';
+						html +=	'<table style="width:100%;border:3px solid #ddd;">';
+						html +=	'<tr>'
+						html += '<td colspan="2"><input type="text" name="coTargetName" id="coTargetName" style="width:90%;" value="'+data.coTargetName+'"></td>'
+						html += '<td style="width:20%"><input type="text" name="coTargetClass" id="coTargetClass" style="width:70px;" value="'+data.coTargetClass+'">';
+						html +=	'<td style="width:20%;text-align:right;"><a onclick="inputFormClose(4)">';
+						html += '<img src="resources/img/cencel.jpg" style="width:20px;height:20px;">';
+						html += '</a>';
+						html += '</td></tr><tr>';
+						html += '<td colspan="4"><input type="text" name="coContent" id="coContent" style="width:95%" value="'+data.coContent+'"></td>';
+						html += '</tr><tr>';
+						html += '<td colspan="4"><input type="text" name="coPlace" id="coPlaceContent style="width:95%" value="'+data.coPlace+'"></td>';
+						html += '</tr><tr>';
+						html += '<td style="width:28%;">발인 : </td>';
+						html += '<td colspan="3"><input type="date" name="coHanddate" id="coHanddate" value="'+data.coHanddate+'"></td>';
+						html += '</tr><tr>';
+						html += '<td style="width:28%;">단체 : </td>';
+						html += '<td style="width:35%;"><input type="date" name="coVisitDate" style="width:130px;" id="coVisitDate" value="'+data.coVisitDate+'"></td>';
+						html += '<td style="width:17%;"><input type="text" name="coVisitHour" style="width:40px;" value="'+data.coVisitHour+'"/></td>'
+						html += '<td style="width:20%;"><input type="text" name="coVisitMinute" style="width:40px;" value="'+data.coVisitMinute+'"/></td>';
+						html += '</tr></table>';
+						html += '<button type="button" style="background-color:#ddd;width:100%;" id="noticeModify">수정</a>';
+						html += '</form>';
+					}else if(data.noType == 2){
+						var html = '<form id="noticeModifyForm">';
+						html += '<input type="hidden" name="noType" value="'+data.noType+'"/>';
+						html += '<input type="hidden" name="noNum" value="'+data.noNum+'"/>';
+						html +=	'<table style="width:100%;text-align:center;border:3px solid #ddd;">';
+						html +=	'<tr>'
+						html += '<td><input type="text" name="noSubject" id="noSubject" style="width:100%;" value="'+data.noSubject+'"></td>'
+						html += '<td style="font-weight:bold;font-size:17px;width:30px;">'
+						html +=	'<a onclick="inputFormClose(4)">'
+						html += '<font style="float:right;"><img src="resources/img/cencel.jpg" style="width:20px;height:20px;"></font>';
+						html += '</a>';
+						html += '</td></tr><tr>';
+						html += '<td colspan="2"><input type="text" name="coPlace" style="width:100%;" id="coPlaceContent" value="'+data.coPlace+'"></td>';
+						html += '</tr><tr>';
+						html += '<td colspan="2"><input type="tel" name="coMoney" style="width:100%;" id="coMoney" value="'+data.coMoney+'"></td>';
+						html += '</tr><tr>';
+						html += '<td colspan="2"><input type="date" name="coEventDate" id="coEventDate" style="width:100%;" value="'+data.coEventDate+'"></td>';
+						html += '</tr><tr>';
+						html += '<td colspan="2"><input type="text" name="coContent" id="coContent" style="width:100%;" value="'+data.coContent+'"></td>';
+						html += '</tr></table>';
+						html += '<button type="button" style="background-color:#ddd;width:100%;" id="noticeModify">수정</a>';
+						html += '</form>';
+					}else if(data.noType == 3){
+						var html = '<form id="noticeModifyForm">';
+						html += '<input type="hidden" name="noType" value="'+data.noType+'"/>';
+						html += '<input type="hidden" name="noNum" value="'+data.noNum+'"/>';
+						html +=	'<table style="width:100%;text-align:center;border:3px solid #ddd;">';
+						html +=	'<tr>'
+						html += '<td style="width:60%"><input type="text" name="noTargetName" style="width:100%;" id="noTargetName" value="'+data.noTargetName+'"></td>'
+						html += '<td style="width:20%"><input type="text" name="noTargetClass" style="width:60px;" id="noTargetClass" value="'+data.noTargetClass+'"></td>'
+						html +=	'<td style="width:20%;"><a onclick="inputFormClose(4)">'
+						html += '<font style="float:right;"><img src="resources/img/cencel.jpg" style="width:20px;height:20px;"></font>';
+						html += '</a>';
+						html += '</td></tr><tr>';
+						html += '<td colspan="3"><input type="text" name="noSubject" id="noSubject" style="width:100%;" value="'+data.noSubject+'"></td>';
+						html += '</tr><tr>';
+						html += '<td colspan="3"><input type="text" name="noContents" id="noContents" style="width:100%;" value="'+data.noContents+'"></td>';
+						html += '</tr></table>';
+						html += '<button type="button" style="background-color:#ddd;width:100%;" id="noticeModify">수정</a>';
+						html += '</form>';
+					}
+					$('#noticeModifyDiv').append(html);
+					$('#noticeModifyDiv').slideDown();				
+				}
+			});			
+		});
+		
+		//공지수정
+		$(document).on('click','#noticeModify',function(){
+			var params = $('#noticeModifyForm').serialize();
+			
+			$.ajax({
+				url : 'modifyNotice',
+				data : params,
+				dataType : 'json',
+				type : 'post',
+				success : function(data){
+					if(data.check == 'true'){
+						alert('수정이 완료되었습니다');
+						window.location.reload(true);
+					}
+				}
+			});
+		});
+		
+		function searchAlbumByUser(){
+			var userName = $('#searchAlbumByUser').val();
+			var cookieId = '${cookie.cookieId.value}';
+			var html = '';
+			
+			$.ajax({
+				url : 'searchAlbumByUser',
+				data : {'userName':userName},
+				dataType : 'json',
+				type : 'post',
+				success : function(data){
+					console.log(data);
+					if(data.length > 0){
+						$.each(data,function(i,result){
+							html += '<div id="albumDiv">';
+							html += '<input type="hidden" id="albumNo" value="'+result.albumNo+'"/>';
+							html += '<input type="hidden" id="commentOpenCheck" value="close"/>';
+							html += '<input type="hidden" id="albumPath" value="'+result.userId.substring(0,1)+'"/><br/>';
+							html += '<table style="width:100%;border-top:2px solid #ddd;">';
+							html += '<tr>';
+							html += '<td style="width:25px;"><img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:30px;height:30px;border-radius:10px;"/></td>';
+							html += '<td style="width:45px;font-size:15px;font-weight:bold;">'+result.userName+'</td>';
+							html += '<td style="font-size:14px;">'+result.albumRegDate+'</td>';
+							html += '<td style="width:10%;"><a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:25px;height:25px;"/></a></td>';
+							html += '</tr>';
+							html += '</table>';
+							$.each(result.fileList, function(i, photoList){
+								html += '<input type="hidden" id="fileName" value="'+photoList.fileName+'"/>';
+								if(photoList.fileName == 'birthday.PNG'){
+									html += '<img src="resources/files/'+photoList.filePath+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
+								}else{
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
+								}
+							});
+							html += '<h4 id="albumMsgH4">'+result.albumMsg+'</h4>';
+							/* 버튼으로 변경
+							html += '<div style="font-size:14px;">';
+							html += '<img src="resources/img/good.jpg" style="width:14px;height:14px;"/>';
+							html += '좋아요 <font style="font-weight:bold;" id="goodCountTag">'+result.albumGood+'</font>';
+							html += '</div>'; */
+							
+							html += '<table style="width:100%;text-align:center;">';
+							html += '<tr id="albumButtonTr">';
+							if(result.userId == cookieId){
+								/* html += '<button type="button" style="width:33%;float:left;" class="openAlbumCommentBtn">';
+								html += '댓글 '+result.commentList.length+'</button>';
+								html += '<button type="button" style="width:33%;float:left;" class="albumModifyBtn">글수정</button>';
+								html += '<button type="button" style="width:33%;float:left;" class="albumDeleteBtn">글삭제</button>'; */
+								
+								html += '<td class="topList4 goodCountPlusBtn">좋아요(<font style="font-weight:bold;" id="goodCountTag">'+result.albumGood+'</font>)</td>';
+								html += '<td class="topList4 openAlbumCommentBtn">댓글('+result.commentList.length+')</td>';
+								html += '<td class="topList4 albumModifyBtn">수정</td>';
+								html += '<td class="topList4 albumDeleteBtn">삭제</td>';
+							}else if(result.userId != cookieId){
+								/* html += '<button type="button" style="width:49%;float:left;" class="goodCountPlusBtn">좋아요</button>';
+								html += '<button type="button" style="width:49%;float:left;" class="openAlbumCommentBtn">';
+								html += '댓글 '+result.commentList.length+'</button>'; */
+								
+								html += '<td class="topList4 goodCountPlusBtn">좋아요(<font style="font-weight:bold;" id="goodCountTag">'+result.albumGood+'</font>)</td>';
+								html += '<td class="topList4 openAlbumCommentBtn">댓글('+result.commentList.length+')</td>';
+							}
+							html += '</tr>';
+							html += '</table>';
+							html += '<div id="albumCommentDiv" style="display:none;">';
+							html += '<table style="width:100%" id="albumCommentTable">';
+							$.each(result.commentList,function(i, commentList){
+								html += '<tr>';
+								if(commentList.userImgNew != null && commentList.userImgOld != null){
+									html += '<td style="border-top:1px solid #ddd;width:50px;">';
+									html += '<img src="resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
+									html += '</td>';
+								}else if(commentList.userImgNew == null && commentList.userImgOld != null){
+									html += '<td style="border-top:1px solid #ddd;width:50px;">';
+									html += '<img src="resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
+									html += '</td>';
+								}else if(commentList.userImgNew == null && commentList.userImgOld == null){
+									html += '<td style="border-top:1px solid #ddd;width:50px;">';
+									html += '<img src="resources/img/ready.jpg" style="width:40px;height:40px;border-radius:15px;" />';
+									html += '</td>';
+								}
+								html += '<td style="border-top:1px solid #ddd;">';
+								html += '<font style="font-weight:bold;font-size:14px;">'+commentList.userName+'</font><br/>';
+								html += '<font style="font-weight:bold;">'+commentList.comContent+'</font>';
+								html += '</td>';
+								if(commentList.userId == cookieId){
+									html += '<td style="border-top:1px solid #ddd;text-align:right;">';
+									html += '<input type="hidden" id="commentNum" value="'+commentList.comNum+'"/>';
+									html += '<a href="#" class="commentDeleteBtn"><img src="resources/img/cencel.jpg" style="width:26px;height:26px;"/></a>';
+									html += '</td>';
+								}
+		
+								html += '</tr>';
+							});
+							
+							html += '</table>';
+							/*댓글입력  */
+							html += '<div style="width:100%;" id="commentWriteForm">';
+							html += '<table style="width:100%;">';
+							html += '<td style="width:85%;"><input type="text" style="width:100%" name="comContent" placeholder="댓글 입력"></td>';
+							html += '<td style="text-align:right;"><a href="#" style="width:12%;" class="addCommentBtn">';
+							html += '<img src="resources/img/plus.jpg" style="width:30px;height:30px;"/></a></td>';
+							html += '</table>';
+							html += '</div>';
+							html += '</div>';
+							html += '</div>';
+							console.log('h2');
+						});
+						console.log(html);
+						$('#albumListDiv').empty();
+						$('#albumListDiv').html(html);
+					}else{
+						alert('검색 결과가 없습니다.');
+						return;
+					} 
+				}
+			});
+		}
+		
+		function photoOpen(num){
+			if(num == 1){
+				location.href = 'muju2016List';
+			}else if(num == 2){
+				location.href = 'before30thList';
+			}else if(num == 3){
+				location.href = 'after30thList';
+			}else if(num == 4){
+				location.href = 'adminList';
+			}else if(num == 5){
+				location.href = 'muju2017List';
+			}else if(num == 7){
+				location.href = 'albumList';
+			}
+			submit();
+		}
+		
+		function statDetail(classNum){
+			location.href = 'statDetail?classNum='+classNum;
+		}
+		
+		function songList(num){
+			location.href = 'songList?num='+num;
+		}
+		
+		function duesDetail(classNum){
+			location.href = 'duesDetail?classNum='+classNum;
+		}
+		
+		// 댓글삭제
+		$(document).on('click','.commentDeleteBtn',function(){
+			var comNum = $(this).parent().find('#commentNum').val();
+			
+			if(confirm('댓글을 삭제하시겠습니까?') == true){
+				$.ajax({
+					url : 'removeComment',
+					type : 'post',
+					dataType : 'json',
+					data : {'comNum':comNum},
+					success : function(data){
+						if(data.check == 'true'){
+							alert('삭제되었습니다');
+							window.location.reload(true);
+						}else{
+							alert('삭제에 실패하였습니다');
+							return;
+						}
+					}
+				});
+			}
+		});
+		
+		$(document).on('click','.joinListBtn',function(){
+			var noNum = $(this).closest('#bodyTable').find('#noNum').val();
+			console.log('공지번호 확인 : '+noNum);
+			
+			$.ajax({
+				url : 'readJoinUserList',
+				data : {'noNum':noNum},
+				dataType : 'json',
+				type : 'post',
+				success : function(data){
+					console.log(data);
+					if(data.length > 0){
+						var html = '<table style="width:100%;">';
+						$.each(data, function(i, result){
+							html += '<tr>';
+							html += '<td style="width:43px;border-bottom:1px dotted #ddd;height:42px;">';
+							if(result.userImgOld != null && result.userImgNew == null){
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td style="border-bottom:1px dotted #ddd;">'
+							}else if(result.userImgOld != null && result.userImgNew != null){
+								/* html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td style="width:43px;border-bottom:1px dotted #ddd;">'; */
+								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td style="border-bottom:1px dotted #ddd;">';
+							}else if(result.userImgOld == null && result.userImgNew == null){
+								html += '</td><td style="border-bottom:1px dotted #ddd;">'
+							}
+							if(result.userDo == null || result.userCityName == null){
+								html += '<font style="color:black;font-weight:bold;">'+result.userName+'('+result.userId.substring(0,1)+'반)</font><br/>';
+							}else if(result.userDo != null || result.userCityName != null){
+								html += '<font style="color:black;font-weight:bold;">'+result.userName+'('+result.userId.substring(0,1)+'반)</font><br/>';
+								html += '<font style="font-size:13px;font-weight:bold;">'+result.userDo+' '+result.userCityName+'</font>';
+							}
+							if(result.joJoinShape == '참여'){
+								html += '</td><td style="width:40px;border-bottom:1px dotted #ddd;"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">참여</font>';
+							}else if(result.joJoinShape == '불참'){
+								html += '</td><td style="width:40px;border-bottom:1px dotted #ddd;"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">불참</font>';
+							}
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;width:36px;">';
+							if(result.userHp != null && result.userHp != ''){
+								html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>';
+							}else{
+								/* html += '<a href="#page9"><img src="resources/img/nohp.png" style="width:40px;height:40px;"/></a>'; */
+							}
+							html += '</td>';
+							html += '</tr>';
+						});
+						html += '</table>';
+						infoPopUp(html);
+					}
+				}
+			});
+		})
+		
+		function infoPopUp(txt){
+		    modal({
+		        type: 'info',
+		        title: '참여',
+		        text: txt,
+		        buttons: [{
+		    		text: '닫기', //Button Text
+		    		val: 'close', //Button Value
+		    		eKey: true, //Enter Keypress
+		    		addClass: 'btn-light-blue', //Button Classes (btn-large | btn-small | btn-green | btn-light-green | btn-purple | btn-orange | btn-pink | btn-turquoise | btn-blue | btn-light-blue | btn-light-red | btn-red | btn-yellow | btn-white | btn-black | btn-rounded | btn-circle | btn-square | btn-disabled)
+		    		onClick: function(dialog) {
+		    			return true;
+		    		}
+		    	}]
+		    });
+		}
+
+
+		</script>
 </head>
 <body>
 	<section id="page1" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    <header data-role="header" style="height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#" class="ui-btn-active ui-state-persist">친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none">공지</a></li>
-	                <li><a href="#page8" data-transition="none">일상</a></li>
-	                <li><a href="#page7" data-transition="none">관리</a></li>
+	                <li><a href="#" class="ui-btn-active ui-state-persist"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#page8" data-transition="none"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div><!-- /navbar -->
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="margin-top:25px;">
-	    	<div data-role="collapsible-set" data-inset="false">
-	
-				<!-- <h2 style="text-align:center;">친구목록</h2> -->
-				<div style="width:100%;" id="userSearchForm">
-					<input type="text" name="searchUserByName" id="searchUserByName" placeholder="검색할 이름을 입력하세요"/>
-					<button type="button" onclick="formClose();" data-icon="arrow-u" style="width:30%;float:right;background-color:#6CC0FF;color:white;">창닫기</button>
-					<button type="button" onclick="searchUser();" data-icon="search" style="width:30%;float:right;background-color:#B3D26C;">검색</button><br/><br/><br/><br/>
-				</div>
-				<div id="userSearchFormOpen" style="display:none;">
-					<button type="button" onclick="formOpen();" data-icon="arrow-d" style="background-color:#489FAE;color:white;">검색 폼 열기</button>
-				</div>
+	    <div class="content" data-role="content" style="margin-top:40px;">
+	    	<!-- 상단목록 -->
+	    	<table style="width:100%;border-bottom:3px solid #ddd;margin-top:2px;font-size:15px;">
+	    		<tr>
+	    			<!-- <td class="topList" onclick="userList(1);" id="class1">1반<br/><font style="font-size:13px;">58</font></td>
+	    			<td class="topList" onclick="userList(2);" id="class2">2반<br/><font style="font-size:13px;">54</font></td>
+	    			<td class="topList" onclick="userList(3);" id="class3">3반<br/><font style="font-size:13px;">55</font></td>
+	    			<td class="topList" onclick="userList(4);" id="class4">4반<br/><font style="font-size:13px;">57</font></td>
+	    			<td class="topList" onclick="userList(5);" id="class5">5반<br/><font style="font-size:13px;">56</font></td>
+	    			<td class="topList" onclick="userList(6);" id="class6">6반<br/><font style="font-size:13px;">60</font></td>
+	    			<td class="topList" onclick="userList(7);" id="class7">7반<br/><font style="font-size:13px;">57</font></td>
+	    			<td class="topList" onclick="userList(8);" id="class8">8반<br/><font style="font-size:13px;">58</font></td>
+	    			<td><a href="#" onclick="formOpen()"><img src="resources/img/search.png" style="width:33px;height:33px;"></a></td> -->
+	    			
+	    			<td style="width:35%;height:35px;">
+	    				<select style="height:35px;" onchange="userList(this.value)" data-native-menu="false">
+	    					<option value="1">1반(${joinCountList.get(0)}/58)</option>
+	    					<option value="2">2반(${joinCountList.get(1)}/54)</option>
+	    					<option value="3">3반(${joinCountList.get(2)}/55)</option> 
+	    					<option value="4">4반(${joinCountList.get(3)}/57)</option>
+	    					<option value="5">5반(${joinCountList.get(4)}/56)</option>
+	    					<option value="6" selected="selected">6반(${joinCountList.get(5)}/60)</option>
+	    					<option value="7">7반(${joinCountList.get(6)}/57)</option>
+	    					<option value="8">8반(${joinCountList.get(7)}/58)</option>
+	    				</select>
+	    			</td>
+	    			<td style="width:50%;">
+	    				<input type="text" style="height:39px;" name="searchUserByName" id="searchUserByName" placeholder="이름/지역"/>
+	    			</td>
+	    			<td style="width:15%;text-align:right;" onclick="searchUser();">
+	    				<img src="resources/img/search.jpg" style="width:41px;height:41px;">
+	    			</td>
+	    			<!-- <td style="width:10%;text-align:center;"><img src="resources/img/cencel2.png" style="width:28px;height:28px;"/></td> -->
+	    		</tr>
+	    	</table>	
+	    	
+	    	<!-- <div style="width:100%;display:none;" id="userSearchForm" class="form">
+	    		<input type="hidden" id="check" value="close"/>
+	    		<table style="width:100%">
+	    			<tr>
+	    				<td style="width:70%;"><input type="text" style="width:100%;border:2px solid #ddd;padding-top:5px;" name="searchUserByName" id="searchUserByName" placeholder="검색할 이름을 입력"></td>
+	    				<td style="width:20%;">
+		    				<div style="width:80%;border:2px solid #ddd;border-radius:5px;text-align:center;height:35px;font-size:20px;" onclick="searchUser();">
+								검색
+							</div>
+						</td>
+	    				<td onclick="userListOpen(2);"><font><img src="resources/img/cencel.png" style="width:25px;height25px;"/></font></td>
+	    			</tr>
+	    		</table>
+			</div> -->
+	    	
+	    	<div id="searchUserListDiv">
 				
-				<div id="searchUserListDiv">
-				
-				</div>
-				<div data-role="collapsible">
-					<h3>1반&nbsp;총원 58(핸드폰등록 ${countList.get(0)}명중 ${joinCountList.get(0)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 1 }">
+			</div>
+			
+			<div id="userListDiv">
+				<!-- <button type="button" style="background-color:#B4E7FF;width:100%;font-weight:bold;height:40px" onclick="userListOpen(2);">6반
+					<font style="float:right;"><img src="resources/img/cencel.png" style="width:25px;height25px;"/></font>
+				</button> -->
+				<table style="width:100%;">
+					<tr>
+						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
+							<img src="resources/files/6/3632.jpg" style="width:58px;height:58px;border-radius:10px;">
+						</td>
+						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
+							<img src="resources/files/6/3632new.jpg" style="width:58px;height:58px;border-radius:10px;">
+						</td>
+						<td style="border-bottom:1px dotted #ddd;">
+							<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>
+							<font style="font-size:13px;font-weight:bold;">전북&nbsp;전주시</font>
+						</td>
+						<td style="text-align:right;border-bottom:1px dotted #ddd;">
+							<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
+						</td>
+					</tr>
+					<c:forEach var="userList" items="${userList}">
+						<c:if test="${userList.userId.substring(0,1) eq '6' and userList.userId ne '632'}">
+						<tr>
+							<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li class="one" data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
+									<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">
+										</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li class="one" data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
+									<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:58px;height:58px;border-radius:10px;">
+										</td><td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:58px;height:58px;border-radius:10px;">
+										</td><td style="border-bottom:1px dotted #ddd;">
 									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li class="one" data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
+									<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">
+										</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 									</c:when>
 								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/1/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
+								<c:if test="${userList.userDo eq null or userList.userCityName eq null }">
+									<font style="color:black;font-weight:bold;">${userList.userName}</font><br/>
+								</c:if>
+								<c:if test="${userList.userDo ne null or userList.userCityName ne null }">
+									<font style="color:black;font-weight:bold;">${userList.userName}</font><br/>
+									<font style="font-size:13px;font-weight:bold;">${userList.userDo}&nbsp;${userList.userCityName}</font>
+								</c:if>
+							</td>
+							<td style="text-align:right;border-bottom:1px dotted #ddd;">
+								<c:choose>
+									<c:when test="${userList.userHp != null && userList.userHp != ''}">
+										<a href="tel:'${userList.userHp}'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
+									</c:when>
+									<c:otherwise>
 										
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 2 -->
-				<div data-role="collapsible">
-					<h3>2반&nbsp;총원 54(핸드폰등록 ${countList.get(1)}명중 ${joinCountList.get(1)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 2 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
+									</c:otherwise>
 								</c:choose>
-										
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/2/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-										
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 3 -->
-				<div data-role="collapsible">
-					<h3>3반&nbsp;총원 55(핸드폰등록 ${countList.get(2)}명중 ${joinCountList.get(2)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 3 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/3/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-										
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 4 -->
-				<div data-role="collapsible">
-					<h3>4반&nbsp;총원 57(핸드폰등록 ${countList.get(3)}명중 ${joinCountList.get(3)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 4 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/4/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 5 -->
-				<div data-role="collapsible">
-					<h3>5반&nbsp;총원 56(핸드폰등록 ${countList.get(4)}명중 ${joinCountList.get(4)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 5 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/5/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 6 -->
-				<div data-role="collapsible">
-					<h3>6반&nbsp;총원 60(핸드폰등록 ${countList.get(5)}명중 ${joinCountList.get(5)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 6 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/6/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font></h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 7 -->
-				<div data-role="collapsible">
-					<h3>7반&nbsp;총원 57(핸드폰등록 ${countList.get(6)}명중 ${joinCountList.get(6)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 7 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/7/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach>
-					</ul>
-				</div>
-				
-				<!-- 8 -->
-				<div data-role="collapsible">
-					<h3>8반&nbsp;총원 58(핸드폰등록 ${countList.get(7)}명중 ${joinCountList.get(7)}명사용)</h3>
-					<ul data-role="listview">
-						<c:forEach var="userList" items="${userList}">
-							<c:if test="${userList.userId.toString().substring(0,1) eq 8 }">
-								<c:choose>
-									<c:when test="${userList.userId eq sessionId }">
-										<li data-icon="edit">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#page8" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp ne null}">
-										<li data-icon="phone">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" onclick="document.location.href='tel:${userList.userHp}'" id="detailBtn">
-									</c:when>
-									<c:when test="${userList.userId ne sessionId and userList.userHp eq null}">
-										<li data-icon="lock">
-											<input type="hidden" id="userId" value="${userList.userId }"/>
-											<a href="#" id="detailBtn">
-									</c:when>
-								</c:choose>
-										<c:if test="${userList.userImgNew eq null or userList.userImgNew eq ''}">
-											<c:if test="${userList.userImgOld ne null and userList.userImgOld ne ''}">
-												<img src="resources/files/8/${userList.userImgOld }" style="width:80px;height:80px;"/>
-											</c:if>
-											<c:if test="${userList.userImgOld eq null or userList.userImgOld eq ''}">
-												<img src="resources/img/ready.jpg" style="width:80px;height:80px;"/>
-											</c:if>
-										</c:if>
-										<c:if test="${userList.userImgNew ne null and userList.userImgNew ne ''}">
-											<img src="resources/img/${userList.userImgNew }" style="width:80px;height:80px;"/>
-										</c:if>
-										<c:if test="${userList.userDo eq null or userList.userCityName eq null}">
-											<h2>${userList.userName }</h2>
-										</c:if>	
-										<c:if test="${userList.userDo ne null and userList.userCityName ne null}">
-											<h2>${userList.userName }<font style="font-size:13px;">&nbsp;-&nbsp;${userList.userDo} ${userList.userCityName}</font> </h2>
-										</c:if>	
-										<c:if test="${userList.userHp ne null and userList.userHp ne ''}">
-											<h2>${userList.userHp }</h2>
-										</c:if>
-									</a>
-								</li>
-							</c:if>
-						</c:forEach> 
-					</ul>
-				</div>
+							</td>
+						</tr>
+						</c:if>
+					</c:forEach>
+				</table>
 			</div>
 		</div>
 	    
@@ -1310,58 +2111,112 @@
 	<!-- 포토 -->
 	<section id="page2" data-role="page">
 	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#page1" data-transition="none">친구</a></li>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none">공지</a></li>
-	                <li><a href="#page8" data-transition="none">일상</a></li>
-	                <li><a href="#page7" data-transition="none">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#" class="ui-btn-active ui-state-persist" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#page8" data-transition="none"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
 	    <div class="content" data-role="content" style="height:70%;margin-top:25px;">
-		    <!-- 사진등록 가기 버튼 
-		    <div>
-		    	<a href="#page6" data-role="button" data-icon="plus" style="width:25%" data-transition="none">사진등록</a>
-		    </div> -->
-		    
-		    <div data-role="collapsible-set" data-inset="false">
-				<div data-role="collapsible">
-					<h3>총동문회 무주 체육대회 (2017.07)</h3>
-					<ul data-role="listview">
-						<li class="one" data-icon="edit">
-							<a>
-							
-							</a>
-						</li>
-					</ul>
-				</div> 
-				<div data-role="collapsible">
-					<h3>30주년 행사 (2017.07)</h3>
-					<ul data-role="listview">
-						<li class="one" data-icon="edit">
-							<a>
-							
-							</a>
-						</li>
-					</ul>
-				</div> 	
-				<div data-role="collapsible">
-					<h3>고등학교 시절 </h3>
-					<ul data-role="listview">
-						<li class="one" data-icon="edit">
-							<a>
-							
-							</a>
-						</li>
-					</ul>
-				</div> 	
-			</div>
+	    <br/>  
+	    <table class="subject">
+    		<tr>
+    			<td></td>
+    			<td><input type="search" name="searchPhotoByUser" placeholder="이름"/></td>
+    			<td style="text-align:right;"><a href="#" style="width:45px;text-align:right;" onclick=""><img src="resources/img/search.jpg" style="width:35px;height:35px;"/></a></td>
+    			<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+	    			<td style="width:36px;text-align:right;">
+	    				<a href="#" onclick="openWriteForm();"><img src="resources/img/photo.jpg" style="width:35px;height:35px;"/></a>
+	    			</td>
+    			</c:if>
+    		</tr>
+    	</table>
+    	<table style="width:100%;font-size:15px;">
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(5);">
+    				무주 동문회
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017.07</td>
+    		</tr>
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(4);">
+    				임원진 위취임식 행사
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
+    		</tr>
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(3);">
+    				30주년 기념식 사진
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
+    		</tr>
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(2);">
+    				30주년을 준비하며
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
+    		</tr>
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(1);">
+    				무주 동문회
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2016</td>
+    		</tr>
+    		<tr>
+    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+    			<td class="photoList" onclick="photoOpen(7);">
+    				추억과 졸업앨범
+    			</td>
+    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;"></td>
+    		</tr>
+    	</table>
+    	<br/>
+    	<table style="width:100%;">
+    		<tr>
+    			<td class="songListTd">
+    				<a href="#" onclick="songList(1);">
+	    				<img src="resources/img/song.jpg" style="width:40px;height:40px;"/><br/>
+	    				<font style="font-size:14px;font-weight:bold;color:#030066;">유진표</font><br/>
+		    			<font style="font-size:14px;font-weight:bold;color:#030066;">천년지기</font>
+	    			</a>
+    			</td>
+    			<td class="songListTd">
+    				<a href="#" onclick="songList(2);">
+	    				<img src="resources/img/song.jpg" style="width:40px;height:40px;"/><br/>
+	    				<font style="font-size:14px;font-weight:bold;color:#030066;">미기</font><br/>
+		    			<font style="font-size:14px;font-weight:bold;color:#030066;">천년지기</font>
+		    		</a>
+    			</td>
+    			<td class="songListTd">
+    				<a href="#" onclick="songList(3);">
+	    				<img src="resources/img/song.jpg" style="width:40px;height:40px;"/><br/>
+	    				<font style="font-size:14px;font-weight:bold;color:#030066;">이선희</font><br/>
+		    			<font style="font-size:14px;font-weight:bold;color:#030066;">인연</font>
+		    		</a>
+    			</td>	
+    			<td class="songListTd">
+    				<a href="#" onclick="songList(4);">
+	    				<img src="resources/img/song.jpg" style="width:40px;height:40px;"/><br/>
+	    				<font style="font-size:14px;font-weight:bold;color:#030066;">조용필</font><br/>
+		    			<font style="font-size:14px;font-weight:bold;color:#030066;">친구여</font>
+		    		</a>
+    			</td>		    			
+    		</tr>
+    	</table>
+	    
 	    </div>
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
@@ -1370,16 +2225,17 @@
 
 	
 	<!-- 문자 -->
-	<section id="page3" data-role="page">
+	<%-- <section id="page3" data-role="page">
 	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);">MY</a>
 	    	<div data-role="navbar">
 	            <ul>
-	                <li><a href="#page1" data-icon="user" data-transition="none">친구</a></li>
-	                <li><a href="#page2" data-icon="camera" data-transition="none">포토</a></li>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="mail">문자</a></li>
-	                <li><a href="#page4" data-icon="audio" data-transition="none">소식</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#" data-transition="none"  class="ui-btn-active ui-state-persist"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	           
 	        </div>
@@ -1426,63 +2282,201 @@
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
 
-	</section>
+	</section> --%>
 	
 	<!-- 공지 > 목록-->
 	<section id="page4" data-role="page">
 	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	    	<div data-role="navbar">
 	             <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none" class="ui-btn-active ui-state-persist">공지</a></li>
-	                <li><a href="#page7" data-transition="none">일상</a></li>
-	                <li><a href="#page8" data-transition="none">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#page8" data-transition="none"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;margin-top:20px;">
-	       <!-- 공지목록 / 공지내용 선택메뉴  
-	       <div data-role="navbar">
-	            <ul>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="bullets" data-transition="none">공지목록</a></li>
-	                <li><a href="#page5" data-icon="plus" data-transition="none">공지등록</a></li>
-	            </ul>
-	        </div> -->
-	        
+	    <div class="content" data-role="content" style="height:70%;margin-top:20px;font-size:15px;">
+	        <br/>
+	        <!--머릿말 -->
+	      	<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+		      	<div id="noticeTitle" style="height:auto;margin-top:10px;">
+		    		<table style="width:100%;text-align:center;border-bottom:3px solid #ddd;">
+		    			<tr>
+		    				<td id="typeContent" class="topList3">부의</td>
+		    				<td id="typeEvent" class="topList3">행사</td>
+		    				<td id="typeNormal" class="topList3">축하</td>
+		    				<td class="topList3">기타</td>
+		    			</tr>
+		    		</table>
+			    	
+			    	<!--공지수정폼  -->
+			    	<div id="noticeModifyDiv" style="display:none;width:100%;">
+			    		
+			    	</div>
+			    	
+					<!-- 부의공지입력폼 -->
+					<div id="contentDiv" style="display:none;">
+						<form id="contentForm">
+							<input type="hidden" name="noType" value="1"/>
+							<table style="width:100%;text-align:center;">
+								<tr>
+									<td colspan="2"><input type="text" name="coTargetName" id="coTargetName" placeholder="이름"></td>
+									<td style="width:15%"><input type="text" name="coTargetClass" id="coTargetClass" placeholder="반"></td>
+									<td>
+										<a onclick="inputFormClose(1)">
+											<font style="float:right;"><img src="resources/img/cencel.jpg" style="width:34px;height:34px;"></font>
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4"><input type="text" name="coContent" id="coContent" placeholder="내용" /></td>
+								</tr>
+								<tr>
+									<td colspan="4"><input type="text" name="coPlace" id="coPlaceContent" placeholder="장례식장"></td>
+								</tr>
+								<tr>
+									<td style="width:25%;">발인</td>
+									<td colspan="3"><input type="date" name="coHanddate" id="coHanddate" placeholder="발인"></td>
+								</tr>
+								<tr>
+									<td style="width:25%;">조문</td>
+									<td style="width:35%;"><input type="date" name="coVisitDate" id="coVisitDate" placeholder="단체조문"></td>
+									<td style="width:20%;"><input type="text" name="coVisitHour" placeholder="시"/></td>
+									<td style="width:20%;"><input type="text" name="coVisitMinute" placeholder="분"/></td>
+								</tr>
+							</table>
+							<a data-role="button" data-theme="c" style="background-color:#ddd;color:#000000;" href="#" id="contentAddBtn">공지등록</a> 
+						</form>
+					</div>
+							
+					
+					<!-- 행사공지 입력폼 -->
+					<div id="eventDiv" style="display:none;">
+						<form id="eventForm">
+							<input type="hidden" name="noType" value="2"/>
+							<table style="width:100%;text-align:center;">
+								<tr>
+									<td><input type="text" name="noSubject" id="noSubject" placeholder="행사 제목"></td>
+									<td style="font-weight:bold;font-size:17px;width:30px;">
+										<a onclick="inputFormClose(2)">
+											<font style="float:right;"><img src="resources/img/cencel.jpg" style="width:34px;height:34px;"></font>
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="text" name="coPlace" id="coPlaceContent" placeholder="장소"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="tel" name="coMoney" id="coMoney" placeholder="회비"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="date" name="coEventDate" id="coEventDate" placeholder="행사날짜"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="text" name="coContent" id="coContent" placeholder="행사 내용"></textarea></td>
+								</tr>
+							</table>
+							<a data-role="button" data-theme="c" style="background-color:#ddd;color:#000000;" href="#" id="eventAddBtn">공지등록</a> 
+						</form>
+					</div>
+					
+					
+					<!-- 축하공지 입력폼 -->
+					<div id="normalDiv" style="display:none;">
+						<form id="normalForm">
+							<input type="hidden" name="noType" value="3"/>
+							<table style="width:100%;text-align:center;">
+								<tr>
+									<td style="width:60%"><input type="text" name="noTargetName" id="noTargetName" placeholder="이름"></td>
+									<td style="width:20%"><input type="text" name="noTargetClass" id="noTargetClass" placeholder="반"></td>
+									<td>
+										<a onclick="inputFormClose(3)">
+											<font style="float:right;"><img src="resources/img/cencel.jpg" style="width:34px;height:34px;"></font>
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3"><input type="text" name="noSubject" id="noSubject" placeholder="제목"></td>
+								</tr>
+								<tr>
+									<td colspan="3"><input type="text" name="noContents" id="noContents" placeholder="내용"></textarea></td>
+								</tr>
+							</table>
+							<a data-role="button" data-theme="c" style="background-color:#ddd;color:#000000;" href="#" id="normalAddBtn">공지등록</a> 
+						</form>
+					</div>
+				</div> <!-- 공지등록 끝 -->
+	      	</c:if>
+	      	
+	        <c:if test="${cookie.cookieId.value ne 632 and cookie.cookieId.value ne 848 and cookie.cookieId.value ne 845}">
+	        	<table class="subject" style="margin-top:10px;">
+		        	<tr>
+		        		<td style="width:28px;"><img src="resources/img/phototop.png" style="width:26px;height:26px;"/></td>
+		        		<td>우리 모두 동참합니다</td>
+		        	</tr>
+		        </table>
+	        </c:if>
 	        <!--공지내용 들어갈부분  -->
 	        <div data-role="collapsible-set" data-inset="false">
-	        	<h2 style="text-align:center;">공지목록</h2>
 	        	<c:forEach var="noticeList" items="${noticeList }" varStatus="i">
 	        		<c:if test="${noticeList.noType eq 1 }">
 	        			<div data-role="collapsible" id="accodianDiv">
-							<h3>[哀事]${noticeList.noSubject }<font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
-							<h4>삼가 고인의 명복을 빕니다.</h4>
-							<table  id="bodyTable">
-								<thead>
+	        				<h3><font class="noticeH3">[哀事]${noticeList.coTargetName}(${noticeList.coTargetClass}반) ${noticeList.coContent }</font><font style="float:right;font-size:14px;padding-top:2px;">${noticeList.noRegDate }</font></h3>
+							<table style="width:100%">
+								<tr>
+									<td>
+										<c:if test="${noticeList.userImgOld ne null}">
+											<img src="resources/files/${noticeList.coTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
+										</c:if>
+										<c:if test="${noticeList.userImgNew ne null}">
+											<img src="resources/files/${noticeList.coTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
+										</c:if>
+									</td>
+									<td colspan="2" style="text-align:right;">
+										<c:if test="${noticeList.coUserHp != null and noticeList.coUserHp != ''}">
+											<a href="tel:'${noticeList.coUserHp}'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+										</c:if>
+									</td>
+								</tr>
+							</table>
+							<table id="bodyTable" style="width:100%">
+								<input type="hidden" id="noNum" value="${noticeList.noNum }"/>
+	        					<input type="hidden" id="noType" value="1"/>
+								<thead>	
 									<tr>
-										<th>내용</th>
-										<td>${noticeList.coContent }</td>
+										<td style="width:20%;font-weight:bold;">내용 : </td>
+										<td>${noticeList.coTargetName}(${noticeList.coTargetClass}반) ${noticeList.coContent }</td>
 									</tr>
 									<tr>
-										<th>발인</th>
+										<td style="width:20%;font-weight:bold;">발인 : </td>
 										<td>${noticeList.coHanddate }</td>
 									</tr>
-										<th>장소</th>
+										<td style="width:20%;font-weight:bold;">장소 : </td>
 										<td>${noticeList.coPlace }</td>
 									</tr>
 									<tr>
-										<th>조문<br/>일시</th>
-										<td>${noticeList.noRegDateAfter} 오후7시</td>
+										<td style="width:20%;font-weight:bold;">단체 : </td>
+										<td>${noticeList.coVisitDate}&nbsp;오후${noticeList.coVisitHour}시&nbsp;${noticeList.coVisitMinute}분</td>
 									</tr>
 								</thead>
 								<tbody>
+									<tr>
+										<td colspan="2">
+											<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+												<button type="button" style="width:49%;float:left;font-size:14px;" class="noticeModifyBtn">수정</button>
+								    			<button type="button" style="width:49%;float:left;font-size:14px;" class="noticeDeleteBtn">삭제</button>
+											</c:if>
+										</td>
+									</tr>
 								</tbody>
 							</table>
+							
 							
 							<%-- <a href="#" class="contentJoinBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
 							
@@ -1556,30 +2550,67 @@
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 2 }">
 	        			<div data-role="collapsible" id="accodianDiv">
-							<h3>[行事]${noticeList.noSubject }<font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
-							<h4>행사공지...인사말</h4>
-							<table id="bodyTable">
+							<h3><font class="noticeH3">[行事]${noticeList.noSubject }</font><font style="float:right;font-size:14px;padding-top:2px;">${noticeList.noRegDate }</font></h3>
+							<table style="width:100%">
+								<tr>
+									<td>
+										<img src="resources/files/6/3632.jpg" style="width:35px;height:35px;"/>
+										<img src="resources/files/6/3632new.jpg" style="width:35px;height:35px;"/>
+									</td>
+									<td>
+										<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+											<a style="float:right;" class="noticeDeleteBtn"><img src="resources/img/cencel.jpg" style="width:35px;height:35px;" alt="삭제"></a>
+											<a style="float:right;" class="noticeModifyBtn"><img src="resources/img/edit.jpg" style="width:35px;height:35px;" alt="취소"></a>
+											<a href="tel:'010-3673-1951'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+							    		</c:if>
+							    		<c:if test="${cookie.cookieId.value ne 632 and cookie.cookieId.value ne 848 and cookie.cookieId.value ne 845}">
+											<a href="tel:'010-3673-1951'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+										</c:if>
+									</td>
+								</tr>
+							</table>
+							<table id="bodyTable" style="width:100%">
+								<input type="hidden" id="noNum" value="${noticeList.noNum }"/>
+								<input type="hidden" id="joinCount" value="${noticeList.joinCount }"/>
+								<input type="hidden" id="notJoinCount" value="${noticeList.notJoinCount }"/>
+								<input type="hidden" id="noType" value="2"/>
 								<thead>
 									<tr>
-										<th>내용</th>
+										<td style="width:20%;font-weight:bold;">일시 : </td>
+										<td>${noticeList.coEventDate }</td>
+									</tr>
+									<tr>	
+										<td style="width:20%;font-weight:bold;">회비 : </td>
+										<td>${noticeList.coMoney} 원</td>
+									</tr>
+									<tr>
+										<td style="width:20%;font-weight:bold;">장소 : </td>
+										<td>${noticeList.coPlace }</td>
+									</tr>
+										<td style="width:20%;font-weight:bold;">내용 : </td>
 										<td>${noticeList.coContent }</td>
 									</tr>
 									<tr>
-										<th>행사<br/>일시</th>
-										<td>${noticeList.coEventDate }</td>
-									</tr>
-									<tr>
-										<th>회비</th>
-										<td>${noticeList.coMoney } 원</td>
-									</tr>
-										<th>장소</th>
-										<td>${noticeList.coPlace }</td>
+										<td colspan="2">
+											<button type="button" style="width:33%;float:left;font-size:15px;" class="eventJoinBtn">참여(${noticeList.joinCount})</button>
+											<button type="button" style="width:33%;float:left;font-size:15px;" class="eventNotJoinBtn">불참(${noticeList.notJoinCount})</button>
+											<button type="button" style="width:33%;float:left;font-size:15px;" class="joinListBtn">목록</button>
+										</td>
 									</tr>
 								</thead>
 								<tbody>
-									
+									<%-- <tr>
+										<td colspan="3">
+											<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+												<button type="button" style="width:49%;float:left;">수정</button>
+								    			<button type="button" style="width:49%;float:left;">삭제</button>
+											</c:if>
+										</td>
+									</tr> --%>
 								</tbody>
 							</table>
+							
+							
 							<%-- <a href="#" class="eventJoinCheckBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
 						
 							<form id="${noticeList.noNum}Form">
@@ -1645,11 +2676,45 @@
 						</div>
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 3 }">
-	        			<div data-role="collapsible">
-							<h3>[祝賀]${noticeList.noSubject } <font style="float:right;font-size:13px;">${noticeList.noRegDate }</font></h3>
-							<h4>${noticeList.noContents }</h4>
+	        			<div data-role="collapsible" id="accodianDiv">
+	        				<table id="bodyTable" style="width:100%">
+	        					<input type="hidden" id="noNum" value="${noticeList.noNum }"/>
+	        					<input type="hidden" id="noType" value="3"/>
+	        					<tr>
+	        						<td>
+										<c:if test="${noticeList.userImgOld ne null}">
+											<img src="resources/files/${noticeList.noTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
+										</c:if>
+										<c:if test="${noticeList.userImgNew ne null}">
+											<img src="resources/files/${noticeList.noTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
+										</c:if>
+									</td>
+									<td colspan="2" style="text-align:right;">
+										<c:if test="${noticeList.coUserHp != null and noticeList.coUserHp != ''}">
+											<a href="tel:'${noticeList.coUserHp}'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+										</c:if>
+									</td>
+								
+	        						<td>
+		        						<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+											<a style="float:right;" class="noticeDeleteBtn"><img src="resources/img/cencel.jpg" style="width:35px;height:35px;" alt="삭제"></a>
+											<a style="float:right;" class="noticeModifyBtn"><img src="resources/img/edit.jpg" style="width:35px;height:35px;" alt="취소"></a>
+											<c:if test="${noticeList.noUserHp != null and noticeList.noUserHp != ''}">
+												<a href="tel:'${noticeList.coUserHp}'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+											</c:if>
+										</c:if>
+										<c:if test="${cookie.cookieId.value ne 632 and cookie.cookieId.value ne 848 and cookie.cookieId.value ne 845}">
+											<c:if test="${noticeList.noUserHp != null and noticeList.noUserHp != ''}">
+												<a href="tel:'${noticeList.noUserHp}'" style="float:right;"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+											</c:if>
+										</c:if>
+									</td>
+	        					</tr>
+	        				</table>
+	        				<h3><font class="noticeH3">[祝賀]${noticeList.noSubject }</font> <font style="float:right;font-size:14px;padding-top:2px;">${noticeList.noRegDate }</font></h3>
+							<h4>${noticeList.noTargetName}(${noticeList.noTargetClass}반)<br/> ${noticeList.noContents }</h4>
 						</div>
-	        		</c:if>
+					</c:if>
 	        	</c:forEach>
 	        </div>
 
@@ -1659,156 +2724,19 @@
 
 	</section>
 	
-	<!--공지 : 공지등록  -->
-	<section id="page5" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
-	    	<div data-role="navbar">
-	            <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none" class="ui-btn-active ui-state-persist">공지</a></li>
-	                <li><a href="#page8" data-transition="none">일상</a></li>
-	                <li><a href="#page7" data-transition="none">관리</a></li>
-	            </ul>
-	        </div>
-
-	    </header>                   
-	    
-	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
-	        <div data-role="navbar">
-	            <ul>
-	                <li><a href="#page4" data-icon="bullets" data-transition="none">공지목록</a></li>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="plus" data-transition="none">공지등록</a></li>
-	            </ul>
-	        </div>
-			
-			<br/>
-			<div id="noticeTitle">
-				<h2>공지 카테고리 선택 : </h2>
-			</div>
-			<div data-role="controlgroup" data-type="horizontal" id="noticeCate">
-				<a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-bars ui-btn-b" href="#" id="typeContent">부의공지</a>
-	            <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-bars ui-btn-b" href="#" id="typeEvent">행사공지</a>
-	            <a class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-bars ui-btn-b" href="#" id="typeNormal">일반공지</a>
-	        </div>
-
-			<!-- 부의공지입력폼 -->
-			
-			<div id="contentDiv" style="display:none;">
-				<form id="contentForm">
-					<input type="hidden" name="noType" value="1"/>
-					
-					<label for="noSubject">제목 : </label>
-	       			<input type="text" name="noSubject" id="noSubject" placeholder="글 제목">
-	       			
-	       			<!-- <label for="noImgName">이미지 : </label>
-	       			<input type="file" name="noImgName" accept="image/*" multiple="multiple"/> -->
-	       			
-	       			<label for="writerHp">작성자 휴대폰 : </label>
-	       			<input type="tel" name="writerHp" id="writerHp" placeholder="작성자 핸드폰번호">
-	       			
-	       			<label for="coPlace">장례식장 주소:  </label>
-	       			<a class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini" href="#" id="searchAddBtn" onclick="execDaumPostCodeContent()">주소찾기</a>
-					<input type="text" name="coPlace" id="coPlaceContent">
-					<input type="text" name="sangseAdd" id="sangseAddContent"/>
-					
-					<label for="coHanddate">발인날짜 :  </label>
-	       			<input type="date" name="coHanddate" id="coHanddate" placeholder="발인날짜">
-	       			
-	       			<label for="coContent">내용 :  </label>
-	       			<textarea name="coContent" id="coContent" rows="8" cols="40" height="150px;" placeholder="내용"></textarea>
-	       			
-	       			<label for="coPayName">미참자 대납계좌 소유주 :  </label>
-	       			<input type="text" name="coPayName" id="coPayName" placeholder="대납계좌 소유주">
-	       			
-	       			<label for="coPayAccount">미참자 대납계좌 : </label>
-	       			<input type="tel" name="coPayAccount" id="coPayAccount" placeholder="대납 계좌번호">
-	       			
-	       			<br/>
-	       			<a data-role="button" data-theme="c" style="background-color:#ff0000;color:#0000ff;" href="#" id="contentAddBtn">공지등록</a>
-       			</form>
-			</div>
-			
-			<!-- 행사공지 입력폼 -->
-			<div id="eventDiv" style="display:none;">
-				<form id="eventForm">
-					<input type="hidden" name="noType" value="2"/>
-					
-					<label for="noSubject">제목 : </label>
-	       			<input type="text" name="noSubject" id="noSubject" placeholder="글 제목">
-	       			
-	       			<!-- <label for="noImgName">이미지 : </label>
-	       			<input type="file" name="noImgName" accept="image/*" multiple="multiple"/> -->
-	       			
-	       			<label for="writerHp">작성자 휴대폰 : </label>
-	       			<input type="tel" name="writerHp" id="writerHp" placeholder="작성자 핸드폰번호">
-	       			
-	       			<label for="coPlace">행사장소:  </label>
-	       			<a class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini" href="#" id="searchAddBtn" onclick="execDaumPostCodeEvent()">주소찾기</a>
-					<input type="text" name="coPlace" id="coPlaceEvent">
-					<input type="text" name="sangseAdd" id="sangseAddEvent"/>
-					
-					<label for="coEventDate">행사날짜 :  </label>
-	       			<input type="date" name="coEventDate" id="coEventDate" placeholder="발인날짜">
-	       			
-	       			<label for="coContent">내용 :  </label>
-	       			<textarea name="coContent" id="coContent" rows="8" cols="40" height="150px;" placeholder="내용"></textarea>
-	       			
-	       			<label for="coMoney">회비 : </label>
-	       			<input type="tel" name="coMoney" id="coMoney" placeholder="회비">
-	       			
-	       			<label for="coPayName">회비입금계좌 소유주 :  </label>
-	       			<input type="text" name="coPayName" id="coPayName" placeholder="회비입금계좌 소유주">
-	       			
-	       			<label for="coPayAccount">회비입금계좌 : </label>
-	       			<input type="tel" name="coPayAccount" id="coPayAccount" placeholder="회비입금계좌">
-	       			
-	       			<br/>
-	       			<a class="ui-shadow ui-btn ui-corner-all ui-btn-b" href="#" id="eventAddBtn">공지등록</a>
-       			</form>
-			</div>
-			
-			<!-- 일반공지 입력폼 -->
-			<div id="normalDiv" style="display:none;">
-				<form id="normalForm">
-					<input type="hidden" name="noType" value="3"/>
-					
-					<label for="noSubject">제목 : </label>
-	       			<input type="text" name="noSubject" id="noSubject" placeholder="글 제목">
-	       			
-	       			<!-- <label for="noImgName">이미지 : </label>
-	       			<input type="file" name="noImgName" accept="image/*" multiple="multiple"/> -->
-	       			
-	       			<label for="writerHp">작성자 휴대폰 : </label>
-	       			<input type="tel" name="writerHp" id="writerHp" placeholder="작성자 핸드폰번호">
-	       			
-	       			<label for="noContents">내용 :  </label>
-	       			<textarea name="noContents" id="noContents" rows="8" cols="40" height="150px;" placeholder="내용"></textarea>
-	       			
-	       			<br/>
-	       			<a class="ui-shadow ui-btn ui-corner-all ui-btn-b" href="#" id="normalAddBtn">공지등록</a>
-       			</form>
-			</div>
-	    </div> 
-	    
-	    <c:import url="./module/footer.jsp"></c:import>
-
-	</section>
 	
 	<!-- 포토 > 사진등록 -->
-	<section id="page6" data-role="page">
+	<%-- <section id="page6" data-role="page">
 	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	    	<div data-role="navbar">
 	             <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#" class="ui-btn-active ui-state-persist" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none">공지</a></li>
-	                <li><a href="#page8" data-transition="none">일상</a></li>
-	                <li><a href="#page7" data-transition="none">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist" ><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
@@ -1817,14 +2745,14 @@
 	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
 	    	<a href="#page2" data-role="button" style="width:25%">목록가기</a>
 	    	
-	    	<!-- <form id="photoForm" enctype="multipart/form-data" method="post">
+	    	<form id="photoForm" enctype="multipart/form-data" method="post">
 		        <input type="file" name="uploadFile[]" accept="image/*" id="imgInp" multiple="multiple">
 		        <div style="width:100%;height:70%">
 		        	<img id="blah" src="#" style="width:100%;height:100%;display:none;" />
 		        </div>
 		        <input type="text" name="albumMsg"/>
 		        <a href="#" data-role="button" id="imgAddBtn">등록하기</a>
-			</form> -->
+			</form>
 
 			
 	       
@@ -1832,29 +2760,185 @@
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
 
-	</section>
+	</section> --%>
 	
 	<!-- 일상 -->
 	<section id="page7" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    <header data-role="header" style="height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	        <div data-role="navbar">
 	            <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none" >공지</a></li>
-	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">일상</a></li>
-	                <li><a href="#page8" data-transition="none">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none" ><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#page8" data-transition="none"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
-	    	<a href="#" onclick="openWriteForm();"><img src="resources/img/write.png" style="width:40px;height:40px;"/></a>
+	    <div class="content" data-role="content" style="height:70%;margin-top:40px;font-size:15px;">
+	    	<table class="subject">
+	    		<tr>
+	    			<td></td>
+	    			<td><input type="search" name="searchAlbumByUser" id="searchAlbumByUser" placeholder="이름"/></td>
+	    			<!-- <td><button type="button" style="height:35px;">검색</button></td>
+	    			<td style="width:45px;">
+	    				<button type="button" style="height:35px;" onclick="openWriteForm();">등록</button>
+	    			</td> -->
+	    			<td><a href="#" style="text-align:right;" onclick="searchAlbumByUser();"><img src="resources/img/search.jpg" style="width:35px;height:35px;"/></a></td>
+	    			<td style="width:36px;text-align:right;">
+	    				<a href="#" onclick="openWriteForm();"><img src="resources/img/edit.jpg" style="width:35px;height:35px;"/></a>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    	
+	    	
+	    	<!-- 일상 등록폼 -->
 	    	<div id="writeForm" style="width:100%;display:none;">
-	    		<textarea></textarea>
+	    		<form id="albumInputForm" enctype="multipart/form-data" method="post">
+		    		<div class="fileInputDiv">
+						<img src="resources/img/photo.jpg" class="fileInputImgBtn" alt="사진등록"/>
+						<input type="file" class="fileInputHidden" id="albumImg" name="albumImg" accept="image/*" multiple/>
+					</div>
+					<img src="#" id="albumImgView" style="display:none;width:100%;height:200px;border-radius:7px;"/>
+		    		<textarea name="albumMsg" id="albumMsg"></textarea>
+		    		<div>
+		    			<button type="button" onclick="addAlbum();" style="width:49%;float:left;font-size:15px;">등록</a>
+		    			<button type="button" onclick="closeWriteForm();" style="width:49%;float:left;font-size:15px;">취소</a>
+		    		</div>
+	    		</form>
+	    	</div>
+	    	
+	    	<!-- 일상 수정폼 -->
+	    	<div id="albumModifyForm" style="width:100%;display:none;font-size:15px;">
+	    		<textarea name="albumMsg" id="albumMsg2"></textarea>
+	    		<a href="#" onclick="" data-role="button" data-icon="edit" style="background-color:#D4F4FA;">수정</a>
+	    		
+	    	</div>
+	    	
+	    	<!-- 일상목록 -->
+	    	<div id="albumListDiv" style="width:100%;">
+	    		<c:forEach var="albumList" items="${albumList }" varStatus="i">
+	    			<div id="albumDiv">
+	    				<input type="hidden" id="albumNo" value="${albumList.albumNo }"/>
+	    				<input type="hidden" id="commentOpenCheck" value="close"/>
+	    				<input type="hidden" id="albumPath" value="${albumList.userId.substring(0,1)}"/>
+	    				
+		    			<%-- <h4 style="border-top:2px solid #ddd;">
+		    				<img src="resources/files/${albumList.userId.substring(0,1)}/${albumList.userImgOld}" style="width:25px;height:25px;border-radius:10px;"/>
+		    				${albumList.userName }<font style="font-size:14px;float:right;">${albumList.albumRegDate} </font>
+		    			</h4> --%>
+		    			<br/>
+		    			<table style="width:100%;border-top:2px solid #ddd;">
+		    				<tr>
+		    					<td style="width:25px;"><img src="resources/files/${albumList.userId.substring(0,1)}/${albumList.userImgOld}" style="width:30px;height:30px;border-radius:10px;"/></td>
+		    					<td style="width:45px;font-size:15px;font-weight:bold;">${albumList.userName }</td>
+		    					<td style="font-size:14px;">${albumList.albumRegDate}</td>
+		    					<td style="width:10%;"><a href="tel:'${albumList.userHp}'"><img src="resources/img/call.jpg" style="width:25px;height:25px;"/></a></td>
+		    				</tr>
+		    			</table>
+		    			
+		    			<c:forEach var="photoList" items="${albumList.fileList }">
+		    				<input type="hidden" id="fileName" value="${photoList.fileName}"/>
+		    				<c:if test="${photoList.fileName eq 'birthday.PNG'}">
+		    					<img src="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+		    				</c:if>
+		    				<c:if test="${photoList.fileName ne 'birthday.PNG'}">
+		    					<img src="resources/files/${albumList.userId.substring(0,1)}/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+		    				</c:if>
+		    			</c:forEach>
+		    			
+		    			<h4 id="albumMsgH4">${albumList.albumMsg }</h4>
+		    			
+		    			<%-- <div style="font-size:14px;">
+		    				<img src="resources/img/like.png" style="width:14px;height:14px;"/>
+		    				좋아요 <font style="font-weight:bold;" id="goodCountTag">${albumList.albumGood }</font>
+		    			</div> --%>
+		    			
+		    			
+		    			<table style="width:100%;text-align:center;">
+			    			<tr id="albumButtonTr">
+			    				<c:if test="${albumList.userId eq cookie.cookieId.value }">
+				    				<td class="topList4 goodCountPlusBtn">좋아요(<font style="font-weight:bold;" id="goodCountTag">${albumList.albumGood }</font>)</td>
+				    				<td class="topList4 openAlbumCommentBtn">댓글(${albumList.commentList.size()})</td>
+				    				<td class="topList4 albumModifyBtn">수정</td>
+				    				<td class="topList4 albumDeleteBtn">삭제</td>
+			    				</c:if>
+			    				<c:if test="${albumList.userId ne cookie.cookieId.value }">
+			    					<td class="topList4 goodCountPlusBtn">좋아요(<font style="font-weight:bold;" id="goodCountTag">${albumList.albumGood }</font>)</td>
+				    				<td class="topList4 openAlbumCommentBtn">댓글(${albumList.commentList.size()})</td>
+			    				</c:if>
+			    			</tr>
+			    		</table>
+		    			
+		    			<%-- <c:if test="${albumList.userId eq cookie.cookieId.value }">
+		    				<button type="button" style="width:33%;float:left;" class="openAlbumCommentBtn">
+			    				댓글 (${albumList.commentList.size()})
+			    			</button>
+			    			<button type="button" style="width:33%;float:left;" class="albumModifyBtn">수정</button>
+			    			<button type="button" style="width:33%;float:left;" class="albumDeleteBtn">삭제</button>
+		    			</c:if>
+		    			<c:if test="${albumList.userId ne cookie.cookieId.value }">
+		    				<button type="button" style="width:49%;float:left;" class="goodCountPlusBtn">좋아요</button>
+			    			<button type="button" style="width:49%;float:left;" class="openAlbumCommentBtn">
+			    				댓글 (${albumList.commentList.size()})
+			    			</button>
+			    		</c:if> --%>
+		    			
+		    			<!-- 댓글 목록-->
+		    			<div id="albumCommentDiv" style="display:none;">
+		    				<!-- 댓글목록 -->
+		    				<table style="width:100%" id="albumCommentTable">
+		    					<c:forEach var="commentList" items="${albumList.commentList }">
+			    					<tr>
+			    						<c:choose>
+			    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
+			    								<td style="border-top:1px solid #ddd;width:50px;">
+					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+					    						</td>
+			    							</c:when>
+			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld ne null}">
+			    								<td style="border-top:1px solid #ddd;width:50px;">
+					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
+					    						</td>
+			    							</c:when>
+			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">
+			    								<td style="border-top:1px solid #ddd;width:50px;">
+					    							<img src="resources/img/ready.jpg" style="width:40px;height:40px;border-radius:15px;" />
+					    						</td>
+			    							</c:when>
+			    						</c:choose>
+			    						<td style="border-top:1px solid #ddd;">
+			    							<font style="font-weight:bold;font-size:14px;">${commentList.userName }</font><br/>
+			    							<font style="font-weight:bold;">${commentList.comContent }</font>
+			    						</td>
+			    						<c:if test="${commentList.userId eq cookie.cookieId.value }">
+				    						<td style="border-top:1px solid #ddd;text-align:right;">
+				    							<input type="hidden" id="commentNum" value="${commentList.comNum }"/>
+				    							<a href="#" class="commentDeleteBtn"><img src="resources/img/cencel.jpg" style="width:26px;height:26px;"/></a>
+				    						</td>
+			    						</c:if>
+			    					</tr>
+		    					</c:forEach>
+		    				</table>
+		    				
+		    				<!-- 댓글입력 -->
+		    				<div style="width:100%;" id="commentWriteForm">
+			    				<table style="width:100%;">
+			    					<td style="width:85%;"><input type="text" style="width:100%" name="comContent" placeholder="댓글 입력"></td>
+			    					<td style="text-align:right;">
+				    					<a href="#" style="width:12%;" class="addCommentBtn">
+				    						<img src="resources/img/plus.jpg" style="width:32px;height:32px;"/>
+				    					</a>
+			    					</td>
+			    				</table>
+		    				</div>
+		    			</div>
+	    			</div>
+	    		</c:forEach>
 	    	</div>
 		</div>
 	    
@@ -1864,23 +2948,338 @@
 	
 	<!--관리  -->
 	<section id="page8" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    <header data-role="header" style="height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	        <div data-role="navbar">
 	             <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none" >공지</a></li>
-	                <li><a href="#page7" data-transition="none" >일상</a></li>
-	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
-	    <div class="content" data-role="content" style="height:70%;margin-top:50px;">
-	    	관리
+	    <div class="content" data-role="content" style="height:70%;margin-top:50px;font-size:15px;">
+	    	<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+		    	<table class="subject">
+		    		<tr>
+		    			<td class="topList2" id="ctrl2" onclick="allUserViewCtrl()" style="background-color:#C1F2FF;">임원</td>
+		    			<td class="topList2" id="ctrl3" onclick="smsAddCtrl()">문자</td>
+		    			<td class="topList2" id="ctrl1" onclick="noticeAddCtrl()">회비</td>
+		    			<td class="topList2" id="ctrl4" onclick="accountingCtrl()">회계</td>
+		    			<td class="topList2" id="ctrl5" onclick="statCtrl()">이용</td>
+		    		</tr>
+		    	</table>
+			    <!-- 공지 이미지 뷰 
+			    <div style="text-align:center;margin-top:5%;margin-left:10%;margin-right:10%;width:80%;font-weight:bold;">
+			    	<br/><br/>
+			    	<table style="width:100%;">
+			    		<tr>
+			    			<td style="width:50%"><img src="resources/img/photo2.png"><br/>포토등록</td>
+			    			<td><img src="resources/img/notice.png"><br/>공지등록</td>
+			    		</tr>
+			    	</table>
+			    	<br/><br/>
+			   		<table style="width:100%;">
+			    		<tr>
+			    			<td style="width:50%"><img src="resources/img/mail.png"><br/>단체문자</td>
+			    			<td><img src="resources/img/research.png"><br/>이용통계</td>
+			    		</tr>
+			    	</table>
+			    </div> -->
+			    
+			    <!-- 회비 -->
+				<div id="duesCtrlDiv" style="display:none;border:2px solid #ddd;">
+					<h3 style="font-weight:bold;text-align:right;color:blue;font-size:15px;margin:-2px 0 0 0;">(단위:만원)</h3>
+					<table style="width:100%;" class="duesTable">
+						<tr>
+							<th class="duesTr">반</th>
+							<th class="duesTr">~2017</th>
+							<th class="duesTr">30th기부</th>
+							<th class="duesTr">30th이후</th>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(1);">1반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(0)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(0) }</number></td>
+							<c:if test="${thirtyList.get(0) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(0) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(0) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(2);">2반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(1)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(1) }</number></td>
+							<c:if test="${thirtyList.get(1) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(1) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(1) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(3);">3반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(2)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(2) }</number></td>
+							<c:if test="${thirtyList.get(2) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(2) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(2) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(4);">4반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(3)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(3) }</number></td>	
+							<c:if test="${thirtyList.get(3) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(3) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(3) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(5);">5반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(4)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(4) }</number></td>	
+							<c:if test="${thirtyList.get(4) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(4) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(4) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>	
+							<td class="statTd2"><a href="#" onclick="duesDetail(6);">6반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(5)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(5) }</number></td>
+							<c:if test="${thirtyList.get(5) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(5) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(5) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(7);">7반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(6)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(6) }</number></td>	
+							<c:if test="${thirtyList.get(6) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(6) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(6) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td class="statTd2"><a href="#" onclick="duesDetail(8);">8반</a></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${duesList.get(7)}</number></td>
+							<td class="statTd2" style="text-align:right;"><number class="numberInput">${kibuList.get(7) }</number></td>	
+							<c:if test="${thirtyList.get(7) ne 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">${thirtyList.get(7) }</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(7) eq 0}">
+								<td class="statTd2" style="text-align:right;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+						<tr>
+							<td style="background-color:#FFA648;text-align:center;font-weight:bold;">합계</td>
+							<td style="background-color:#FFA648;text-align:right;font-weight:bold;"><number class="numberInput">${duesList.get(0)+duesList.get(1)+duesList.get(2)+duesList.get(3)+duesList.get(4)+duesList.get(5)+duesList.get(6)+duesList.get(7)}</number></td>
+							<td style="background-color:#FFA648;text-align:right;font-weight:bold;"><number class="numberInput">${kibuList.get(0)+kibuList.get(1)+kibuList.get(2)+kibuList.get(3)+kibuList.get(4)+kibuList.get(5)+kibuList.get(6)+kibuList.get(7)}</number></td>	
+							<c:if test="${thirtyList.get(0)+thirtyList.get(1)+thirtyList.get(2)+thirtyList.get(3)+thirtyList.get(4)+thirtyList.get(5)+duthirtyListsList.get(6)+thirtyList.get(7) ne 0}">
+								<td style="background-color:#FFA648;text-align:right;font-weight:bold;"><number class="numberInput">${thirtyList.get(0)+thirtyList.get(1)+thirtyList.get(2)+thirtyList.get(3)+thirtyList.get(4)+thirtyList.get(5)+duthirtyListsList.get(6)+thirtyList.get(7)}</number></td>
+							</c:if>
+							<c:if test="${thirtyList.get(0)+thirtyList.get(1)+thirtyList.get(2)+thirtyList.get(3)+thirtyList.get(4)+thirtyList.get(5)+duthirtyListsList.get(6)+thirtyList.get(7) eq 0}">
+								<td style="background-color:#FFA648;text-align:right;font-weight:bold;"><number class="numberInput">-</number></td>
+							</c:if>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- 사진등록 -->
+				<div id="photoCtrlDiv" style="display:none;">
+					<img src="resources/img/readying.png" style="width:100%;height:70%;"/>
+				</div>
+				
+				<!-- 문자보내기 -->
+				<div id="smsSendDiv" style="display:none;">
+					<!-- <label for="msg">메세지입력 :</label> -->
+		       	 	<textarea name="msg" id="msg" rows="8" cols="40" height="150px;"></textarea>
+		       	 	
+		        	<table style="width:100%;text-align:center;border:3px solid #ddd;">
+		    			<tr>
+		    				<!-- <td id="typeContent" class="topList3" id="direct" onclick="direct();">직접입력</td> -->
+		    				<td id="typeEvent" class="topList3" id="searchUser" onclick="searchForm();">회원검색</td>
+		    				<td id="typeNormal" class="topList3" id="sendAllBtn" onclick="sendAll();">전체발송</td>
+		    			</tr>
+		    		</table>
+		    		
+		        	<div id="directForm" style="display:none;">
+		        		<input name="userHp" id="userHp" type="tel" placeholder="수신자 휴대폰번호 입력 예)01022223333" >
+		        		<button type="button" id="sendMmsDirectBtn">문자발송</a>
+		        		
+		        	</div>
+		        	
+		        	<div id="searchForm" style="display:none;">
+		        		<table style="width:100%;border:3px solid #ddd;">
+		        			<tr>
+		        				<td colspan="2">
+		        					<select name="searchKey" id="searchKey" data-native-menu="false" style="width:100%;">
+							            <option>반/지역 선택</option>
+							            <option value="class">반</option> 
+							            <option value="local">지역</option> 
+							        </select>
+		        				</td>
+		        			</tr>
+		        			<tr>
+		        				<td style="width:80%;">
+		        					<input type="text" name="searchValue" id="searchValue" placeholder="상세">
+		        				</td>
+		        				<td style="width:20%">
+		        					<div style="border:2px solid #ddd;border-radius:5px;text-align:center;height:25px;padding-top:7px;" onclick="searchUserSms();">
+										검색
+									</div>
+		        				</td>
+		        			</tr>
+		        		</table>
+				        
+				        <!-- <div id="valueDetail">
+				        	<input type="text" style="width:85%;float:left;border-bottom:1px solid #ddd;" name="searchValue" id="searchValue" placeholder="검색 키워드를입력">
+							<div style="width:12%;float:right;border:2px solid #ddd;border-radius:5px;text-align:center;height:26px;" onclick="searchUserSms();">
+								검색
+							</div>
+				        </div> -->
+				    </div>
+					<div id="resultDiv">
+					
+					</div>
+				</div> <!-- 문자발송끝 -->
+				
+				<!-- 회계 -->
+				<div id="accountingDiv" style="display:none;">
+					 <img src="resources/img/readying.png" style="width:100%;height:70%;"/>
+				</div>
+	
+				<!-- 이용 -->
+				<div id="statDiv" style="display:none;">
+					<table style="width:100%;color:#030066;">
+						<tr>
+							<th class="duesTr">반</th>
+							<th class="duesTr">총원</th>
+							<th class="duesTr">접속</th>
+							<th class="duesTr">목록</th>
+						</tr>
+						<tr>
+							<td class="statTd">1반</td>
+							<td class="statTd">59명</td>
+							<td class="statTd">${joinCountList.get(0)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(1);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
+						</tr>
+						<tr>
+							<td class="statTd">2반</td>
+							<td class="statTd">54명</td>
+							<td class="statTd">${joinCountList.get(1)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(2);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
+						</tr>
+						<tr>
+							<td class="statTd">3반</td>
+							<td class="statTd">55명</td>
+							<td class="statTd">${joinCountList.get(2)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(3);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
+						</tr>
+						<tr>
+							<td class="statTd">4반</td>
+							<td class="statTd">57명</td>
+							<td class="statTd">${joinCountList.get(3)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(4);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
+						</tr>
+						<tr>
+							<td class="statTd">5반</td>
+							<td class="statTd">56명</td>
+							<td class="statTd">${joinCountList.get(4)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(5);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
+						</tr>
+						<tr>	
+							<td class="statTd">6반</td>
+							<td class="statTd">60명</td>
+							<td class="statTd">${joinCountList.get(5)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(6);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
+						</tr>
+						<tr>
+							<td class="statTd">7반</td>
+							<td class="statTd">57명</td>
+							<td class="statTd">${joinCountList.get(6)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(7);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
+						</tr>
+						<tr>
+							<td class="statTd">8반</td>
+							<td class="statTd">58명</td>
+							<td class="statTd">${joinCountList.get(7)}명</td>
+							<td class="statTd"><a href="#" onclick="statDetail(8);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
+						</tr>
+					</table>
+				</div>
+				
+			</c:if>
+			
+			<!-- 임원 -->
+			<div id="allUserViewDiv">
+				<table style="width:100%">
+					<tr>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3848new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:1px dotted #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">회장 최기호(8반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">떡보의 하루 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:1px dotted #ddd;">
+							<a href="sms:010-2607-0689"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-2607-0689'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3845new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:1px dotted #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">총무 정윤승(8반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">금강여행사 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:1px dotted #ddd;">
+							<a href="sms:010-9476-4884"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-9476-4884'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:3px solid #ddd;"><img src="resources/files/admin/omg.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:3px solid #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">재무 오민권(6반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">(주)한국정보통계 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:3px solid #ddd;">
+							<a href="sms:010-3673-1951"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:3px solid #ddd;margin-top:8px;">
+							<font style="font-weight:bold;font-size:16px;color:black;">회비 및 <br/>후원계좌</font>
+						</td>
+						<td colspan="2" style="width:50%;border-bottom:3px solid #ddd;margin-top:8px;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">농협 오민권<br/>301-0216-9668-01</font>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
 		</div>
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
@@ -1889,47 +3288,48 @@
 	
 	<!--마이페이지  -->
 	<section id="page9" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/logo.png" style="margin-top:-25px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:green;color:white;">MY</a>
+	    <header data-role="header" style="height:45px;" data-tap-toggle="false" data-position="fixed">
+	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
+	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);margin-top:15px;"><font style="font-weight:bold;color:red;">MY</font></a>
 	        <div data-role="navbar">
 	             <ul>
-	                <li><a href="#page1" >친구</a></li>
-	                <li><a href="#page2" data-transition="none">포토</a></li>
-	                <li><a href="#page4" data-transition="none" >공지</a></li>
-	                <li><a href="#page7" data-transition="none" >일상</a></li>
-	                <li><a href="#" data-transition="none" class="ui-btn-active ui-state-persist">관리</a></li>
+	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
+	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
+	                <li><a href="#page4" data-transition="none" ><font style="font-size:16px;">공지</font></a></li>
+	                <li><a href="#page7" data-transition="none" ><font style="font-size:16px;">일상</font></a></li>
+	                <li><a href="#page8" data-transition="none"><font style="font-size:16px;">관리</font></a></li>
 	            </ul>
 	        </div>
 
 	    </header>                   
 	    
 	    <div class="content" data-role="content" style="margin-top:50px;">
+	    	<div style="width:100%;font-size:15px;">
 	    	<form id="userModifyForm" enctype="multipart/form-data" method="post">
 		    	<table style="width:100%;margin-top:10px;">
 		    		<tr>
 		    			<c:if test="${user.userImgOld eq null && user.userImgNew eq null}">
 		 					<!-- <td style="width:50%;"><img src="resources/img/ready.jpg" class="img-round"/></td> -->
-		    				<td colspan="2" style="text-align:center;"><img src="resources/img/ready.jpg" id="filePreviewImg" style="width:40%;height:116px;border-radius:70px;"/></td>
+		    				<td colspan="2" style="text-align:center;"><img src="resources/img/ready.jpg" id="filePreviewImg" style="width:40%;height:116px;"/></td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld ne null && user.userImgNew eq null}">
-		 					<td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
-		    				<td style="width:50%;">
-		    					<img src="#" id="filePreviewImg2" style="display:none;width:80%;height:116px;border-radius:70px;"/>
+		 					<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		    				<td style="width:50%;text-align:center;">
+		    					<img src="#" id="filePreviewImg2" style="display:none;width:80%;height:116px;"/>
 		    				</td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld ne null && user.userImgNew ne null}">
-		 					<td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
-		    				<td><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round" id="filePreviewImg3"/></td>
+		 					<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		    				<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round" id="filePreviewImg3"/></td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld eq null && user.userImgNew ne null}">
 		 					<%-- <td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round"/></td> --%>
-		    				<td colspan="2" style="text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" id="filePreviewImg4" style="width:40%;height:116px;border-radius:70px;"/></td>
+		    				<td colspan="2" style="text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" id="filePreviewImg4" style="width:40%;height:116px;"/></td>
 		 				</c:if>
 		    		</tr>
 		    	</table>
 		    	<div class="fileInputDiv">
-					<img src="resources/img/photo.png" class="fileInputImgBtn" alt="사진등록"/>
+					<img src="resources/img/photo.jpg" class="fileInputImgBtn" alt="사진등록"/>
 					<c:if test="${user.userImgOld eq null && user.userImgNew eq null}">
 						<input type="file" name="userImgNew" id="userImgNew" class="fileInputHidden" accept="image/*" multiple/>
 					</c:if>
@@ -1947,32 +3347,63 @@
 		    	<table style="width:100%;">
 		    		<tr>
 		    			<td style="width:13%;"><img src="resources/img/name.png" style="width:25px;height:25px;"/></td>
-		    			<td style="border-bottom:1px solid #ddd;width:87%;font-weight:bold;">
+		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="3">
 		    				${user.userName }
 		    			</td>
 		    		</tr>
 		    		<tr>
 		    			<td style="width:13%;"><img src="resources/img/hp.png" style="width:25px;height:25px;"/></td>
-		    			<td style="border-bottom:1px solid #ddd;width:87%;font-weight:bold;">
+		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="3">
 		    				<input type="tel" name="userHp" id="userHpModify" value="${user.userHp }"/>
 		    			</td>
 		    		</tr>
 		    		<tr>
-		    			<td style="width:13%;"><img src="resources/img/address.png" style="width:30px;height:30px;"/></td>
-		    			<td style="border-bottom:1px solid #ddd;width:85%;font-weight:bold;">
-		    				<input type="text" name="userAddress" id="userAddressModify" value="${user.userAddress }"/>
+		    			<td><img src="resources/img/birth.png" style="width:25px;height:25px;"/></td>
+		    			<td>
+		    				<select name="birthType" id="birthType" data-native-menu="false" style="height:33px;" data-inline="true">
+		    					<option value="양력" selected="selected">양력</option>
+		    					<option value="음력">음력</option>
+		    				</select>
+		    				<c:if test="${user.userBirthType ne null }">
+			    				<script>
+			    					$('#birthType').val('${user.userBirthType}').prop('selected','selected');
+			    				</script>
+		    				</c:if>
+		    			</td>
+		    			<td>
+		    				<input type="number" name="userBirthMonth" placeholder="월" value="${user.userBirthMonth }"/>
+		    			</td>
+		    			<td>
+		    				<input type="number" name="userBirthDay" placeholder="일" value="${user.userBirthDay }"/>
 		    			</td>
 		    		</tr>
 		    		<tr>
-		    			<td colspan="2"><button type="button" onclick="userModify();" style="width:100%">개인정보수정</button></td>
+		    			<td style="width:13%;"><img src="resources/img/address.png" style="width:30px;height:30px;"/></td>
+		    			<td style="font-weight:bold;padding-top:7px;" colspan="3">
+		    				<font style="border:1px solid #FF5E00;width:100px;height:33px;padding:5px;text-align:center;border-radius:5px;color:#000042;" onclick="execDaumPostCode();">주소찾기</font>
+		    				<input type="text" name="userAddress" id="userAddressModify" value="${user.userAddress }"/>
+		    				<c:if test="${user.userSangseAdd eq null or user.userSangseAdd eq '' }">
+		    					<input type="text" name="userSangseAdd" id="sangseAdd" style="display:none;"/>
+		    				</c:if>
+		    				<c:if test="${user.userSangseAdd ne null and user.userSangseAdd ne '' }">
+		    					<input type="text" name="userSangseAdd" id="sangseAdd" value="${user.userSangseAdd }"/>
+		    				</c:if>
+		    			</td>
+		    		</tr>
+		    		<tr>
+		    			<td colspan="4"><button type="button" onclick="userModify();" style="width:100%">개인정보수정</button></td>
 		    		</tr>
 		    	</table>
 	    	
 	    	</form>
+	    	</div>
 		</div>
 	    
 	    <c:import url="./module/footer.jsp"></c:import>
 
 	</section>
+	
+	
+	
 </body>
 </html>

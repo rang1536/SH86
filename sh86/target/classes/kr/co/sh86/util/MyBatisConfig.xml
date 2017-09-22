@@ -19,7 +19,7 @@
 		<!-- 디폴트 Executor 설정(SIMPLE은 특별히 동작하는 것은 업음) -->
 		<setting name="defaultExecutorType" value="SIMPLE" />
 		<!-- DB 응답 타임아웃 설정 -->
-		<setting name="defaultStatementTimeout" value="10" />
+		<setting name="defaultStatementTimeout" value="20" />
 		<!-- 중첩구문내 RowBound 사용 허용여부 -->
 		<setting name="safeRowBoundsEnabled" value="false" />
 		<!-- 전통적 DB 컴럼명을 JAVA의 Camel표기법으로 자동 매핑 설정 -->

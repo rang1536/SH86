@@ -12,6 +12,44 @@ public class Notice {
 	private int noType;
 	private String userId;
 	private String noContents;
+	private String noTargetName;
+	private String noTargetClass;
+	private String noUserHp;
+	private String userImgOld;
+	private String userImgNew;
+	
+	
+	
+	public String getUserImgOld() {
+		return userImgOld;
+	}
+	public void setUserImgOld(String userImgOld) {
+		this.userImgOld = userImgOld;
+	}
+	public String getUserImgNew() {
+		return userImgNew;
+	}
+	public void setUserImgNew(String userImgNew) {
+		this.userImgNew = userImgNew;
+	}
+	public String getNoUserHp() {
+		return noUserHp;
+	}
+	public void setNoUserHp(String noUserHp) {
+		this.noUserHp = noUserHp;
+	}
+	public String getNoTargetName() {
+		return noTargetName;
+	}
+	public void setNoTargetName(String noTargetName) {
+		this.noTargetName = noTargetName;
+	}
+	public String getNoTargetClass() {
+		return noTargetClass;
+	}
+	public void setNoTargetClass(String noTargetClass) {
+		this.noTargetClass = noTargetClass;
+	}
 	public int getNoNum() {
 		return noNum;
 	}
@@ -76,8 +114,9 @@ public class Notice {
 	public String toString() {
 		return "Notice [noNum=" + noNum + ", noSubject=" + noSubject + ", noContentNum=" + noContentNum + ", noWriter="
 				+ noWriter + ", noRegDate=" + noRegDate + ", noImgPass=" + noImgPass + ", noImgName=" + noImgName
-				+ ", noType=" + noType + ", userId=" + userId + ", noContents=" + noContents + "]";
+				+ ", noType=" + noType + ", userId=" + userId + ", noContents=" + noContents + ", noTargetName="
+				+ noTargetName + ", noTargetClass=" + noTargetClass + ", noUserHp=" + noUserHp + ", userImgOld="
+				+ userImgOld + ", userImgNew=" + userImgNew + "]";
 	}
-	
 	
 }

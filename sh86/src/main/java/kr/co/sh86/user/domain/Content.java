@@ -10,6 +10,49 @@ public class Content {
 	private String coPayName;
 	private String coPayAccount;
 	private int noNum;
+	private String coTargetName;
+	private String coTargetClass;
+	private String coVisitDate;
+	private String coVisitHour;
+	private String coVisitMinute;
+	private String coUserHp;
+	
+	public String getCoUserHp() {
+		return coUserHp;
+	}
+	public void setCoUserHp(String coUserHp) {
+		this.coUserHp = coUserHp;
+	}
+	public String getCoVisitHour() {
+		return coVisitHour;
+	}
+	public void setCoVisitHour(String coVisitHour) {
+		this.coVisitHour = coVisitHour;
+	}
+	public String getCoVisitMinute() {
+		return coVisitMinute;
+	}
+	public void setCoVisitMinute(String coVisitMinute) {
+		this.coVisitMinute = coVisitMinute;
+	}
+	public String getCoVisitDate() {
+		return coVisitDate;
+	}
+	public void setCoVisitDate(String coVisitDate) {
+		this.coVisitDate = coVisitDate;
+	}
+	public String getCoTargetName() {
+		return coTargetName;
+	}
+	public void setCoTargetName(String coTargetName) {
+		this.coTargetName = coTargetName;
+	}
+	public String getCoTargetClass() {
+		return coTargetClass;
+	}
+	public void setCoTargetClass(String coTargetClass) {
+		this.coTargetClass = coTargetClass;
+	}
 	public int getCoNum() {
 		return coNum;
 	}
@@ -62,8 +105,10 @@ public class Content {
 	public String toString() {
 		return "Content [coNum=" + coNum + ", coPlace=" + coPlace + ", coHanddate=" + coHanddate + ", coContent="
 				+ coContent + ", coUserId=" + coUserId + ", coPayName=" + coPayName + ", coPayAccount=" + coPayAccount
-				+ ", noNum=" + noNum + "]";
+				+ ", noNum=" + noNum + ", coTargetName=" + coTargetName + ", coTargetClass=" + coTargetClass
+				+ ", coVisitDate=" + coVisitDate + ", coVisitHour=" + coVisitHour + ", coVisitMinute=" + coVisitMinute
+				+ ", coUserHp=" + coUserHp + "]";
 	}
-	
+
 	
 }

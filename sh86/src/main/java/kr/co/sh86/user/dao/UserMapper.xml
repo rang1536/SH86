@@ -28,18 +28,10 @@
 <!-- 모든회원정보조회 -->
 <select id="selectAllUser" resultType="kr.co.sh86.user.domain.User">
 	SELECT
-		user_id,
-		user_name,
-		user_do,
-		user_cityname,
-		user_job,
-		user_hp,
-		user_img_pass,
-		user_img_old,
-		user_img_new,
-		user_joincheck
+		*
 	FROM
 		SH86.SH_USER
+	ORDER BY user_name
 </select>
 
 <!-- 휴대폰번호 있는 사용자 카운트 -->
@@ -69,16 +61,19 @@
 <!-- 모든공지사항 조회 -->
 <select id="selectAllNotice" resultType="kr.co.sh86.user.domain.NoticeView">
 	SELECT
-		no_num,
-		no_subject,
-		no_writer,
-		no_regdate,
-		no_type,
-		no_contentnum,
-		user_id,
-		no_contents
+		no.no_num,
+		no.no_subject,
+		no.no_writer,
+		no.no_regdate,
+		no.no_type,
+		no.no_contentnum,
+		no.user_id,
+		no.no_contents,
+		no.no_targetclass,
+		no.no_targetname,
+		no.no_user_hp
 	FROM
-		SH86.SH_NOTICE
+		SH86.SH_NOTICE no
 </select>
 
 <!-- 부의공지내용 조회 -->
@@ -185,11 +180,8 @@
 	FROM
 		SH86.SH_USER
 	<trim prefix="WHERE" prefixOverrides="AND">
-		<if test="userName neq null and !userName.equals('')">
-			AND USER_NAME LIKE '%'||#{userName}||'%'
-		</if>
-		<if test="userHp neq null and !userHp.equals('')">
-			AND USER_HP LIKE '%'||#{userHp}||'%'
+		<if test="userId neq null and !userId.equals('')">
+			AND USER_ID LIKE #{userId}||'%'
 		</if>
 		<if test="userAddress neq null and !userAddress.equals('')">
 			AND USER_ADDRESS LIKE '%'||#{userAddress}||'%'
@@ -244,7 +236,7 @@
 	FROM 
 		SH86.SH_USER
 	WHERE
-		user_hp = #{writerHp}
+		user_id = #{userId}
 </select>
 
 <!-- 소식 > 공지사항(부의) 등록 -->
@@ -259,9 +251,6 @@
 		no_regdate,
 		no_type,
 		user_id
-		<if test="noType eq 3">
-			,no_contents
-		</if>
 		)
 	VALUES(
 		#{noNum},
@@ -270,10 +259,37 @@
 		to_char(sysdate,'YYYY-MM-DD'),
 		#{noType},
 		#{userId}
-		<if test="noType eq 3">
-			,#{noContents}
-		</if>
 		)	
+</insert>
+
+<!-- 소식 > 공지사항(축하) 등록 -->
+<insert id="insertNoticeCong" parameterType="kr.co.sh86.user.domain.Notice">
+	INSERT INTO SH86.SH_NOTICE(
+		no_num,
+		no_subject,
+		no_writer,
+		no_regdate,
+		no_type,
+		user_id
+		,no_contents
+		,no_targetname
+		,no_targetclass
+		<if test="noUserHp != null and noUserHp != ''">
+			,no_user_hp
+		</if>)
+	VALUES(
+		notice_seq.nextval,
+		#{noSubject},
+		#{noWriter},
+		to_char(sysdate,'YYYY-MM-DD'),
+		#{noType},
+		#{userId}
+		,#{noContents}
+		,#{noTargetName}
+		,#{noTargetClass}
+		<if test="noUserHp != null and noUserHp != ''">
+			,#{noUserHp}
+		</if>)	
 </insert>
 
 <!-- 소식 > 공지사항(부의) 컨텐트 등록 -->
@@ -286,17 +302,30 @@
 		co_place,
 		co_handdate,
 		co_content,
-		co_payname,
-		co_payaccount,
-		no_num)
+		no_num,
+		co_targetname,
+		co_targetClass,
+		co_visitdate,
+		co_visithour,
+		co_visitminute
+		<if test="coUserHp != null and coUserHp !=''">
+			,co_user_hp
+		</if>
+		)
 	VALUES(
 		#{coNum},
 		#{coPlace},
 		#{coHanddate},
 		#{coContent},
-		#{coPayName},
-		#{coPayAccount},
-		#{noNum})
+		#{noNum},
+		#{coTargetName},
+		#{coTargetClass},
+		#{coVisitDate},
+		#{coVisitHour},
+		#{coVisitMinute}
+		<if test="coUserHp != null and coUserHp !=''">
+			#{coUserHp}
+		</if>)
 </insert>
 
 <!--소식 > 공지사항(부의) > 컨텐트등록 후 pk값 공지테이블에 수정처리 -->
@@ -338,7 +367,9 @@
 <insert id="insertJoin" parameterType="kr.co.sh86.user.domain.Join">
 	INSERT INTO SH86.SH_JOIN(
 		jo_num,
-		user_id,
+		<if test="userId != null and userId != ''">
+			user_id,
+		</if>
 		<if test="joDate != null and joDate != ''">
 			jo_date,
 		</if>
@@ -353,7 +384,9 @@
 		no_num)
 	VALUES(
 		join_seq.nextval,
+		<if test="userId != null and userId != ''">
 		#{userId},
+		</if>
 		<if test="joDate != null and joDate != ''">
 			#{joDate},
 		</if>
@@ -400,7 +433,8 @@
 <!-- 회원사이트 접속확인 카운팅 > 조회 -->
 <select id="selectUserById" parameterType="String" resultType="kr.co.sh86.user.domain.User">
 	SELECT
-		user_id
+		user_id,
+		user_joincheck
 	FROM
 		SH86.SH_USER
 	WHERE
@@ -412,7 +446,8 @@
 	UPDATE
 		SH86.SH_USER
 	SET
-		USER_JOINCHECK = #{userJoinCheck}
+		USER_JOINCHECK = #{userJoinCheck},
+		USER_LASTDATE = to_char(sysdate,'yyyy-mm-dd')
 	WHERE
 		USER_ID = #{userId}
 </update>
@@ -420,8 +455,22 @@
 <!-- 친구 > 회원검색(이름) -->
 <select id="selectUserByUserName" parameterType="String" resultType="kr.co.sh86.user.domain.User">
 	SELECT
+		*
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name LIKE '%'||#{userName}||'%'
+	OR
+		user_cityname LIKE '%'||#{userName}||'%'
+	ORDER BY user_name
+</select>
+
+<!-- 친구 > 회원검색(이름) -->
+<select id="selectUserByClass" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
 		user_id,
 		user_name,
+		user_do,
 		user_cityname,
 		user_job,
 		user_hp,
@@ -432,20 +481,14 @@
 	FROM
 		SH86.SH_USER
 	WHERE
-		user_name LIKE '%'||#{userName}||'%'
+		user_id LIKE #{classNum}||'%'
+	ORDER BY user_name
 </select>
 
 <!-- 마이페이지 > 개인정보조회 -->
 <select id="selectUserByCookieId" parameterType="String" resultType="kr.co.sh86.user.domain.User">
 	SELECT
-		user_id,
-		user_name,
-		user_email,
-		user_address,
-		user_hp,
-		user_img_pass,
-		user_img_old,
-		user_img_new
+		*
 	FROM
 		SH86.SH_USER
 	WHERE
@@ -470,9 +513,614 @@
 		USER_HP = #{userHp}
 		<if test="userAddress != null and userAddress != ''">
 			,USER_ADDRESS = #{userAddress}
+			,USER_DO = #{userDo}
+			,USER_CITYNAME = #{userCityName} 
+		</if>
+		<if test="userBirthType != null and userBirthType != ''">
+			,USER_BIRTH_TYPE = #{userBirthType}
+		</if>
+		<if test="userBirth != null and userBirth != ''">
+			,USER_BIRTH = #{userBirth}
+		</if>
+		<if test="userBirthMonth != null and userBirthMonth != ''">
+			,USER_BIRTH_MONTH = #{userBirthMonth}
+		</if>
+		<if test="userBirthDay != null and userBirthDay != ''">
+			,USER_BIRTH_DAY = #{userBirthDay}
+		</if>
+		<if test="userSangseAdd != null and userSangseAdd != ''">
+			,USER_SANGSEADD = #{userSangseAdd}
 		</if>
 	WHERE
 		USER_ID = #{userId}
 </update>
 
+<!--일상등록  -->
+<insert id="insertAlbum" parameterType="kr.co.sh86.user.domain.Album">
+	<selectKey keyProperty="albumNo" resultType="int" order="BEFORE">
+		select album_seq.nextval FROM DUAL
+	</selectKey>
+	INSERT INTO SH86.SH_ALBUM(
+		album_no,
+		album_msg,
+		user_id,
+		album_regdate)
+	VALUES(
+		#{albumNo},
+		#{albumMsg},
+		#{userId},
+		to_char(sysdate,'YYYY-MM-DD')
+		)
+</insert>
+
+<!--일상등록 > 파일정보등록  -->
+<insert id="insertAlbumPhoto" parameterType="kr.co.sh86.user.domain.UploadFileDTO">
+	INSERT INTO SH86.SH_PHOTO(
+		file_no,
+		file_originalname,
+		file_path,
+		file_name,
+		album_no)
+	VALUES(
+		PHOTO_SEQ.NEXTVAL,
+		#{fileOriginalName},
+		#{filePath},
+		#{fileName},
+		#{albumNo})
+	
+</insert>
+
+<!-- 일상 글조회 -->
+<select id="selectAllAlbum" resultType="kr.co.sh86.user.domain.Album">
+	SELECT 
+		al.*,
+		us.user_name,
+		us.user_hp,
+		us.user_img_old,
+		us.user_img_new
+	FROM
+		SH86.SH_ALBUM al,
+		SH86.SH_USER us
+	WHERE
+		al.user_id = us.user_id
+	ORDER BY al.album_no DESC
+</select>
+
+<!--일상에 딸린 사진조회  -->
+<select id="selectPhotoForAlbum" parameterType="int" resultType="kr.co.sh86.user.domain.UploadFileDTO">
+	SELECT
+		file_no,
+		file_name,
+		album_no,
+		file_path
+	FROM
+		SH86.SH_PHOTO
+	WHERE
+		album_no = #{albumNo}
+</select>
+
+<!-- 일상 > 좋아요체크 -->
+<insert id="insertGoodByAlbum" parameterType="kr.co.sh86.user.domain.GoodCheck">
+	INSERT INTO SH86.SH_GOODCHECK(
+		good_num,
+		user_id
+		<if test="albumNo != null and albumNo != ''">
+			,album_no
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			,file_no
+		</if>
+		)
+	VALUES(
+		GOODCHECK_SEQ.NEXTVAL,
+		#{userId}
+		<if test="albumNo != null and albumNo != ''">
+			,#{albumNo}
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			,#{fileNo}
+		</if>)		
+</insert>
+
+<!-- 좋아요 체크했는지 검색 -->
+<select id="selectGoodCheckByUser" parameterType="kr.co.sh86.user.domain.GoodCheck" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		SH86.SH_GOODCHECK
+	WHERE
+		user_id = #{userId}
+	<if test="albumNo != null and albumNo != ''">
+		AND
+			album_no = #{albumNo}
+	</if>
+	<if test="fileNo != null and fileNo != ''">
+		AND
+			file_no = #{fileNo}
+	</if>
+</select>
+
+<!-- 앨범테이블에 좋아요 카운트++ -->
+<update id="updateAlbumGoodCount" parameterType="kr.co.sh86.user.domain.Album">
+	UPDATE
+		SH86.SH_ALBUM
+	SET
+		album_good = #{albumGood}
+	WHERE
+		album_no = #{albumNo}
+</update>
+
+<!--댓글등록  -->
+
+<!-- 포토테이블에 좋아요 카운트++ -->
+<update id="updatePhotoGoodCount" parameterType="kr.co.sh86.user.domain.UploadFileDTO">
+	UPDATE
+		SH86.SH_PHOTO
+	SET
+		photo_goods = #{photoGoods}
+	WHERE
+		file_no = #{fileNo}
+</update>
+
+<!--댓글등록  -->
+<insert id="insertAlbumComment" parameterType="kr.co.sh86.user.domain.Comment">
+	<selectKey keyProperty="comNum" resultType="int" order="BEFORE">
+		select COMMENT_SEQ.NEXTVAL FROM DUAL
+	</selectKey>
+	INSERT INTO SH86.SH_COMMENT(
+		com_num,
+		com_content,
+		com_regdate,
+		user_id
+		<if test="albumNo != null and albumNo != ''">
+			,album_no
+		</if>
+		<if test="photoType != null and photoType != ''">
+			,photo_type
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			,file_no
+		</if>
+		)
+	VALUES(
+		#{comNum},
+		#{comContent},
+		TO_CHAR(SYSDATE,'YYYYMMDDHHMMSS'),
+		#{userId}
+		<if test="albumNo != null and albumNo != ''">
+			,#{albumNo}
+		</if>
+		<if test="photoType != null and photoType != ''">
+			,#{photoType}
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			,#{fileNo}
+		</if>)
+</insert>
+
+<!-- 댓글조회 -->
+<select id="selectAllAlbumComment" parameterType="int" resultType="kr.co.sh86.user.domain.Comment">
+	SELECT 
+		co.com_num,
+		co.com_content,
+		co.com_regdate,
+		co.user_id,
+		us.user_img_old,
+		us.user_img_new,
+		us.user_name
+	FROM
+		SH86.SH_COMMENT co,
+		SH86.SH_USER us
+	WHERE
+		co.album_no = #{albumNo}
+	AND
+		co.user_id = us.user_id
+	ORDER BY com_num 
+</select>
+
+<!-- 방금 입력된 댓글조회 -->
+<select id="selectAlbumComment" parameterType="int" resultType="kr.co.sh86.user.domain.Comment">
+	SELECT 
+		co.com_num,
+		co.com_content,
+		co.com_regdate,
+		co.user_id,
+		us.user_img_old,
+		us.user_img_new,
+		us.user_name
+	FROM
+		SH86.SH_COMMENT co,
+		SH86.SH_USER us
+	WHERE
+		co.user_id = us.user_id
+  	AND
+		co.com_num = #{comNum}
+</select>
+
+<!-- 일상 > 글삭제 -->
+<delete id="deleteAlbumByAlbumNo" parameterType="int">
+	DELETE
+	FROM
+		SH86.SH_ALBUM
+	WHERE
+		album_no = #{albumNo}
+</delete>
+
+<!-- 일상 > 댓글삭제(글삭제시 전체삭제) -->
+<delete id="deleteCommentByAlbumNo" parameterType="int">
+	DELETE
+	FROM
+		SH86.SH_COMMENT
+	WHERE
+		album_no = #{albumNo}
+</delete>
+
+<!--일상 > 글수정  -->
+<update id="updateAlbum" parameterType="kr.co.sh86.user.domain.Album">
+	UPDATE
+		SH86.SH_ALBUM
+	SET
+		album_msg = #{albumMsg}
+	WHERE
+		album_no = #{albumNo}
+</update>
+
+<!-- 행사공지 조인카운트 -->
+<select id="selectEventJoinCount" parameterType="kr.co.sh86.user.domain.Join" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		SH86.SH_JOIN
+	WHERE
+		NO_NUM = #{noNum}
+	<if test="joJoinShape != null and joJoinShape != ''">
+	AND
+		JO_JOINSHAPE = '참여'
+	</if>
+	
+	<if test="userId != null and userId != ''">
+		AND user_id = #{userId}
+	</if>
+</select>
+
+<!-- 행사공지 불참카운트 -->
+<select id="selectEventNotJoinCount" parameterType="kr.co.sh86.user.domain.Join" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		SH86.SH_JOIN
+	WHERE
+		JO_JOINSHAPE = '불참'
+	AND
+		NO_NUM = #{noNum}
+	<if test="userId != null and userId != ''">
+		AND user_id = #{userId}
+	</if>
+</select>
+
+<!-- 공지 > 글삭제 -->
+<delete id="deleteNotice" parameterType="int">
+	DELETE
+	FROM
+		SH86.SH_NOTICE
+	WHERE
+		NO_NUM = #{noNum}
+</delete>
+
+<!--공지 > 행사공지글수정 > 수정할 공지 조회 -->
+<select id="selectNoticeEventByNoNum" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*,
+		ev.*
+	FROM 
+		SH86.SH_NOTICE no,
+		SH86.SH_EVENT ev
+	WHERE
+		no.no_num = ev.no_num
+	AND
+		no.no_num = #{noNum}		
+</select> 
+
+<!--공지 > 부의공지글수정 > 수정할 공지 조회 -->
+<select id="selectNoticeContentByNoNum" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*,
+		co.*
+	FROM 
+		SH86.SH_NOTICE no,
+		SH86.SH_CONTENT co
+	WHERE
+		no.no_num = co.no_num
+	AND
+		no.no_num = #{noNum}		
+</select> 
+
+<!--공지 > 축하공지글수정 > 수정할 공지 조회 -->
+<select id="selectNoticeByNoNum" parameterType="int" resultType="kr.co.sh86.user.domain.NoticeView">
+	SELECT
+		no.*
+	FROM 
+		SH86.SH_NOTICE no
+	WHERE
+		no.no_num = #{noNum}		
+</select> 
+
+<!-- 공지 > 공지 수정 -->
+<update id="updateNotice" parameterType="kr.co.sh86.user.domain.NoticeView">
+	UPDATE
+		SH86.SH_NOTICE
+	SET
+		no_subject = #{noSubject}
+		<if test="noType eq 3">
+			,no_contents = #{noContents}
+			,no_targetclass = #{noTargetClass}
+			,no_targetName = #{noTargetName}
+		</if>
+	WHERE
+		no_num = #{noNum}
+</update>
+
+<!-- 공지 > 행사공지 수정 -->
+<update id="updateEventNotice" parameterType="kr.co.sh86.user.domain.NoticeView">
+	UPDATE
+		SH86.SH_EVENT
+	SET
+		co_place = #{coPlace},
+		co_eventdate = #{coEventDate},
+		co_content = #{coContent},
+		co_money = #{coMoney}
+	WHERE
+		no_num = #{noNum}
+</update>
+
+<!-- 공지 > 부의공지 수정  -->
+<update id="updateContentNotice" parameterType="kr.co.sh86.user.domain.NoticeView">
+	UPDATE
+		SH86.SH_CONTENT
+	SET
+		co_place = #{coPlace},
+		co_handdate = #{coHanddate},
+		co_content = #{coContent},
+		co_targetclass = #{coTargetClass},
+		co_targetName = #{coTargetName},
+		co_visitdate = #{coVisitDate},
+		co_visitHour = #{coVisitHour},
+		co_visitminute = #{coVisitMinute}
+	WHERE
+		no_num = #{noNum}
+</update>
+
+<!-- 앨범 > 등록자이름으로 조회 -->
+<select id="selectAlbumByUserName" parameterType="String" resultType="kr.co.sh86.user.domain.Album">
+	SELECT 
+		al.*,
+		us.user_name,
+		us.user_hp,
+		us.user_img_old,
+		us.user_img_new
+	FROM
+		SH86.SH_ALBUM al,
+		SH86.SH_USER us
+	WHERE
+		al.user_id = us.user_id
+	AND
+		us.user_name LIKE '%'||#{userName}||'%'
+	ORDER BY al.album_no DESC		
+</select>
+
+<!-- 공지대상자 폰번호 조회(부의) -->
+<select id="selectUserInfoByContent" parameterType="kr.co.sh86.user.domain.Content" resultType="String">
+	SELECT
+		user_hp
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name = #{coTargetName}
+	AND
+		user_id like #{coTargetClass}||'%'
+		
+</select>
+
+<!-- 공지대상자 폰번호 조회(축하) -->
+<select id="selectUserInfoByNotice" parameterType="kr.co.sh86.user.domain.Notice" resultType="String">
+	SELECT
+		user_hp
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name = #{noTargetName}
+	AND
+		user_id like #{noTargetClass}||'%'
+		
+</select>
+
+<!--포토 > 카테고리별 파일명,경로 조회 -->
+<select id="selectFileInfoByPhotoType" parameterType="int" resultType="kr.co.sh86.user.domain.UploadFileDTO">
+	SELECT
+		*
+	FROM
+		SH86.SH_PHOTO
+	WHERE
+		photo_type= #{photoType}
+	ORDER BY FILE_NO
+</select>
+
+<!--포토 > 카테고리별 파일명,경로 조회2 -->
+<select id="selectFileInfoByPhotoTypeAndFolder" parameterType="Map" resultType="kr.co.sh86.user.domain.UploadFileDTO">
+	SELECT
+		*
+	FROM
+		SH86.SH_PHOTO
+	WHERE
+		photo_type= #{photoType}
+	AND
+		file_path Like '%'||#{folderName}||'%'
+	ORDER BY FILE_NO
+</select>
+
+<!--포토 > 댓글조회  -->
+<select id="selectPhotoCommentByPhotoType" parameterType="Map" resultType="kr.co.sh86.user.domain.Comment">
+	SELECT
+		co.*,
+		us.user_img_old,
+		us.user_img_new,
+		us.user_name
+	FROM
+		SH86.SH_COMMENT co,
+		SH86.SH_USER us
+	WHERE
+		co.user_id = us.user_id
+	AND
+		photo_type = #{photoType}
+	AND 
+		co.file_no = #{fileNo}
+</select>
+
+<!-- 포토 > 댓글등록 -->
+<insert id="insertPhotoComment" parameterType="kr.co.sh86.user.domain.Comment">
+	INSERT INTO SH86.SH_COMMENT(
+		com_num,
+		com_content,
+		com_regdate,
+		user_id,
+		photo_type)
+	VALUES(
+		COMMENT_SEQ.NEXTVAL,
+		#{comContent},
+		TO_CHAR(SYSDATE,'YYYYMMDDHHMMSS'),
+		#{userId},
+		#{photoType})
+</insert>
+
+<!-- 공지대상자 사진 조회(부의) -->
+<select id="selectUserImgByContent" parameterType="kr.co.sh86.user.domain.NoticeView" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_img_old,
+		user_img_new
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name = #{coTargetName}
+	AND
+		user_id like #{coTargetClass}||'%'
+		
+</select>
+
+<!-- 공지대상자 사진 조회(축하) -->
+<select id="selectUserImgByCong" parameterType="kr.co.sh86.user.domain.NoticeView" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		user_img_old,
+		user_img_new
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_name = #{noTargetName}
+	AND
+		user_id like #{noTargetClass}||'%'		
+</select>
+
+<!-- 관리 - 이용(접속현황) -->
+<select id="selectUserConnection" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		*
+	FROM 
+		SH86.SH_USER
+	WHERE
+		user_id LIKE #{classNum}||'%'
+</select>
+
+<!-- 관리 - 회비2017(반 별 합계) -->
+<select id="selectUserDuesSum" parameterType="String" resultType="int">
+	SELECT
+		SUM(user_dues2017)
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_id LIKE #{classNum}||'%'
+</select> 
+
+<!-- 관리 - 30th(반 별 합계) -->
+<select id="selectUser30thSum" parameterType="String" resultType="int">
+	SELECT
+		SUM(user_30th)
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_id LIKE #{classNum}||'%'
+</select> 
+
+<!-- 관리 - 30th기부(반 별 합계) -->
+<select id="selectUser30thKibuSum" parameterType="String" resultType="int">
+	SELECT
+		SUM(user_30thkibu)
+	FROM
+		SH86.SH_USER
+	WHERE
+		user_id LIKE #{classNum}||'%'
+</select> 
+
+<!-- 스케줄러 > 생일인사람 일상 글 올려주기 -->
+<!-- 생일자 회원검색 -->
+<select id="selectUserBirthday" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		*
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_BIRTH = #{birthDay}
+</select>
+
+<!-- 일상 > 댓글삭제 -->
+<delete id="deleteCommentByComNum" parameterType="int">
+	DELETE 
+	FROM
+		SH86.SH_COMMENT
+	WHERE
+		COM_NUM = #{comNum}
+</delete>
+
+<!-- 공지 > 행사 참여자조회 -->
+<select id="selectUserByEventJoin" parameterType="int" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		us.*,
+		jo.jo_joinshape
+	FROM
+		SH86.SH_USER us,
+		SH86.SH_JOIN jo
+	WHERE
+		us.user_id = jo.user_id
+	AND
+		jo.no_num = #{noNum}	
+</select>
+
+<!--포토 > 사진확대  -->
+<select id="selectPhotoBigger" parameterType="int" resultType="kr.co.sh86.user.domain.UploadFileDTO">
+	SELECT
+		*
+	FROM
+		SH86.SH_PHOTO
+	WHERE
+		file_no = #{fileNo}
+</select>
+
+<!-- 포토 > 사진삭제 -->
+<delete id="deletePhoto" parameterType="int">
+	DELETE
+	FROM
+		SH86.SH_PHOTO
+	WHERE
+		file_no = #{fileNo}
+</delete>
+
+<!-- 문자발송자 조회 -->
+<select id="selectUserMmsTaken" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		DEST_NAME,
+		PHONE_NUMBER,
+		RESULT
+	FROM
+		XROSHOT.SDK_MMS_REPORT_DETAIL
+	WHERE
+		SEND_DATE >= #{sendDate}
+</select>
 </mapper>

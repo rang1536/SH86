@@ -1,6 +1,7 @@
 package kr.co.sh86.user.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
@@ -14,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import kr.co.sh86.user.domain.Album;
+import kr.co.sh86.user.domain.Comment;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
+import kr.co.sh86.user.domain.UploadFileDTO;
 import kr.co.sh86.user.domain.User;
 import kr.co.sh86.user.service.UserService;
+import kr.co.sh86.util.UtilDate;
 
 @Controller
 @SessionAttributes("sessionId")
@@ -35,22 +40,32 @@ public class UserController {
 	
 	@RequestMapping(value="/userList", method = RequestMethod.GET)
 	public String userListCtrl(Model model,
-			@RequestParam(value="userId", defaultValue="none")String userId,
-			@CookieValue(value="cookieId", required=false)Cookie cookie) {	
+			@CookieValue(value="cookieId")Cookie cookie,
+			@RequestParam(value="userId", defaultValue="none")String userId) {	
 		List<User> userList = userService.readAllUser();
 		List<NoticeView> noticeList = userService.readAllNoticeServ();
-		if(!userId.equals("none")) {
-			int result = userService.modifyJoinCountServ(userId);
+		
+		if(cookie != null) {
+			int result = userService.modifyJoinCountServ(cookie.getValue());
+			if(result > 0) {
+				User user = userService.readUserByCookieIdServ(cookie.getValue());
+				model.addAttribute("user", user);
+			}
+		}else if(userId.equals("none")) {
+			
 		}
 		List<Integer> countList = userService.readCountByHpServ(); //핸드폰보유자
 		List<Integer> joinCountList = userService.readCountByJoinServ(); //1번이상 접속한 유저수 카운팅
 		
-		if(cookie != null) { // 쿠키에 저장된 사용자는 개인정보조회하여 세팅.
-			/*System.out.println("쿠키값 확인 : "+cookie.getValue());*/
-			User user = userService.readUserByCookieIdServ(cookie.getValue());
-			model.addAttribute("user", user);
-		}
+		List<Album> albumList = userService.readAlbumAllServ();
+		Map<String, Object> resultMap = userService.readUserSumAllServ();
+		UtilDate utilDate = new UtilDate();
+		System.out.println(utilDate.getCurrentDateTime());
 		
+		model.addAttribute("duesList", resultMap.get("duesList"));
+		model.addAttribute("thirtyList", resultMap.get("thirtyList"));
+		model.addAttribute("kibuList", resultMap.get("kibuList"));
+		model.addAttribute("albumList", albumList);
 		model.addAttribute("joinCountList", joinCountList);
 		model.addAttribute("countList", countList);
 		model.addAttribute("userList", userList);
@@ -59,30 +74,114 @@ public class UserController {
 		return "index";
 	}
 	
-	/*@RequestMapping(value="/photoList", method = RequestMethod.GET)
-	public String photoListCtrl() {
-		System.out.println("사진목록 컨트롤러~!!");
-		
-		return "/photo/photo_list";
-	}
-	
-	@RequestMapping(value="/smsSendForm", method = RequestMethod.GET)
-	public String smsSendFormCtrl() {
-		System.out.println("문자 전송 폼 컨트롤러~!!");
-		
-		return "/sms/sms_sendForm";
-	}
-	
-	@RequestMapping(value="/noticeList", method = RequestMethod.GET)
-	public String noticeListCtrl() {
-		System.out.println("공지목록 컨트롤러~!!");
-		
-		return "/notice/notice_list";
-	}*/
-	
 	@RequestMapping(value="/sinbo", method=RequestMethod.GET)
 	public String sinboDb() {
 		int result = userService.sinboServ();
 		return null;
+	}
+	
+	//교가
+	@RequestMapping(value="/songList", method=RequestMethod.GET)
+	public String songListCtrl(@RequestParam(value="num")String num) {
+		String url = "/photo/song";
+		return url+num;
+	}
+	
+	//무주2016
+	@RequestMapping(value="/muju2016List", method=RequestMethod.GET)
+	public String muju2016ListCtrl(Model model) {
+		int photoType= 1;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		return "/photo/muju2016";
+	}
+		
+	//30주년준비
+	@RequestMapping(value="/before30thList", method=RequestMethod.GET)
+	public String before30thListCtrl(Model model) {
+		int photoType= 2;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		return "/photo/30thBefore";
+	}
+	
+	//30주년 기념 - after30thList
+	@RequestMapping(value="/after30thList", method=RequestMethod.GET)
+	public String after30thListCtrl(Model model,
+			@RequestParam(value="folderName", defaultValue="30th01")String folderName) {
+		int photoType= 3;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeAndFolderServ(photoType, folderName);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		model.addAttribute("folderName", folderName);
+		return "/photo/30thAfter";
+	}
+		
+	//임원취임
+	@RequestMapping(value="/adminList", method=RequestMethod.GET)
+	public String adminListCtrl(Model model) {
+		int photoType= 4;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		return "/photo/admin";
+	}
+	
+	//무주동문회 2017
+	@RequestMapping(value="/muju2017List", method=RequestMethod.GET)
+	public String muju2017ListCtrl(Model model) {
+		int photoType= 5;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		return "/photo/muju2017";
+	}
+	
+	//추억 및 졸업앨범 - after30thList
+	@RequestMapping(value="/albumList", method=RequestMethod.GET)
+	public String albumListCtrl(Model model,
+			@RequestParam(value="folderName", defaultValue="school01")String folderName) {
+		int photoType= 7;
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeAndFolderServ(photoType, folderName);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		model.addAttribute("photoList", list);
+		model.addAttribute("folderName", folderName);
+		return "/photo/album";
+	}
+	
+	//관리 - 이용 statDetail
+	@RequestMapping(value="/statDetail", method=RequestMethod.GET)
+	public String statDetailCtrl(Model model,
+			@RequestParam(value="classNum", defaultValue="1")String classNum) {
+		List<User> userList = userService.readUserConnectionServ(classNum);
+		List<Integer> joinCountList = userService.readCountByJoinServ(); //1번이상 접속한 유저수 카운팅
+		
+		model.addAttribute("userList", userList);
+		model.addAttribute("joinCountList", joinCountList);
+		
+		return "/admin/stat_list";
+	}
+	
+	//관리 - 회비 duesDetail
+	@RequestMapping(value="/duesDetail", method=RequestMethod.GET)
+	public String duesDetailCtrl(Model model,
+			@RequestParam(value="classNum", defaultValue="1")String classNum) {
+		List<User> userList = userService.readUserConnectionServ(classNum);
+		Map<String, Object> resultMap = userService.readUserSumAllServ(classNum);
+		
+		model.addAttribute("userList", userList);
+		model.addAttribute("duesSum", resultMap.get("duesSum"));
+		model.addAttribute("thirtySum", resultMap.get("thirtySum"));
+		model.addAttribute("kibuSum", resultMap.get("kibuSum"));
+		
+		return "/admin/dues_list";
 	}
 }

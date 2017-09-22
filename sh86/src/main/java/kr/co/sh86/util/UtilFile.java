@@ -16,10 +16,10 @@ public class UtilFile {
 	public List<UploadFileDTO> multiUploadFile(MultipartHttpServletRequest request){
 		List<UploadFileDTO> uploadFileList = new ArrayList<UploadFileDTO>();
 		//호스팅
-		/*String rootPath = "/home/hosting_users/sh86/tomcat/webapps/files/";*/
+		String rootPath = "/home/hosting_users/sh86/tomcat/webapps/files/";
 		
 		//로컬
-		String rootPath = "C:\\Users\\FreeUser\\Documents\\workspace-sts-3.9.0.RELEASE\\sh86\\src\\main\\webapp\\resources\\files\\";
+		/*String rootPath = "C:\\Users\\FreeUser\\Documents\\workspace-sts-3.9.0.RELEASE\\sh86\\src\\main\\webapp\\resources\\files\\";*/
 		List<MultipartFile> multipartFile = request.getFiles("uploadFile");
         if (multipartFile.size() == 1 && multipartFile.get(0).getOriginalFilename().equals("")) {
         } else {
@@ -31,16 +31,20 @@ public class UtilFile {
 		return uploadFileList;	
 	}
 	//단일파일 업로드
-	public UploadFileDTO singleUploadFile(MultipartHttpServletRequest request, String classNum){
+	public UploadFileDTO singleUploadFile(MultipartHttpServletRequest request, String classNum, String type){
 		//호스팅
-		/*String rootPath = "/home/hosting_users/kis0488/tomcat/webapps/ROOT/resources/files/"+classNum+"/";*/
-		
-		/*String rootPath = "/tomcat/webapps/ROOT/resources/files/"+classNum+"/";*/
+		String rootPath = "/home/hosting_users/kis0488/tomcat/webapps/ROOT/resources/files/"+classNum+"/";
 		
 		//로컬
-		String rootPath = "C:\\Users\\FreeUser\\git\\SH86\\sh86\\src\\main\\webapp\\resources\\files\\"+classNum+"\\";
+		/*String rootPath = "C:\\Users\\FreeUser\\git\\SH86\\sh86\\src\\main\\webapp\\resources\\files\\"+classNum+"\\";*/
 		
-		return uploadFile(request.getFile("userImgNew"), rootPath);
+		if(type.equals("myPage")) {
+			return uploadFile(request.getFile("userImgNew"), rootPath);
+		}else if(type.equals("album")) {
+			return uploadFile(request.getFile("albumImg"), rootPath);
+		}else {
+			return uploadFile(request.getFile("userImgNew"), rootPath);
+		}
 	}
 	
 	//파일업로드 메소드 (DTO반환)

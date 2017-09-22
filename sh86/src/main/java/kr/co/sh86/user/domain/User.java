@@ -18,9 +18,101 @@ public class User {
 	private String userImgOld; //옛사진 파일이름
 	private String userImgNew; //최신사진 파일이름
 	private String userLevel; //회원등급
-	private int userJoinCheck;
+	private int userJoinCheck; //접속체크
+	private String userBirthType;
+	private String userBirth;
+	private String userLastDate;//최근접속일
+	private int userDues2017;
+	private int user30th;
+	private int user30thKibu;
+	private String userBirthMonth;
+	private String userBirthDay;
+	private String joJoinShape;
+	private String userSangseAdd;
+	private String destName;
+	private String phoneNumber;
+	private int result;
 	
 	
+	
+	public String getDestName() {
+		return destName;
+	}
+	public void setDestName(String destName) {
+		this.destName = destName;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public int getResult() {
+		return result;
+	}
+	public void setResult(int result) {
+		this.result = result;
+	}
+	public String getUserSangseAdd() {
+		return userSangseAdd;
+	}
+	public void setUserSangseAdd(String userSangseAdd) {
+		this.userSangseAdd = userSangseAdd;
+	}
+	public String getJoJoinShape() {
+		return joJoinShape;
+	}
+	public void setJoJoinShape(String joJoinShape) {
+		this.joJoinShape = joJoinShape;
+	}
+	public String getUserBirthMonth() {
+		return userBirthMonth;
+	}
+	public void setUserBirthMonth(String userBirthMonth) {
+		this.userBirthMonth = userBirthMonth;
+	}
+	public String getUserBirthDay() {
+		return userBirthDay;
+	}
+	public void setUserBirthDay(String userBirthDay) {
+		this.userBirthDay = userBirthDay;
+	}
+	public int getUserDues2017() {
+		return userDues2017;
+	}
+	public void setUserDues2017(int userDues2017) {
+		this.userDues2017 = userDues2017;
+	}
+	public int getUser30th() {
+		return user30th;
+	}
+	public void setUser30th(int user30th) {
+		this.user30th = user30th;
+	}
+	public int getUser30thKibu() {
+		return user30thKibu;
+	}
+	public void setUser30thKibu(int user30thKibu) {
+		this.user30thKibu = user30thKibu;
+	}
+	public String getUserLastDate() {
+		return userLastDate;
+	}
+	public void setUserLastDate(String userLastDate) {
+		this.userLastDate = userLastDate;
+	}
+	public String getUserBirthType() {
+		return userBirthType;
+	}
+	public void setUserBirthType(String userBirthType) {
+		this.userBirthType = userBirthType;
+	}
+	public String getUserBirth() {
+		return userBirth;
+	}
+	public void setUserBirth(String userBirth) {
+		this.userBirth = userBirth;
+	}
 	public int getUserJoinCheck() {
 		return userJoinCheck;
 	}
@@ -130,8 +222,11 @@ public class User {
 				+ ", userAddress=" + userAddress + ", userDo=" + userDo + ", userCityName=" + userCityName
 				+ ", userDong=" + userDong + ", userSangse=" + userSangse + ", userImgPass=" + userImgPass
 				+ ", userImgOld=" + userImgOld + ", userImgNew=" + userImgNew + ", userLevel=" + userLevel
-				+ ", userJoinCheck=" + userJoinCheck + "]";
+				+ ", userJoinCheck=" + userJoinCheck + ", userBirthType=" + userBirthType + ", userBirth=" + userBirth
+				+ ", userLastDate=" + userLastDate + ", userDues2017=" + userDues2017 + ", user30th=" + user30th
+				+ ", user30thKibu=" + user30thKibu + ", userBirthMonth=" + userBirthMonth + ", userBirthDay="
+				+ userBirthDay + ", joJoinShape=" + joJoinShape + ", userSangseAdd=" + userSangseAdd + ", destName="
+				+ destName + ", phoneNumber=" + phoneNumber + ", result=" + result + "]";
 	}
-	
 	
 }

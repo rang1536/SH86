@@ -96,10 +96,15 @@ public class UtilDate {
 		return (new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
 	}
 	
+	// 오늘 날짜 리턴
+	public String getNowDate() {
+		return (new SimpleDateFormat("MM-dd")).format(new Date());
+	}
+	
 	// 오늘 날짜+시간 리턴
 	public String getCurrentDateTime() {
 
-		return (new SimpleDateFormat("yyyy-MM-dd HH-mm")).format(new Date());
+		return (new SimpleDateFormat("yyyyMMddHHmm")).format(new Date());
 	}
 	
 	// 현재 시간 리턴
