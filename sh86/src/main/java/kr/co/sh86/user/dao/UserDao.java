@@ -15,6 +15,8 @@ import kr.co.sh86.user.domain.Event;
 import kr.co.sh86.user.domain.GoodCheck;
 import kr.co.sh86.user.domain.Join;
 import kr.co.sh86.user.domain.Mms;
+import kr.co.sh86.user.domain.MmsReport;
+import kr.co.sh86.user.domain.MmsStat;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
 import kr.co.sh86.user.domain.Sinbo;
@@ -392,5 +394,30 @@ public class UserDao {
 	//문자 - 발송자 성공여부 확인을 위한 조회
 	public List<User> selectUserMmsTaken(String sendDate){
 		return sqlSession.selectList("UserDao.selectUserMmsTaken", sendDate);
+	}
+	
+	//문자 - 월별 건수 조회
+	public int selectCountMmsByMonth(String sendDate) {
+		return sqlSession.selectOne("UserDao.selectCountMmsByMonth", sendDate);
+	}
+	
+	//문자발송 성공자 - selectUserMmsTakenSuccess
+	public int selectUserMmsTakenSuccess(String sendDate){
+		return sqlSession.selectOne("UserDao.selectUserMmsTakenSuccess", sendDate);
+	}
+	
+	//문자발송후 기록입력
+	public int insertMmsReport(MmsReport mmsReport) {
+		return sqlSession.insert("UserDao.insertMmsReport", mmsReport);
+	}
+	
+	//문자발송 이력조회 - 월별
+	public List<MmsReport> selectReportByMonth(String sendDate){
+		return sqlSession.selectList("UserDao.selectReportByMonth", sendDate);
+	}
+	
+	//문자발송 성공여부조회 - 건별
+	public List<User> selectUserSuccessByDateTime(String sendDate){
+		return sqlSession.selectList("UserDao.selectUserSuccessByDateTime", sendDate);
 	}
 }

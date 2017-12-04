@@ -20,6 +20,10 @@ public class UtilFile {
 		
 		//로컬
 		/*String rootPath = "C:\\Users\\FreeUser\\Documents\\workspace-sts-3.9.0.RELEASE\\sh86\\src\\main\\webapp\\resources\\files\\";*/
+		
+		//회사 서버
+		/*String rootPath = "F:\\sh86\\resources\\files\\";*/
+		
 		List<MultipartFile> multipartFile = request.getFiles("uploadFile");
         if (multipartFile.size() == 1 && multipartFile.get(0).getOriginalFilename().equals("")) {
         } else {

@@ -12,6 +12,6 @@
 	
 </head>
 <body>
-	<a href="sinbo">신보 db정리</a>
+	센싱확인
 </body>
 </html>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kr.co.sh86.user.domain.Album;
 import kr.co.sh86.user.domain.Comment;
+import kr.co.sh86.user.domain.MmsReport;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
 import kr.co.sh86.user.domain.UploadFileDTO;
@@ -40,8 +42,18 @@ public class UserController {
 	
 	@RequestMapping(value="/userList", method = RequestMethod.GET)
 	public String userListCtrl(Model model,
-			@CookieValue(value="cookieId")Cookie cookie,
-			@RequestParam(value="userId", defaultValue="none")String userId) {	
+			@CookieValue(value="cookieId", required=false)Cookie cookie,
+			@RequestParam(value="userId", defaultValue="none")String userId,
+			@RequestParam(value="type", defaultValue="none")String type,
+			HttpServletResponse response) {	
+		if(!userId.equals("none")) {
+			cookie = new Cookie("cookieId",userId);
+			cookie.setPath("/");
+			cookie.setMaxAge(60*60*24*30);
+			
+			response.addCookie(cookie);
+		}
+		
 		List<User> userList = userService.readAllUser();
 		List<NoticeView> noticeList = userService.readAllNoticeServ();
 		
@@ -60,8 +72,44 @@ public class UserController {
 		List<Album> albumList = userService.readAlbumAllServ();
 		Map<String, Object> resultMap = userService.readUserSumAllServ();
 		UtilDate utilDate = new UtilDate();
-		System.out.println(utilDate.getCurrentDateTime());
+		List<Integer> mmsCountList = userService.readCountMmsByMonthServ();
 		
+		System.out.println("type 확인 : "+type);
+		if(type.equals("sms")) model.addAttribute("type", type);
+		model.addAttribute("mmsCountList", mmsCountList);
+		model.addAttribute("duesList", resultMap.get("duesList"));
+		model.addAttribute("thirtyList", resultMap.get("thirtyList"));
+		model.addAttribute("kibuList", resultMap.get("kibuList"));
+		model.addAttribute("albumList", albumList);
+		model.addAttribute("joinCountList", joinCountList);
+		model.addAttribute("countList", countList);
+		model.addAttribute("userList", userList);
+		model.addAttribute("noticeList", noticeList);
+		
+		return "index";
+	}
+	
+	@RequestMapping(value="/userListForMms", method = RequestMethod.GET)
+	public String userListForMmsCtrl(Model model,
+			@CookieValue(value="cookieId")Cookie cookie) {	
+		List<User> userList = userService.readAllUser();
+		List<NoticeView> noticeList = userService.readAllNoticeServ();
+		
+		if(cookie != null) {
+			User user = userService.readUserByCookieIdServ(cookie.getValue());
+			model.addAttribute("user", user);
+			
+		}
+		List<Integer> countList = userService.readCountByHpServ(); //핸드폰보유자
+		List<Integer> joinCountList = userService.readCountByJoinServ(); //1번이상 접속한 유저수 카운팅
+		
+		List<Album> albumList = userService.readAlbumAllServ();
+		Map<String, Object> resultMap = userService.readUserSumAllServ();
+		UtilDate utilDate = new UtilDate();
+		List<Integer> mmsCountList = userService.readCountMmsByMonthServ();
+		
+		model.addAttribute("type", "sms");
+		model.addAttribute("mmsCountList", mmsCountList);
 		model.addAttribute("duesList", resultMap.get("duesList"));
 		model.addAttribute("thirtyList", resultMap.get("thirtyList"));
 		model.addAttribute("kibuList", resultMap.get("kibuList"));
@@ -183,5 +231,22 @@ public class UserController {
 		model.addAttribute("kibuSum", resultMap.get("kibuSum"));
 		
 		return "/admin/dues_list";
+	}
+	
+	//문자 단체발송 이력 상세조회showMmsList
+	@RequestMapping(value="/showMmsList", method=RequestMethod.GET)
+	public String showMmsListCtrl(Model model,
+			@RequestParam(value="month")String month) {
+		System.out.println("월 확인 : "+month);
+		String sendDate = null;
+		if(Integer.parseInt(month) < 10) {
+			sendDate = "20170"+month;
+		}else if(Integer.parseInt(month) > 9) {
+			sendDate = "2017"+month;
+		}
+		List<MmsReport> reportList = userService.readReportByMonth(sendDate);
+		System.out.println("조회값 확인 : "+reportList);
+		model.addAttribute("reportList", reportList);
+		return "admin/mms_list";
 	}
 }

@@ -17,6 +17,8 @@ import kr.co.sh86.user.domain.Event;
 import kr.co.sh86.user.domain.GoodCheck;
 import kr.co.sh86.user.domain.Join;
 import kr.co.sh86.user.domain.Mms;
+import kr.co.sh86.user.domain.MmsReport;
+import kr.co.sh86.user.domain.MmsStat;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
 import kr.co.sh86.user.domain.Sinbo;
@@ -121,7 +123,7 @@ public class UserService {
 		return mms;
 	}
 	//문자 - mms발송
-	public List<User> sendMmsServ(String key, String value, String msg) {
+	public int sendMmsServ(String key, String value, String msg) {
 		final int scheduleType = 0;
 		final String subject = "신흥고86회 동문회";
 		final String callback = "0632880488"; //발송번호는 등록된 번호만 가능. 추후 대표님 폰등은 필요하면 따로 등록.
@@ -147,7 +149,20 @@ public class UserService {
 			result = userDao.sendMmsToSelected(mms);
 		}
 		
-		List<User> sendCheckUserList = userDao.selectUserMmsTaken(sendDate);
+		/*List<User> sendCheckUserList = userDao.selectUserMmsTaken(sendDate);
+		System.out.println(sendCheckUserList);*/
+		
+		MmsReport mmsReport = new MmsReport();
+		mmsReport.setMmsMsg(mmsMsg.substring(0, 10)+"..");
+		mmsReport.setMmsSendDate(utilDate.getCurrentDateTime());
+		mmsReport.setMmsSender("오민권");
+		/*mmsReport.setMmsSuccess(userDao.selectUserMmsTakenSuccess(sendDate));*/
+		mmsReport.setMmsTotalCount(userList.size());
+		
+		System.out.println("문자 전송후 값 세팅 확인 : "+mmsReport);
+		int insertResult = userDao.insertMmsReport(mmsReport);
+		
+		System.out.println("문자 전송후 입력확인 : "+insertResult);
 		/*System.out.println("전송결과 확인 : "+sendCheckUserList);*/
 		/* 뒤에 url안붙여도 되는 문자 로직 100건씩 컷해서 보냄.
 		 * if(userList.size() < 100) {
@@ -286,7 +301,7 @@ public class UserService {
 		}
 		System.out.println("문자전송 확인 : "+result);*/
 		
-		return sendCheckUserList;
+		return insertResult;
 	}
 	
 	//문자 - 직접입력
@@ -308,7 +323,7 @@ public class UserService {
 	}
 	
 	//문자 > 전체발송
-	public List<User> sendMmsAllServ(String msg) {
+	public int sendMmsAllServ(String msg) {
 		final int scheduleType = 0;
 		final String subject = "신흥고 86회 동문회";
 		final String callback = "0632880488"; //발송번호는 등록된 번호만 가능. 추후 대표님 폰등은 필요하면 따로 등록.
@@ -330,7 +345,20 @@ public class UserService {
 			mms = setMms(scheduleType, subject, callback, destInfo, destCount, mmsMsg);
 			result = userDao.sendMmsToSelected(mms);
 		}
-		List<User> sendCheckUserList = userDao.selectUserMmsTaken(sendDate);
+		/*List<User> sendCheckUserList = userDao.selectUserMmsTaken(sendDate);*/
+		
+		MmsReport mmsReport = new MmsReport();
+		mmsReport.setMmsMsg(mmsMsg.substring(0, 10)+"..");
+		mmsReport.setMmsSendDate(utilDate.getCurrentDateTime());
+		mmsReport.setMmsSender("오민권");
+		/*mmsReport.setMmsSuccess(userDao.selectUserMmsTakenSuccess(sendDate));*/
+		mmsReport.setMmsTotalCount(userList.size());
+		
+		System.out.println("문자 전송후 값 세팅 확인 : "+mmsReport);
+		int insertResult = userDao.insertMmsReport(mmsReport);
+		
+		System.out.println("문자 전송후 입력확인 : "+insertResult);
+		
 		/* 문자내용에 url첨부 아닐때 로직
 		 * if(userList.size() > 300) { //DB에 휴대폰번호 있는 회원 수가 322명임
 			for(int i=0; i<100; i++) {
@@ -386,7 +414,7 @@ public class UserService {
 			result = userDao.sendMmsToSelected(mms);
 		}*/
 		
-		return sendCheckUserList;
+		return insertResult;
 	}
 	
 	// 공지 - 부의공지 등록
@@ -1059,5 +1087,38 @@ public class UserService {
 			resultMap.put("check", "false");
 		}	
 		return resultMap;
+	}
+	
+	// 문자 -월별 전송건수 조회
+	public List<Integer> readCountMmsByMonthServ() {
+		String sendDate = "201709";
+		int count = userDao.selectCountMmsByMonth(sendDate);
+		List<Integer> countList = new ArrayList<Integer>();
+		/*System.out.println("1차확인 : "+count);*/
+		countList.add(count);
+		
+		sendDate = "201710";
+		count = userDao.selectCountMmsByMonth(sendDate);
+		/*System.out.println("2차확인 : "+count);*/
+		countList.add(count);
+		
+		/*System.out.println(countList);*/
+		return countList;
+	}
+	
+	//문자 - 월별 발송이력조회
+	public List<MmsReport> readReportByMonth(String sendDate){
+		/*System.out.println("날짜확인 : "+sendDate);*/
+		List<MmsReport> mmsList = userDao.selectReportByMonth(sendDate);
+		for(int i=0; i<mmsList.size(); i++) {
+			/*System.out.println("시간확인 : "+mmsList.get(i).getMmsSendDate());*/
+			mmsList.get(i).setMmsSuccess(userDao.selectUserMmsTakenSuccess(mmsList.get(i).getMmsSendDate()));
+		}
+		return mmsList;
+	}
+	
+	//문자 - 성공여부조회 건별
+	public List<User> readUserSuccessByDateTimeServ(String sendDate){
+		return userDao.selectUserSuccessByDateTime(sendDate);
 	}
 }

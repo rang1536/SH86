@@ -17,6 +17,7 @@
 	<link href="resources/js/jquery.modal.css" type="text/css" rel="stylesheet" />
 	<script src="resources/js/jquery.modal.min.js"></script>
 	
+	
 	<!-- 우편번호(다음) -->
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<link href="resources/img/SH86_128r.jpg" rel="shortcut icon" />
@@ -172,7 +173,11 @@
 		
 		$(document).ready(function(){
 			numberChange();
-			
+			var type = '${type}';
+			console.log(type);
+			if(type == 'sms'){
+				smsAddCtrl();
+			}
 		})
 		/* 바로가기 자동생성 스크립트 */
 		// 접속 핸드폰 정보
@@ -279,8 +284,10 @@
 						
 						if(data.check == '성공'){
 							alert('문자발송에 성공하였습니다.');
-							/* window.location.reload(true); */
-							$('#smsSendDiv').empty();
+							/* location.href = 'userListForMms#page8'; */
+							window.location.reload(true);
+
+							/* $('#smsSendDiv').empty();
 							var success = 0;
 							var html = '<table style="width:100%;">';
 							html += '<tr>';
@@ -309,7 +316,7 @@
 							html += '<th class="duesTr">결과</th>';
 							html += '<th class="duesTr">-</th>';
 							html += '<th class="duesTr">'+success+'/'+data.userList.length+'</th>';
-							$('#smsSendDiv').append(html);
+							$('#smsSendDiv').append(html); */
 						}else{
 							alert('문자발송에 실패하였습니다.');
 						}
@@ -1151,7 +1158,8 @@
 								html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
 							}else if(result.userDo != null || result.userCityName != null){
 								html += '<font style="color:black;font-weight:bold;">'+result.userName+'</font><br/>';
-								html += '<font style="font-size:13px;font-weight:bold;">'+result.userDo+' '+result.userCityName+'</font>';
+								html += '<font style="font-size:13px;font-weight:bold;">'+result.userDo+' '+result.userCityName+'</font><br/>';
+								html += '<font style="font-size:13px;font-weight:bold;">'+result.userId.substring(0,1)+'반</font>';
 							}
 							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
 							if(sessionId == result.userId){
@@ -1352,6 +1360,21 @@
 						if(data[0].userId.substring(0,1) == '8'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3826.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 안정훈</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">경기 구리시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-4369-2015"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+							
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
@@ -1382,6 +1405,21 @@
 						}else if(data[0].userId.substring(0,1) == '6'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3607.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 김대영</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-2708-6900"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+							
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
@@ -1394,9 +1432,99 @@
 							html += '<a href="tel:010-3673-1951"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
 							html += '</td>';
 							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '1'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/1/3134.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 안병모</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-2657-7184"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '2'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/2/3224.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 방기범</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-6795-4242"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '3'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/3/3324.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;"  colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 서영권</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-9987-1212"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '4'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/4/3406.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 김원기</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-5404-2604"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '5'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/5/3548.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 정은식</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-3650-2554"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
+						}else if(data[0].userId.substring(0,1) == '7'){
+							html += '<tr>';
+							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/7/3717.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>';
+							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
+							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '</td>'; */
+							html += '<td style="border-bottom:1px dotted #ddd;">';
+							html += '<font style="color:#030066;font-weight:bold;">반대표 박혜찬</font><br/>';
+							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
+							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
+							html += '<a href="tel:010-3659-7706"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+							html += '</td>';
+							html += '</tr>';
 						}
 						$.each(data, function(i, result){
-							if(result.userId != '845' && result.userId != '848' && result.userId != '632'){
+							if(result.userId != '845' && result.userId != '848' && result.userId != '632' && result.userId != '134' && result.userId != '224' && result.userId != '324' && result.userId != '406' && result.userId != '548' && result.userId != '607' && result.userId != '717' && result.userId != '826'){
 								html += '<tr>';
 								html += '<td style="width:61px;border-bottom:1px dotted #ddd;height:75px;">';
 								if(result.userImgOld != null && result.userImgNew == null){
@@ -1965,8 +2093,20 @@
 		    	}]
 		    });
 		}
-
-
+	
+	 	function mmsShowChange(num){
+	 		if(num == 1){
+	 			$('#sendForm').css('display','none');
+	 			$('#mmsListDiv').css('display','');
+	 		}else if(num == 2){
+	 			$('#mmsListDiv').css('display','none');
+	 			$('#sendForm').css('display','');
+	 		}
+	 	}
+	 	
+	 	function showMmsList(num){
+	 		location.href='showMmsList?month='+num;
+	 	}
 		</script>
 </head>
 <body>
@@ -2047,6 +2187,21 @@
 				<table style="width:100%;">
 					<tr>
 						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
+							<img src="resources/files/6/3607.jpg" style="width:58px;height:58px;border-radius:10px;">
+						</td>
+						<!-- <td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
+							<img src="resources/files/6/3632new.jpg" style="width:58px;height:58px;border-radius:10px;">
+						</td> -->
+						<td colspan="2" style="border-bottom:1px dotted #ddd;">
+							<font style="color:#030066;font-weight:bold;">반대표 김대영</font><br/>
+							<font style="font-size:13px;font-weight:bold;">전북&nbsp;전주시</font>
+						</td>
+						<td style="text-align:right;border-bottom:1px dotted #ddd;">
+							<a href="tel:'010-2708-6900'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 							<img src="resources/files/6/3632.jpg" style="width:58px;height:58px;border-radius:10px;">
 						</td>
 						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
@@ -2061,7 +2216,7 @@
 						</td>
 					</tr>
 					<c:forEach var="userList" items="${userList}">
-						<c:if test="${userList.userId.substring(0,1) eq '6' and userList.userId ne '632'}">
+						<c:if test="${userList.userId.substring(0,1) eq '6' and userList.userId ne '632' and userList.userId ne '607'}">
 						<tr>
 							<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 								<c:choose>
@@ -3111,55 +3266,101 @@
 				
 				<!-- 문자보내기 -->
 				<div id="smsSendDiv" style="display:none;">
-					<!-- <label for="msg">메세지입력 :</label> -->
-		       	 	<textarea name="msg" id="msg" rows="8" cols="40" height="150px;"></textarea>
-		       	 	
-		        	<table style="width:100%;text-align:center;border:3px solid #ddd;">
-		    			<tr>
-		    				<!-- <td id="typeContent" class="topList3" id="direct" onclick="direct();">직접입력</td> -->
-		    				<td id="typeEvent" class="topList3" id="searchUser" onclick="searchForm();">회원검색</td>
-		    				<td id="typeNormal" class="topList3" id="sendAllBtn" onclick="sendAll();">전체발송</td>
-		    			</tr>
-		    		</table>
-		    		
-		        	<div id="directForm" style="display:none;">
-		        		<input name="userHp" id="userHp" type="tel" placeholder="수신자 휴대폰번호 입력 예)01022223333" >
-		        		<button type="button" id="sendMmsDirectBtn">문자발송</a>
-		        		
-		        	</div>
-		        	
-		        	<div id="searchForm" style="display:none;">
-		        		<table style="width:100%;border:3px solid #ddd;">
-		        			<tr>
-		        				<td colspan="2">
-		        					<select name="searchKey" id="searchKey" data-native-menu="false" style="width:100%;">
-							            <option>반/지역 선택</option>
-							            <option value="class">반</option> 
-							            <option value="local">지역</option> 
-							        </select>
-		        				</td>
-		        			</tr>
-		        			<tr>
-		        				<td style="width:80%;">
-		        					<input type="text" name="searchValue" id="searchValue" placeholder="상세">
-		        				</td>
-		        				<td style="width:20%">
-		        					<div style="border:2px solid #ddd;border-radius:5px;text-align:center;height:25px;padding-top:7px;" onclick="searchUserSms();">
-										검색
-									</div>
-		        				</td>
-		        			</tr>
-		        		</table>
-				        
-				        <!-- <div id="valueDetail">
-				        	<input type="text" style="width:85%;float:left;border-bottom:1px solid #ddd;" name="searchValue" id="searchValue" placeholder="검색 키워드를입력">
-							<div style="width:12%;float:right;border:2px solid #ddd;border-radius:5px;text-align:center;height:26px;" onclick="searchUserSms();">
-								검색
-							</div>
-				        </div> -->
-				    </div>
-					<div id="resultDiv">
+					<div id="sendForm" style="display:none;">
+						<table style="width:100%;">
+							<tr>
+								<td></td>
+								<td style="width:36px;text-align:right;" onclick="mmsShowChange(1);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+								<td style="width:36px;text-align:right;" onclick="mmsShowChange(2);"><img src="resources/img/edit.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+						</table>
+						
+			       	 	<textarea name="msg" id="msg" rows="8" cols="40" height="150px;"></textarea>
+			       	 	
+			        	<table style="width:100%;text-align:center;border:3px solid #ddd;">
+			    			<tr>
+			    				<!-- <td id="typeContent" class="topList3" id="direct" onclick="direct();">직접입력</td> -->
+			    				<td id="typeEvent" class="topList3" id="searchUser" onclick="searchForm();">회원검색</td>
+			    				<td id="typeNormal" class="topList3" id="sendAllBtn" onclick="sendAll();">전체발송</td>
+			    			</tr>
+			    		</table>
+			    		
+			        	<div id="directForm" style="display:none;">
+			        		<input name="userHp" id="userHp" type="tel" placeholder="수신자 휴대폰번호 입력 예)01022223333" >
+			        		<button type="button" id="sendMmsDirectBtn">문자발송</a>
+			        		
+			        	</div>
+			        	
+			        	<div id="searchForm" style="display:none;">
+			        		<table style="width:100%;border:3px solid #ddd;">
+			        			<tr>
+			        				<td colspan="2">
+			        					<select name="searchKey" id="searchKey" data-native-menu="false" style="width:100%;">
+								            <option>반/지역 선택</option>
+								            <option value="class">반</option> 
+								            <option value="local">지역</option> 
+								        </select>
+			        				</td>
+			        			</tr>
+			        			<tr>
+			        				<td style="width:80%;">
+			        					<input type="text" name="searchValue" id="searchValue" placeholder="상세">
+			        				</td>
+			        				<td style="width:20%">
+			        					<div style="border:2px solid #ddd;border-radius:5px;text-align:center;height:25px;padding-top:7px;" onclick="searchUserSms();">
+											검색
+										</div>
+			        				</td>
+			        			</tr>
+			        		</table>
+					        
+					        <!-- <div id="valueDetail">
+					        	<input type="text" style="width:85%;float:left;border-bottom:1px solid #ddd;" name="searchValue" id="searchValue" placeholder="검색 키워드를입력">
+								<div style="width:12%;float:right;border:2px solid #ddd;border-radius:5px;text-align:center;height:26px;" onclick="searchUserSms();">
+									검색
+								</div>
+					        </div> -->
+					    </div>
+						<div id="resultDiv">
+						
+						</div>
+					</div> <!-- 문자입력폼 끝 -->
 					
+					<div id="mmsListDiv">
+						<table style="width:100%;">
+							<tr>
+								<td></td>
+								<td style="width:36px;text-align:right;" onclick="mmsShowChange(1);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+								<td style="width:36px;text-align:right;" onclick="mmsShowChange(2);"><img src="resources/img/edit.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+						</table>
+					
+						<table style="width:100%;">
+							<tr>
+								<th class="duesTr">일시</th>
+								<th class="duesTr">건수</th>
+								<th class="duesTr">요금</th>
+								<th class="duesTr">목록</th>
+							</tr>
+							<tr>
+								<td class="statTd">2017-09</td>
+								<td class="statTd">${mmsCountList.get(0) }</td>
+								<td class="statTd"><number class="numberInput">${mmsCountList.get(0) * 55 }</number></td>
+								<td class="statTd" onclick="showMmsList(9);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+							<tr>
+								<td class="statTd">2017-10</td>
+								<c:if test="${mmsCountList.get(1) == 0 }">
+									<td class="statTd">-</td>
+									<td class="statTd">-</td>
+								</c:if>
+								<c:if test="${mmsCountList.get(1) > 0 }">
+									<td class="statTd">${mmsCountList.get(1)}</td>
+									<td class="statTd"><number class="numberInput">${mmsCountList.get(1) * 55 }</number></td>
+								</c:if>
+								<td class="statTd" onclick="showMmsList(10);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+						</table>
 					</div>
 				</div> <!-- 문자발송끝 -->
 				

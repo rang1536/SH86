@@ -60,11 +60,10 @@ public class UserRestController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		// 검색키값으로 해당값 조회하여 뷰로 리턴하고 상세입력창 세팅해주기
-		List<User> sendUserList = userService.sendMmsServ(key, value, msg);
+		int result = userService.sendMmsServ(key, value, msg);
 		
-		if(sendUserList != null) {
+		if(result > 0) {
 			resultMap.put("check", "성공");
-			resultMap.put("userList", sendUserList);
 			
 		}else {
 			resultMap.put("check", "실패");
@@ -95,11 +94,10 @@ public class UserRestController {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		// 전체회원문자발송
-		List<User> sendUserList = userService.sendMmsAllServ(msg);
+		int result = userService.sendMmsAllServ(msg);
 		
-		if(sendUserList != null) {
+		if(result > 0) {
 			resultMap.put("check", "성공");
-			resultMap.put("userList", sendUserList);
 			
 		}else {
 			resultMap.put("check", "실패");
@@ -417,9 +415,20 @@ public class UserRestController {
 	public Map<String, String> removePhotoCtrl(@RequestParam(value="fileNo")int fileNo,
 			@RequestParam(value="photoType")int photoType){
 		Map<String, Integer> params = new HashMap<String, Integer>();
+		params.put("fileNo", fileNo);
+		params.put("photoType",photoType);
 		Map<String,String> resultMap = userService.removePhotoAndCommentServ(params);
 		
 		return resultMap;
 	}
+	
+	//문자 > 개인별 상세발송내역 성공여부 체크 mmsSuccessList
+	@RequestMapping(value="/mmsSuccessList", method=RequestMethod.POST)
+	public List<User> mmsSuccessListCtrl(@RequestParam(value="mmsSendDate")String mmsSendDate){
+		List<User> mmsSuccessList = userService.readUserSuccessByDateTimeServ(mmsSendDate);
+		return mmsSuccessList;
+	}
+	
+	
 	
 }

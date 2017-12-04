@@ -32,9 +32,16 @@ public class User {
 	private String destName;
 	private String phoneNumber;
 	private int result;
+	private String sendDate;
 	
 	
 	
+	public String getSendDate() {
+		return sendDate;
+	}
+	public void setSendDate(String sendDate) {
+		this.sendDate = sendDate;
+	}
 	public String getDestName() {
 		return destName;
 	}

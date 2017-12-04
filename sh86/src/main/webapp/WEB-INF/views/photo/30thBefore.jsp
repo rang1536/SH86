@@ -21,6 +21,8 @@
 	<link href="resources/js/jquery.modal.css" type="text/css" rel="stylesheet" />
 	<!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 	<script src="resources/js/jquery.modal.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js" type="text/javascript" ></script>
+	
 	<style>
 		.topList4{
 			border:2px solid #ddd;
@@ -345,15 +347,20 @@
 		console.log(checkValue)
 		
 		if(checkValue == 1){
-			$('#photoListTable').css('display','none');
-			$('#totalListDiv').css('display','');
-			$('#hiddenCheck').val(2);
-		}else if(checkValue == 2){
 			$('#photoListTable').css('display','');
 			$('#totalListDiv').css('display','none');
+			$('#hiddenCheck').val(2);
+			$('.lazy').lazyload();
+		}else if(checkValue == 2){
+			$('#photoListTable').css('display','none');
+			$('#totalListDiv').css('display','');
 			$('#hiddenCheck').val(1);
 		}
 	}
+	
+	$(document).ready(function(){
+		$('img.lazy').lazyload();
+	})
 	</script>
 </head>
 <body>
@@ -382,7 +389,7 @@
 	    		</tr>
 	    	</table>
 	    	
-	    	<table style="width:100%;" id="photoListTable">
+	    	<table style="width:100%;display:none;" id="photoListTable">
 	   			<c:forEach var="photoList" items="${photoList}" varStatus="i">
 	   				
 	   				<input type="hidden" id="index" value="${i.index }"/>
@@ -391,7 +398,7 @@
 	   				</c:if>
 	   					<td style="width:33%;" class="photoBiggerBtn">
 	   						<input type="hidden" id="fileNo" value="${photoList.fileNo }"/>
-	   						<img src="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
+	   						<img class="lazy" data-original="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
 	   					</td>
 	   				<c:if test="${i.index ne 0 and i.index eq 2 or i.index eq 5 or i.index eq 8 or i.index eq 11 or i.index eq 14}">	
 	   					</tr><tr>
@@ -399,7 +406,7 @@
 	   			</c:forEach>
    			</table>
    			
-	    	<div id="totalListDiv" style="display:none;">
+	    	<div id="totalListDiv">
 		    	<c:forEach var="photoList" items="${photoList }">
 			    	<div style="width:100%;font-size:15px;" id="photoListDiv">
 			    		<input type="hidden" id="commentOpenCheck" value="close"/>
@@ -414,7 +421,7 @@
 			    		
 			    		<%-- <div class="photoBiggerBtn">
 				    		<input type="hidden" id="fileNo" value="${photoList.fileNo }"/> --%>
-				    		<img src="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+				    		<img class="lazy" data-original="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
 			    		<!-- </div> -->
 		    			<%-- <div style="font-size:14px;padding-top:10px;margin-bottom:10px;" class="goodCountPlusBtn">
 		    				<img src="resources/img/good.jpg" style="width:14px;height:14px;"/>

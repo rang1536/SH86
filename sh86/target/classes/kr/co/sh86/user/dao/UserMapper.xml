@@ -1123,4 +1123,70 @@
 	WHERE
 		SEND_DATE >= #{sendDate}
 </select>
+
+<!-- 월별 문자발송 건수등 확인  -->
+<select id="selectCountMmsByMonth" resultType="int">
+	SELECT
+		count(*)
+	FROM
+		XROSHOT.SDK_MMS_REPORT
+	WHERE
+		SUBJECT LIKE '신흥고86'||'%'
+	AND 
+		SEND_DATE LIKE #{sendDate}||'%'
+</select>
+
+<!-- 문자발송자 성공카운트조회 -->
+<select id="selectUserMmsTakenSuccess" parameterType="String" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		XROSHOT.SDK_MMS_REPORT_DETAIL
+	WHERE
+		SEND_DATE LIKE #{sendDate}||'%'
+	AND
+		RESULT = 2
+</select>
+
+<!--단체문자 전송 기록 입력  -->
+<insert id="insertMmsReport" parameterType="kr.co.sh86.user.domain.MmsReport">
+	INSERT INTO SH86.SH_MMS_REPORT(
+		mms_no,
+		mms_senddate,
+		mms_totalcount,
+		mms_success,
+		mms_sender,
+		mms_msg)
+	VALUES(
+		mmsreport_seq.nextval,
+		#{mmsSendDate},
+		#{mmsTotalCount},
+		#{mmsSuccess},
+		#{mmsSender},
+		#{mmsMsg})
+</insert>
+
+<!-- 문자발송 이력조회 월별 -->
+<select id="selectReportByMonth" parameterType="String" resultType="kr.co.sh86.user.domain.MmsReport">
+	SELECT
+		*
+	FROM 
+		SH86.SH_MMS_REPORT
+	WHERE
+		mms_senddate LIKE #{sendDate}||'%'
+</select>
+
+<!-- 문자발송 시간대기준 상세발송성공여부 확인 -->
+<select id="selectUserSuccessByDateTime" parameterType="String" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		DEST_NAME,
+		PHONE_NUMBER,
+		RESULT,
+		SEND_DATE
+	FROM
+		XROSHOT.SDK_MMS_REPORT_DETAIL
+	WHERE
+		SEND_DATE LIKE #{sendDate}||'%'
+	
+</select>
 </mapper>

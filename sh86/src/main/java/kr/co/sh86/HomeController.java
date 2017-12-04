@@ -16,18 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
-@SessionAttributes("sessionId")
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model,
 			@RequestParam(value="userId", defaultValue="none") String userId,
@@ -35,19 +28,22 @@ public class HomeController {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		/*System.out.println(userId);*/
 	
-		if(!userId.equals("none")) {
-			model.addAttribute("sessionId", userId);
-			/*System.out.println("세션값 확인 : "+userId);*/
+		/*if(!userId.equals("none")) {
+			
 			
 			Cookie cookie = new Cookie("cookieId",userId);
 			cookie.setPath("/");
 			cookie.setMaxAge(60*60*24*30);
 			
 			response.addCookie(cookie);
-		}
+		}*/
 		
 		return "redirect:userList?userId="+userId;
 		
 	}
 	
+	@RequestMapping(value = "/sensing", method = RequestMethod.GET)
+	public String sensingTest() {
+		return "a";
+	}
 }
