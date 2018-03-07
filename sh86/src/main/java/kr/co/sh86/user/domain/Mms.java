@@ -13,6 +13,7 @@ public class Mms {
 	private String mmsMsg;
 	private String reserved1;
 	private String reserved2;
+	
 	public int getMsgId() {
 		return msgId;
 	}

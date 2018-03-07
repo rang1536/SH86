@@ -21,6 +21,7 @@ import kr.co.sh86.user.domain.Comment;
 import kr.co.sh86.user.domain.MmsReport;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
+import kr.co.sh86.user.domain.PhotoList;
 import kr.co.sh86.user.domain.UploadFileDTO;
 import kr.co.sh86.user.domain.User;
 import kr.co.sh86.user.service.UserService;
@@ -47,6 +48,7 @@ public class UserController {
 			@RequestParam(value="type", defaultValue="none")String type,
 			HttpServletResponse response) {	
 		if(!userId.equals("none")) {
+			System.out.println("쿠키생성?");
 			cookie = new Cookie("cookieId",userId);
 			cookie.setPath("/");
 			cookie.setMaxAge(60*60*24*30);
@@ -73,9 +75,11 @@ public class UserController {
 		Map<String, Object> resultMap = userService.readUserSumAllServ();
 		UtilDate utilDate = new UtilDate();
 		List<Integer> mmsCountList = userService.readCountMmsByMonthServ();
+		List<PhotoList> photoList = userService.readPhotoListServ();
 		
-		System.out.println("type 확인 : "+type);
+		/*System.out.println("type 확인 : "+type);*/
 		if(type.equals("sms")) model.addAttribute("type", type);
+		
 		model.addAttribute("mmsCountList", mmsCountList);
 		model.addAttribute("duesList", resultMap.get("duesList"));
 		model.addAttribute("thirtyList", resultMap.get("thirtyList"));
@@ -85,7 +89,7 @@ public class UserController {
 		model.addAttribute("countList", countList);
 		model.addAttribute("userList", userList);
 		model.addAttribute("noticeList", noticeList);
-		
+		model.addAttribute("photoList", photoList);
 		return "index";
 	}
 	
@@ -205,6 +209,20 @@ public class UserController {
 		return "/photo/album";
 	}
 	
+	//신규등록된 포토리스트 - after30thList
+	@RequestMapping(value="/photoList", method=RequestMethod.GET)
+	public String photoListCtrl(Model model,
+			@RequestParam(value="photoType", defaultValue="8")int photoType) {
+		List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+		List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+		
+		System.out.println("사진타입확인 : "+photoType);
+		model.addAttribute("photoList", list);
+		model.addAttribute("photoType", photoType);
+		
+		return "/photo/photo_list";
+	}
+	
 	//관리 - 이용 statDetail
 	@RequestMapping(value="/statDetail", method=RequestMethod.GET)
 	public String statDetailCtrl(Model model,
@@ -237,7 +255,6 @@ public class UserController {
 	@RequestMapping(value="/showMmsList", method=RequestMethod.GET)
 	public String showMmsListCtrl(Model model,
 			@RequestParam(value="month")String month) {
-		System.out.println("월 확인 : "+month);
 		String sendDate = null;
 		if(Integer.parseInt(month) < 10) {
 			sendDate = "20170"+month;
@@ -245,7 +262,7 @@ public class UserController {
 			sendDate = "2017"+month;
 		}
 		List<MmsReport> reportList = userService.readReportByMonth(sendDate);
-		System.out.println("조회값 확인 : "+reportList);
+		
 		model.addAttribute("reportList", reportList);
 		return "admin/mms_list";
 	}

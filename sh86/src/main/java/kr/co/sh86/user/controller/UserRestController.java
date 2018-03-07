@@ -1,5 +1,6 @@
 package kr.co.sh86.user.controller;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,9 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,12 +25,15 @@ import kr.co.sh86.user.domain.Content;
 import kr.co.sh86.user.domain.Event;
 import kr.co.sh86.user.domain.GoodCheck;
 import kr.co.sh86.user.domain.Join;
+import kr.co.sh86.user.domain.MmsReport;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
+import kr.co.sh86.user.domain.PhotoList;
 import kr.co.sh86.user.domain.UploadFileDTO;
 import kr.co.sh86.user.domain.User;
 import kr.co.sh86.user.service.UserService;
 
+@CrossOrigin(origins="*")
 @RestController
 @SessionAttributes("sessionId")
 
@@ -71,23 +77,6 @@ public class UserRestController {
 		return resultMap;
 	}
 	
-	//문자 > 직접입력 > 입력받은 번호로 전송하기
-	@RequestMapping(value="/mmsSendDirect", method=RequestMethod.POST)
-	public Map<String, String> mmsSendDirectCtrl(@RequestParam(value="userHp") String userHp,
-			@RequestParam(value="mmsMsg") String msg){
-		Map<String, String> resultMap = new HashMap<String, String>();
-		
-		// 입력받은 번호로 문자발송하기
-		int result = userService.sendMmsDirectServ(userHp, msg);
-		
-		if(result > 0) {
-			resultMap.put("check", "성공");
-		}else {
-			resultMap.put("check", "실패");
-		}
-		return resultMap;
-	}
-	
 	//문자 > 전체발송 > 휴대폰번호가 입력되어진 전체 회원에게 문자발송
 	@RequestMapping(value="/mmsSendAll", method=RequestMethod.POST)
 	public Map<String, Object> mmsSendAllCtrl(@RequestParam(value="mmsMsg") String msg){
@@ -107,8 +96,7 @@ public class UserRestController {
 	
 	//소식 > 공지등록 > 부의공지등록
 	@RequestMapping(value="/noticeContentAdd", method=RequestMethod.POST)
-	public Map<String, String> noticeContentAdd(Notice notice, Content content,
-			@CookieValue(value="cookieId")Cookie cookie){
+	public Map<String, String> noticeContentAdd(Notice notice, Content content){
 		
 		/* 작성자휴대폰번호는 - 없으므로 인덱스 계산하여 - 삽입해서 써야함. -> DB에 -포함된 핸드폰번호 정보만 저장되있슴.
 		 * 상세주소는 컨텐트테이블의 주소정보에 합쳐서 입력하는 걸로 사용해야함.
@@ -117,11 +105,7 @@ public class UserRestController {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		int result =0;
 		
-		if(cookie.getValue() == null) {
-			result = userService.addNoticeContentServ(notice, content, "632");
-		}else {
-			result = userService.addNoticeContentServ(notice, content, cookie.getValue());
-		}
+		result = userService.addNoticeContentServ(notice, content, "632");	
 		
 		if(result > 0) {
 			resultMap.put("check", "성공");
@@ -134,8 +118,7 @@ public class UserRestController {
 	
 	//소식 > 공지등록 > 행사공지등록
 	@RequestMapping(value="/noticeEventAdd", method=RequestMethod.POST)
-	public Map<String, String> noticeEventAdd(Notice notice, Event event,
-			@CookieValue(value="cookieId")Cookie cookie){
+	public Map<String, String> noticeEventAdd(Notice notice, Event event){
 		
 		/* 작성자휴대폰번호는 - 없으므로 인덱스 계산하여 - 삽입해서 써야함. -> DB에 -포함된 핸드폰번호 정보만 저장되있슴.
 		 * 상세주소는 컨텐트테이블의 주소정보에 합쳐서 입력하는 걸로 사용해야함.
@@ -143,11 +126,8 @@ public class UserRestController {
 		 * 행사정보 - 공지정보 입력 후 pk값 가져와서 noNum값 세팅*/
 		Map<String, String> resultMap = new HashMap<String, String>();
 		int result =0;
-		if(cookie.getValue() == null) {
-			result = userService.addNoticeEventServ(notice, event, "632");
-		}else {
-			result = userService.addNoticeEventServ(notice, event, cookie.getValue());
-		}
+		result = userService.addNoticeEventServ(notice, event, "632");
+		
 		
 		if(result > 0) {
 			resultMap.put("check", "성공");
@@ -160,16 +140,12 @@ public class UserRestController {
 	
 	//소식 > 공지등록 > 일반공지등록
 	@RequestMapping(value="/noticeAdd", method=RequestMethod.POST)
-	public Map<String, String> noticeAdd(Notice notice,
-			@CookieValue(value="cookieId")Cookie cookie){
+	public Map<String, String> noticeAdd(Notice notice){
 		
 		Map<String, String> resultMap = new HashMap<String, String>();
 		int result =0;
-		if(cookie.getValue() == null) {
-			result = userService.addNoticeServ(notice, "632");
-		}else {
-			result = userService.addNoticeServ(notice, cookie.getValue());
-		}
+		result = userService.addNoticeServ(notice, "632");
+		
 		if(result > 0) {
 			resultMap.put("check", "성공");
 		}else {
@@ -199,12 +175,13 @@ public class UserRestController {
 	
 	//소식 > 공지목록 > 행사참여체크
 	@RequestMapping(value="/joinEventAdd", method=RequestMethod.POST)
-	public Map<String, String> joinEventAdd(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, String> joinEventAdd(@RequestParam(value="localUserId")String userId,
 			@RequestParam(value="noNum") int noNum,
 			@RequestParam(value="joJoinShape")String joJoinShape){
 		// 세션아이디값으로 작성자 아이디 넣고 등록일은 현재시간으로 해서 db저장하면됨.
+		System.out.println(joJoinShape);
 		Map<String, String> resultMap = new HashMap<String, String>();
-		int result = userService.addJoinCheckServ(noNum, joJoinShape, cookie.getValue());
+		int result = userService.addJoinCheckServ(noNum, joJoinShape, userId);
 		if(result > 0) {
 			resultMap.put("check", "성공");
 		}else {
@@ -214,26 +191,37 @@ public class UserRestController {
 	}
 	
 	//포토 > 사진등록
-	/*@RequestMapping(value="/photoAdd", method=RequestMethod.POST)
+	@RequestMapping(value="/photoAdd", method=RequestMethod.POST)
 	public Map<String, String> photoAddCtrl(MultipartHttpServletRequest request){
-		int result = userService.addPhotoServ(request);
+		Map<String, String> resultMap = new HashMap<String, String>();
+		int result = userService.addPhotoServ(request, "photolist");
 		
-		return null;
-	}*/
+		if(result > 0) {
+			resultMap.put("check", "성공");
+		}else {
+			resultMap.put("check", "실패");
+		}
+		return resultMap;
+	}
 	
 	//친구 > 회원검색(이름)
-	@RequestMapping(value="/searchUserByName", method=RequestMethod.POST)
+	@RequestMapping(value="/searchUserByName", method= {RequestMethod.GET, RequestMethod.POST})
 	public List<User> searchUserByNameCtrl(@RequestParam(value="userName") String userName){
-		List<User> userList = userService.readUserByUserNameServ(userName);
+		/*System.out.println("외부접속 회원검색");
+		System.out.println("값확인 : "+userName);
+		System.out.println(URLDecoder.decode(userName));*/
 		
+		List<User> userList = userService.readUserByUserNameServ(URLDecoder.decode(userName));
+		/*System.out.println("조회목록 : "+userList);*/
 		return userList;
 	}
 	
 	//친구 > 반별목록검색
-	@RequestMapping(value="/searchUserByClass", method=RequestMethod.POST)
+	@RequestMapping(value="/searchUserByClass", method= {RequestMethod.GET, RequestMethod.POST})
 	public List<User> searchUserByClassCtrl(@RequestParam(value="classNum") String classNum){
+		System.out.println("외부접속 반별목록");
 		List<User> userList = userService.readUserByClassServ(classNum);
-		
+		System.out.println(userList);
 		return userList;
 	}
 	
@@ -243,6 +231,7 @@ public class UserRestController {
 			@CookieValue(value="cookieId")Cookie cookie){
 		String userId = cookie.getValue();
 		int result = userService.addUserNewImgServ(request, userId);
+		System.out.println("사진등록 확인 : "+result);
 		Map<String, String> check = new HashMap<String, String>();
 		
 		if(result > 0) check.put("check", "true");
@@ -268,9 +257,8 @@ public class UserRestController {
 	
 	//일상 > 글등록
 	@RequestMapping(value="/addAlbum", method=RequestMethod.POST)
-	public Map<String, String> addAlbumCtrl(MultipartHttpServletRequest request,
-			@CookieValue(value="cookieId")Cookie cookie){
-		String userId = cookie.getValue();
+	public Map<String, String> addAlbumCtrl(MultipartHttpServletRequest request){
+		String userId = request.getParameter("localUserId");
 		Map<String, String> check = new HashMap<String, String>();
 		
 		int result = userService.addAlbumServ(request, userId);
@@ -283,10 +271,10 @@ public class UserRestController {
 	
 	//일상 > 좋아요
 	@RequestMapping(value="/addAlbumGood", method=RequestMethod.POST)
-	public Map<String, String> addAlbumGoodCtrl(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, String> addAlbumGoodCtrl(@RequestParam(value="localUserId")String userId,
 			GoodCheck goodCheck,
 			@RequestParam(value="albumGood", defaultValue="0")int albumGood){
-		String userId = cookie.getValue();
+		/*String userId = cookie.getValue();*/
 		Map<String, String> check = new HashMap<String, String>();
 		
 		int result = userService.addAlbumGoodServ(goodCheck, userId, albumGood);
@@ -299,11 +287,11 @@ public class UserRestController {
 	
 	//일상 > 댓글등록 addAlbumComment
 	@RequestMapping(value="/addAlbumComment", method=RequestMethod.POST)
-	public Map<String, Object> addAlbumCommentCtrl(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, Object> addAlbumCommentCtrl(@RequestParam(value="localUserId")String userId,
 			Comment comment){
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		comment.setUserId(cookie.getValue());
+		comment.setUserId(userId);
 		resultMap = userService.addAlbumCommentServ(comment);
 		
 		return resultMap;
@@ -311,7 +299,7 @@ public class UserRestController {
 	
 	//일상 > 글삭제
 	@RequestMapping(value="/removeAlbum", method=RequestMethod.POST)
-	public Map<String, String> removeAlbumCtrl(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, String> removeAlbumCtrl(@RequestParam(value="localUserId")String userId,
 			@RequestParam(value="albumNo")int albumNo){
 		Map<String, String> resultMap = userService.removeAlbumByAlbumNo(albumNo);
 		return resultMap;
@@ -356,11 +344,11 @@ public class UserRestController {
 	
 	//포토 > 댓글등록 addPhotoComment
 	@RequestMapping(value="/addPhotoComment", method=RequestMethod.POST)
-	public Map<String, Object> addPhotoCommentCtrl(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, Object> addPhotoCommentCtrl(@RequestParam(value="localUserId")String userId,
 			Comment comment){
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		comment.setUserId(cookie.getValue());
+		comment.setUserId(userId);
 		System.out.println(comment);
 		resultMap = userService.addAlbumCommentServ(comment);
 		
@@ -369,12 +357,12 @@ public class UserRestController {
 	
 	//포토 좋아요++ addPhotoGood
 	@RequestMapping(value="/addPhotoGood", method=RequestMethod.POST)
-	public Map<String, String> addPhotoGoodCtrl(@CookieValue(value="cookieId")Cookie cookie,
+	public Map<String, String> addPhotoGoodCtrl(@RequestParam(value="localUserId")String userId,
 			GoodCheck goodCheck,
 			@RequestParam(value="photoGoods", defaultValue="0")int photoGoods){
 		/*System.out.println("좋아요 체크 컨트롤러~!!");
 		System.out.println("값확인 : "+photoGoods);*/
-		String userId = cookie.getValue();
+		
 		Map<String, String> check = new HashMap<String, String>();
 		
 		int result = userService.addPhotoGoodServ(goodCheck, userId, photoGoods);
@@ -429,6 +417,176 @@ public class UserRestController {
 		return mmsSuccessList;
 	}
 	
+	//imgNameSearch
+	@RequestMapping(value="/imgNameSearch", method= {RequestMethod.GET, RequestMethod.POST})
+	public Map<String,String> imgNameSearchCtrl(@RequestParam(value="userId")String userId){
+		System.out.println("외부접속 이미지 확대 값 : "+userId);
+		String userImgNew = userService.readUserImgNewServ(userId);
+		Map<String, String> map = new HashMap<String,String>();
+		map.put("userImgNew", userImgNew);
+		return map;
+	}
 	
+	//addPhotoList
+	@RequestMapping(value="/addPhotoList", method=RequestMethod.POST)
+	public Map<String,Object> addPhotoListCtrl(PhotoList photoList){
+		Map<String,Object> map = userService.addPhotoListServ(photoList);
+		return map;
+	}
 	
+	//deletePhotoList
+	@RequestMapping(value="/deletePhotoList", method=RequestMethod.POST)
+	public Map<String,String> deletePhotoListCtrl(@RequestParam(value="shListNo")int shListNo){		
+		Map<String, String> map = userService.removePhotoListServ(shListNo);
+		return map;
+	}
+	
+	//회원정보검색
+	@RequestMapping(value="/readUser", method=RequestMethod.POST)
+	public User readUserCtrl(@RequestParam(value="userId")String userId){		
+		User user = userService.readUserServ(userId);
+		return user;
+	}
+	
+	//modifyUserHp
+	@RequestMapping(value="/modifyUserHp", method=RequestMethod.POST)
+	public Map<String,String> modifyUserHpCtrl(User user){
+		System.out.println("외부접속 값 확인 : "+user);
+		Map<String, String> map = userService.modifyUserHpServ(user);
+		return map;
+	}
+	
+	//deletePhoto
+	@RequestMapping(value="/deletePhoto", method=RequestMethod.POST)
+	public Map<String,String> deletePhotoCtrl(@RequestParam(value="fileNo")int fileNo){		
+		Map<String, String> map = userService.removePhotoServ(fileNo);
+		return map;
+	}
+	
+	//mmsRetry
+	@RequestMapping(value="/mmsRetry", method=RequestMethod.POST)
+	public Map<String, Object> mmsRetryCtrl(@RequestParam(value="mmsNo")int mmsNo){		
+		Map<String, Object> map = userService.sendMmsRetryServ(mmsNo);
+		
+		return map;
+	}
+	
+	//사진목록 불러오기 List<PhotoList> photoList = userService.readPhotoListServ();
+	@RequestMapping(value="/getPhotoList", method= {RequestMethod.GET, RequestMethod.POST})
+	public List<PhotoList> getPhotoListCtrl(){	
+		System.out.println("외부접속 사진목록 !!");
+		List<PhotoList> photoList = userService.readPhotoListServ();
+		
+		return photoList;
+	}
+	
+	//포토상세보기
+	@RequestMapping(value="/photoSangseList", method= {RequestMethod.GET, RequestMethod.POST})
+	public Map<String, Object> photoSangseListCtrl(@RequestParam(value="shListType")int photoType,
+			@RequestParam(value="folderName", defaultValue="30th01")String folderName) {
+		System.out.println("외부접속 사진목록!");
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(photoType == 3 || photoType == 7) { //30주년 기념
+			List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeAndFolderServ(photoType, folderName);
+			List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+			map.put("list", list);
+			map.put("folderName", folderName);
+		}else {
+			List<UploadFileDTO> photoList = userService.readFileInfoByPhotoTypeServ(photoType);
+			List<UploadFileDTO> list = userService.readPhotoCommentByPhotoTypeServ(photoType, photoList);
+			map.put("list", list);
+		}	
+		
+		return map;
+	}
+	
+	//공지목록 불러오기 
+	@RequestMapping(value="/getNoticeList", method= {RequestMethod.GET, RequestMethod.POST})
+	public List<NoticeView> getNoticeListCtrl(){	
+		System.out.println("외부접속 공지목록 !!");
+		List<NoticeView> noticeList = userService.readAllNoticeServ();
+		return noticeList;
+	}
+	
+	//일상목록 불러오기 
+	@RequestMapping(value="/getAlbumList", method= {RequestMethod.GET, RequestMethod.POST})
+	public List<Album> getAlbumListCtrl(){	
+		System.out.println("외부접속 일상목록 !!");
+		List<Album> albumList = userService.readAlbumAllServ();
+		return albumList;
+	}
+	
+	//월별 문자 목록 불러오기 
+	@RequestMapping(value="/getMmsList", method= {RequestMethod.GET, RequestMethod.POST})
+	public List<Integer> getMmsListCtrl(){	
+		System.out.println("외부접속 문자목록 !!");
+		List<Integer> mmsCountList = userService.readCountMmsByMonthServ();
+		return mmsCountList;
+	}
+	
+	//문자 단체발송 이력 상세조회showMmsList
+	@RequestMapping(value="/getMmsDetail", method={RequestMethod.GET, RequestMethod.POST})
+	public List<MmsReport> getMmsDetailCtrl(@RequestParam(value="month")String month) {
+		String sendDate = null;
+		if(Integer.parseInt(month) < 10) {
+			sendDate = "20170"+month;
+		}else if(Integer.parseInt(month) > 9) {
+			sendDate = "2017"+month;
+		}
+		List<MmsReport> reportList = userService.readReportByMonth(sendDate);
+	
+		return reportList;
+	}
+	
+	//회비 합계 목록 불러오기 
+	@RequestMapping(value="/getSumList", method= {RequestMethod.GET, RequestMethod.POST})
+	public Map<String, Object> getSumListCtrl(){	
+		System.out.println("외부접속 합계목록 !!");
+		Map<String, Object> resultMap = userService.readUserSumAllServ();
+		return resultMap;
+	}
+	
+	//이용 통계 목록 불러오기 
+	@RequestMapping(value="/getStatList", method= {RequestMethod.GET, RequestMethod.POST})
+	public Map<String, Object> getStatListCtrl(){	
+		System.out.println("외부접속 합계목록 !!");
+		Map<String, Object> resultMap = userService.readCountByJoinPhoneGapServ();
+		return resultMap;
+	}
+	
+	//이용 통계 상세정보 불러오기 
+	@RequestMapping(value="/getStatDetail", method= {RequestMethod.GET, RequestMethod.POST})
+	public List<User> getStatDetailCtrl(@RequestParam(value="classNum", defaultValue="1")String classNum){	
+		System.out.println("외부접속 합계목록 !!");
+		List<User> userList = userService.readUserConnectionServ(classNum);
+		return userList;
+	}
+	
+	//개인정보조회 
+	@RequestMapping(value="/getMyPage", method= {RequestMethod.GET, RequestMethod.POST})
+	public User getMyPageCtrl(@RequestParam(value="userId", defaultValue="0")String userId){	
+		System.out.println("외부접속 개인정보 !!"+userId);
+		User user = userService.readUserByCookieIdServ(userId);
+		return user;
+	}
+	
+	//로그인
+	@RequestMapping(value="/login", method= {RequestMethod.GET, RequestMethod.POST})
+	public Map<String, Object> loginCtrl(@RequestParam(value="userClass")String userClass,
+			@RequestParam(value="userName")String userName){	
+		System.out.println("외부접속 로그인!!");
+		Map<String, Object> map = userService.loginServ(userClass, userName);
+		return map;
+	}
+	
+	//preViewPhoto
+	@RequestMapping(value="/preViewPhoto", method=RequestMethod.POST)
+	public UploadFileDTO preViewPhotoCtrl(MultipartHttpServletRequest request){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		UploadFileDTO upload = userService.previewPhotoServ(request);
+		
+		
+		return upload;
+	}
 }

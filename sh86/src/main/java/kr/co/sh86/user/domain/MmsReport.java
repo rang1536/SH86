@@ -1,5 +1,7 @@
 package kr.co.sh86.user.domain;
 
+import java.util.List;
+
 public class MmsReport {
 	private int mmsNo;
 	private String mmsSendDate;
@@ -7,7 +9,22 @@ public class MmsReport {
 	private int mmsSuccess;
 	private String mmsSender;
 	private String mmsMsg;
+	private int connectCount;
+	private List<String> noConnectList;
 	
+	
+	public List<String> getNoConnectList() {
+		return noConnectList;
+	}
+	public void setNoConnectList(List<String> noConnectList) {
+		this.noConnectList = noConnectList;
+	}
+	public int getConnectCount() {
+		return connectCount;
+	}
+	public void setConnectCount(int connectCount) {
+		this.connectCount = connectCount;
+	}
 	public int getMmsNo() {
 		return mmsNo;
 	}

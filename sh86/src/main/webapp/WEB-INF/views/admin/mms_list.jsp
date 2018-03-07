@@ -80,18 +80,217 @@
 					html += '<tr>';
 					html += '<th class="duesTr">이름</th>';
 					html += '<th class="duesTr">번호</th>';
-					html += '<th class="duesTr">일시</th>';
 					html += '<th class="duesTr">확인</th>';
 					html += '</tr>';
+					//실패목록 
 					$.each(data,function(i,successList){
-						html += '<tr>';
-						html += '<td class="statTd">'+successList.destName+'</td>';
-						html += '<td class="statTd">'+successList.phoneNumber+'</td>';
-						html += '<td class="statTd">'+successList.sendDate+'</td>';
-						if(successList.result == 2) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
-						else if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">수신거부</font></td>';
-						else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
-						html += '</tr>'
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '1'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '2'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '3'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '4'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '5'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '6'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '7'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					$.each(data,function(i,successList){
+						if(successList.result != 2){
+							if(successList.userId.substring(0,1) == '8'){
+								html += '<tr>';
+								html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								if(successList.result == 22) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">거부</font></td>';
+								else if(successList.result == 6) html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">결번</font></td>';
+								else html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#C90000;">실패</font></td>';
+								html += '</tr>'
+							}						
+						}						
+					});
+					
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '1'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '2'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '3'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '4'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '5'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '6'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '7'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
+					});
+					//성공목록
+					$.each(data,function(i,successList){
+						if(successList.result == 2) {
+							if(successList.userId != null && successList.userId.substring(0,1) == '8'){
+								html += '<tr>';
+								if(successList.userId != null) html += '<td class="statTd">'+successList.destName+' ('+successList.userId.substring(0,1)+'반)</td>';
+								if(successList.userId == null) html += '<td class="statTd">'+successList.destName+' (-)</td>';
+								html += '<td class="statTd">'+successList.phoneNumber+'</td>';
+								html += '<td class="statTd"><font style="border:1px solid #FF0000;border-radius:5px;height:25px;font-weight:bold;padding:3px;color:#000054;">성공</font></td>';
+								html += '</tr>'
+							}
+						}					
 					});
 					html += '</table>';
 					infoPopUp(html);
@@ -99,6 +298,25 @@
 				
 			}
 		});
+	}
+	
+	function mmsRetry(mmsNo){
+		
+		if(confirm('미접속자에게 문자를 재발송할까요?')==true){
+			$.ajax({
+				url: 'mmsRetry',
+				data:{'mmsNo':mmsNo},
+				dataType:'json',
+				type:'post',
+				success:function(data){
+					if(data.check == 'success'){
+						alert(data.userCount+'건 재발송하였습니다');
+					}else if(data.check == 'fail'){
+						alert('재발송에 실패하였습니다.');
+					}
+				}	
+			})			
+		} 
 	}
 	</script>
 </head>
@@ -120,16 +338,17 @@
 		</header>                   
 	    
 	    <div class="content" data-role="content" style="height:70%;margin-top:35px;">
+	    	<br/>
 			<table style="width:100%;">
 				<tr>
 					<td></td>
 					<td style="width:36px;text-align:right;" onclick="photoList(4);">
-	    				<img src="resources/img/list.jpg" style="width:35px;height:35px;"/>
+	    				<img src="resources/img/back.PNG" style="width:70px;height:35px;"/>
 				    </td>
 				</tr>
 			</table>
 			
-			<table style="width:100%;">
+			<%-- <table style="width:100%;">
 				<tr>
 					<th class="duesTr">발송일</th>
 					<th class="duesTr">발신</th>
@@ -144,7 +363,26 @@
 						<td class="statTd">${list.mmsMsg }</td>
 					</tr>
 				</c:forEach>
-			</table>
+			</table> --%>
+			
+			<c:forEach var="list" items="${reportList}">
+				<table style="width:100%;border:1px solid #ddd;border-top:2px solid #0100FF;">
+					<tr>
+						<th class="duesTr" style="width:38px;">발신</th>
+						<td class="statTd" style="font-weight:bold;" colspan="3">${list.mmsSender } ( ${list.mmsSendDate.substring(4,6)}-${list.mmsSendDate.substring(6,8)} )</td>								
+					</tr>
+					<tr>
+						<th class="duesTr">내용</th>
+						<td class="statTd" colspan="3" style="font-size:14px;text-align:left;">${list.mmsMsg }</td>
+					</tr>
+					<tr>
+						<th class="duesTr">결과</th>	
+						<td style="text-align:center;font-size:15px;height:29px;"><font style="font-weight:bold;color:#36589C;">성공${list.mmsSuccess }/총${list.mmsTotalCount }/접속 ${list.connectCount }</font></td>							
+						<td style="text-align:right;"><img src="resources/img/list.jpg" style="width:29px;height:29px;" onclick="successList(${list.mmsSendDate});"/></td>
+						<td style="text-align:center;"><img src="resources/img/sms.jpg" style="width:29px;height:29px;" onclick="mmsRetry(${list.mmsNo});"/></td>
+					</tr>
+				</table>
+			</c:forEach>
 	    </div>
 	</section>
 </body>

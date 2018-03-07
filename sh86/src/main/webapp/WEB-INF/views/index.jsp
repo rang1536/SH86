@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,6 @@
 	<link href="resources/js/jquery.modal.css" type="text/css" rel="stylesheet" />
 	<script src="resources/js/jquery.modal.min.js"></script>
 	
-	
 	<!-- 우편번호(다음) -->
 	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	<link href="resources/img/SH86_128r.jpg" rel="shortcut icon" />
@@ -25,6 +25,25 @@
 	
 	
 	<style>
+		#imgTest {
+
+            transform-origin: top left; /* IE 10+, Firefox, etc. */
+
+            -webkit-transform-origin: top left; /* Chrome */
+
+            -ms-transform-origin: top left; /* IE 9 */
+
+        }
+
+        .rotate90 {
+
+            transform: rotate(90deg) translateY(-100%);
+
+            -webkit-transform: rotate(90deg) translateY(-100%);
+
+            -ms-transform: rotate(90deg) translateY(-100%);
+
+        }
 		.statTd{
 			text-align:center;
 			font-weight:bold;
@@ -241,18 +260,45 @@
 				type: 'post',
 				dataType: 'json',
 				success : function(data){
-					console.log("ajax성공.");
+					alert(data.userList[0].userName+' 님 포함 총 '+data.count+' 명이 선택되었습니다.');
 					$('#directForm').css('display','none');
-					$('#searchForm').css('display','none');
-					var html = "<p style='font-weight:bold;font-size:20px;color:#030066'>"+data.userList[0].userName+"님 외 총 "+data.count+" 명이 선택됨</p>"
+					$('#searchForm').css('display','');
+					var html = "";
+					html += '<table style="width:100%;">';
+					html += "<tr><td style='font-weight:bold;font-size:16px;color:#030066'>";
+					html += data.userList[0].userName+"님 포함 총 "+data.count+" 명이 선택됨</td>"
+					html += '<td style="width:35px;"><img src="resources/img/list.jpg" onclick="smsListTableShow();" style="width:28px;height:28px;"></td>'
+					html += '</tr></table>'
+					html += '<table style="display:none;" id="smsListTable">';
+					html += '<tr>';
+					html += '<th colspan="2">선택목록</th>';
+					html += '</tr><tr>'
+					html += '<th>이름</th>';
+					html += '<th>핸드폰</th>';
+					html += '</tr>';
+					$.each(data.userList, function(i, list){
+						html += '<tr>';
+						html += '<td style="text-align:center;">'+list.userName+'</td>';
+						html += '<td style="text-align:center;">'+list.userHp+'</td></tr>';
+					})
+					html += '<tr><td colspan="2"><button type="button" style="width:100%;" onclick="smsListTableHide();">목록닫기</button></td></tr>'
+					html += '<table>';
 					html += "<br/>";
 					html += '<button type="button" style="width:100%;height:30px;" id="mmsSendBtn">문자발송</button>';
 					$('#resultDiv').empty();
 					$('#resultDiv').html(html);
-					$('#resultDiv').css('display','');
+					$('#resultDiv').css('display','');					
 				}
 			});
 		};
+		
+		function smsListTableShow(){
+			$('#smsListTable').slideDown();
+		}
+		
+		function smsListTableHide(){
+			$('#smsListTable').slideUp();
+		}
 		
 		// 문자 > 회원검색 > 문자발송버튼 클릭시 > 유효성검사 및 검색된 회원에게 문자발송
 		$(document).on('click','#mmsSendBtn',function(){
@@ -359,6 +405,8 @@
 		
 		// 문자 > 전체발송 > 휴대폰번호가 입력된 전체 회원에게 문자발송
 		function sendAll(){
+			$('#resultDiv').css('display','none');
+			$('#searchForm').css('display','none');
 			var mmsMsg = $('#msg').val();
 			if(mmsMsg == null || mmsMsg == ''){
 				alert('메세지를 입력하세요');
@@ -368,14 +416,14 @@
 			if(confirm("전송 하시겠습니까?") == true){
 				$.ajax({
 					url: 'mmsSendAll',
-					data: {'mmsMsg': mmsMsg,'sendTel': sendTel},
+					data: {'mmsMsg': mmsMsg},
 					type: 'post',
 					dataType: 'json',
 					success : function(data){
 						if(data.check == '성공'){
 							alert('문자발송에 성공하였습니다.');
-							/* window.location.reload(true); */
-							$('#smsSendDiv').empty();
+							window.location.reload(true); 
+							/* $('#smsSendDiv').empty();
 							var success = 0;
 							var html = '<table style="width:100%;">';
 							html += '<tr>';
@@ -404,7 +452,7 @@
 							html += '<th class="duesTr">결과</th>';
 							html += '<th class="duesTr">-</th>';
 							html += '<th class="duesTr">'+success+'/'+data.userList.length+'</th>';
-							$('#smsSendDiv').append(html);
+							$('#smsSendDiv').append(html); */
 						}else{
 							alert('문자발송에 실패하였습니다.');
 						}
@@ -412,7 +460,7 @@
 				});
 			}else{
 				return;
-			}
+			} 
 			
 		};
 		
@@ -1096,7 +1144,6 @@
 		            success : function(data) {
 		            	if(data.check == 'true'){
 		            		//파일업로드완료
-		            		alert('체크');
 		            		window.location.reload(true);
 		            	}else{
 		            		alert("파일 업로드에 실패하였습니다.");
@@ -1150,7 +1197,7 @@
 								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
 								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
-								html += '</td><td style="border-bottom:1px dotted #ddd;">'
+								html += '</td><td style="border-bottom:1px dotted #ddd;">';
 							}else if(result.userImgOld == null && result.userImgNew == null){
 								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
 							}
@@ -1360,7 +1407,7 @@
 						if(data[0].userId.substring(0,1) == '8'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3826.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/8/3826.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(826,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1375,10 +1422,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">회장 최기호</font><br/>';
@@ -1390,10 +1437,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3845.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/8/3845.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3845new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/8/3845new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">총무 정윤승</font><br/>';
@@ -1405,7 +1452,7 @@
 						}else if(data[0].userId.substring(0,1) == '6'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/3607.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/6/3607.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(607,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1420,10 +1467,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/6/20170815_2.JPG" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>';
@@ -1435,7 +1482,7 @@
 						}else if(data[0].userId.substring(0,1) == '1'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/1/3134.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/1/3134.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(134,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1450,7 +1497,7 @@
 						}else if(data[0].userId.substring(0,1) == '2'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/2/3224.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/2/3224.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(224,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1465,12 +1512,12 @@
 						}else if(data[0].userId.substring(0,1) == '3'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/3/3324.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/3/3324.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(324,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
 							html += '</td>'; */
-							html += '<td style="border-bottom:1px dotted #ddd;"  colspan="2">';
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
 							html += '<font style="color:#030066;font-weight:bold;">반대표 서영권</font><br/>';
 							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
 							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
@@ -1480,7 +1527,7 @@
 						}else if(data[0].userId.substring(0,1) == '4'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/4/3406.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/4/3406.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(406,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1495,7 +1542,7 @@
 						}else if(data[0].userId.substring(0,1) == '5'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/5/3548.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/5/3548.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(548,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1510,12 +1557,12 @@
 						}else if(data[0].userId.substring(0,1) == '7'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/7/3717.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
+							html += '<img src="resources/files/7/3717.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(717,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
 							html += '</td>'; */
-							html += '<td style="border-bottom:1px dotted #ddd;">';
+							html += '<td style="border-bottom:1px dotted #ddd;" colspan="2">';
 							html += '<font style="color:#030066;font-weight:bold;">반대표 박혜찬</font><br/>';
 							html += '<font style="font-size:13px;font-weight:bold;">전북 전주시</font>';
 							html += '</td><td style="text-align:right;border-bottom:1px dotted #ddd;">';
@@ -1524,16 +1571,16 @@
 							html += '</tr>';
 						}
 						$.each(data, function(i, result){
-							if(result.userId != '845' && result.userId != '848' && result.userId != '632' && result.userId != '134' && result.userId != '224' && result.userId != '324' && result.userId != '406' && result.userId != '548' && result.userId != '607' && result.userId != '717' && result.userId != '826'){
+							if(result.userId != '845' && result.userId != '848' && result.userId != '632' && result.userId != '134' && result.userId != '224' && result.userId != '324' && result.userId != '406' && result.userId != '548' && result.userId != '607' && result.userId != '717' && result.userId != '826' && result.userId != '601'){
 								html += '<tr>';
 								html += '<td style="width:61px;border-bottom:1px dotted #ddd;height:75px;">';
 								if(result.userImgOld != null && result.userImgNew == null){
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
-									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
+									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">';
 								}else if(result.userImgOld != null && result.userImgNew != null){
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
 									html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',2);">'
 									html += '</td><td style="border-bottom:1px dotted #ddd;">';
 								}else if(result.userImgOld == null && result.userImgNew == null){
 									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
@@ -1548,10 +1595,12 @@
 								if(sessionId == result.userId){
 									html += '<a href="#page9"><img src="resources/img/info.jpg" style="width:43px;height:43px;"/></a>'
 								}
-								if(result.userHp != null && result.userHp != ''){
+								if(result.userHp != null && result.mmsCheck == 0){
 									html += '<a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>';
+								}else if(result.userHp != null && result.mmsCheck == 1){
+									html += '<a href="#" onclick="modifyPhone('+result.userId+');"><img src="resources/img/edit.jpg" style="width:40px;height:40px;"/></a>'; 
 								}else{
-									/* html += '<a href="#page9"><img src="resources/img/nohp.png" style="width:40px;height:40px;"/></a>'; */
+									html += '<a href="#" onclick="modifyPhone('+result.userId+');"><img src="resources/img/edit.jpg" style="width:40px;height:40px;"/></a>'; 
 								}
 								html += '</td>';
 								html += '</tr>';
@@ -1566,6 +1615,7 @@
 				});
 			}
 		}
+		
 		
 		function noticeAddCtrl(){
 			$('.topList2').css('background-color','#ffffff');
@@ -1984,8 +2034,10 @@
 				location.href = 'muju2017List';
 			}else if(num == 7){
 				location.href = 'albumList';
+			}else{
+				location.href = 'photoList?photoType='+num;
 			}
-			submit();
+			/* submit(); */
 		}
 		
 		function statDetail(classNum){
@@ -2094,6 +2146,105 @@
 		    });
 		}
 	
+		function infoPopUp2(txt){
+		    modal({
+		        type: 'info',
+		        title: '확대보기',
+		        text: txt,
+		        buttons: [{
+		    		text: '닫기', //Button Text
+		    		val: 'close', //Button Value
+		    		eKey: true, //Enter Keypress
+		    		addClass: 'btn-light-blue', //Button Classes (btn-large | btn-small | btn-green | btn-light-green | btn-purple | btn-orange | btn-pink | btn-turquoise | btn-blue | btn-light-blue | btn-light-red | btn-red | btn-yellow | btn-white | btn-black | btn-rounded | btn-circle | btn-square | btn-disabled)
+		    		onClick: function(dialog) {
+		    			return true;
+		    		}
+		    	}]
+		    });
+		}
+		
+		function infoPopUp3(txt){
+		    modal({
+		        type: 'info',
+		        title: '핸드폰입력',
+		        text: txt,
+		        buttons: [{
+		    		text: '닫기', //Button Text
+		    		val: 'close', //Button Value
+		    		eKey: true, //Enter Keypress
+		    		addClass: 'btn-light-blue', //Button Classes (btn-large | btn-small | btn-green | btn-light-green | btn-purple | btn-orange | btn-pink | btn-turquoise | btn-blue | btn-light-blue | btn-light-red | btn-red | btn-yellow | btn-white | btn-black | btn-rounded | btn-circle | btn-square | btn-disabled)
+		    		onClick: function(dialog) {
+		    			return true;
+		    		}
+		    	}]
+		    });
+		}
+		function modifyPhone(userId){
+			$.ajax({
+				url : 'readUser',
+				data : {'userId':userId},
+				dataType:'json',
+				type:'post',
+				success:function(data){
+					var html = '';
+					html += '<table style="width:100%;">';
+					html += '<tr>';
+					if(data.userImgOld != null){
+						html += '<td colspan="2" style="text-align:center;">';
+						html += '<img src="resources/files/'+data.userId.substring(0,1)+'/'+data.userImgOld+'" style="width:70px;height70px;"/>';
+						html += '</td></tr><tr>';
+					}			
+					html += '<td colspan="2" style="font-size:15px;font-weight:bold;color:black;text-align:center;">'+data.userName+' 님의 폰번호를 등록해주세요!!</td>';
+					html += '</tr><tr>';
+					if(data.userHp != null) html += '<td><input type="number" name="userHp" id="userHpPopUp" placeholder="폰번호" style="width:100%;height:28px;border-radius:5px;" value="'+data.userHp.replace(/[^0-9]/g, '')+'"/></td>';
+					else html += '<td><input type="number" name="userHp" id="userHpPopUp" placeholder="폰번호" style="width:100%;height:28px;border-radius:5px;"/></td>';
+					html += '<td style="text-align:right;width:60px;"><button type="button" onclick="addUserHp('+data.userId+');" style="width:50px;height:28px;">등록</button></td>'
+					html += '</tr></table>';
+					infoPopUp3(html);
+				}
+			})
+		}
+		
+		function addUserHp(userId){
+			var hp = $('#userHpPopUp').val();
+			var userHp = '';
+			if(hp != ''){
+				hp = hp.replace(/[^0-9]/g, '');
+				if(hp.length == 10){ //옛휴대폰, 일반번호 10자리
+					userHp += hp.substr(0, 3);
+					userHp += '-';
+					userHp += hp.substr(3, 3);
+					userHp += '-';
+					userHp += hp.substr(6);
+				}else if(hp.length == 11){ //11자리 폰번호				
+					userHp += hp.substr(0, 3);
+					userHp += '-';
+					userHp += hp.substr(3, 4);
+					userHp += '-';
+					userHp += hp.substr(7);			
+				}				
+			}else{
+				alert('휴대폰번호를 입력해주세요');
+				$('#userHpPopUp').focus();
+				return;
+			}
+			
+			$.ajax({
+				url : 'modifyUserHp',
+				data : {'userId':userId, 'userHp':userHp},
+				dataType:'json',
+				type:'post',
+				success:function(data){
+					if(data.check == 'success'){
+						alert('휴대폰번호가 등록되었습니다.');
+					}else{
+						alert('등록에 실패하였습니다');
+					}
+					window.location.reload(true);
+				}
+			})
+		}
+		
 	 	function mmsShowChange(num){
 	 		if(num == 1){
 	 			$('#sendForm').css('display','none');
@@ -2107,6 +2258,93 @@
 	 	function showMmsList(num){
 	 		location.href='showMmsList?month='+num;
 	 	}
+	 	
+	 	function biggerImg(a,b){
+	 		if(b ==1){
+	 			var path = 'resources/files/'+a.toString().substring(0,1)+'/3'+a.toString()+'.jpg';
+	 			var txt = '<img src="'+path+'" style="width:100%;border-radius:20px;"/>'
+	 			infoPopUp2(txt);
+	 		}else if(b == 2){
+	 			$.ajax({
+	 				url:'imgNameSearch',
+	 				data : {'userId':a},
+	 				type:'post',
+	 				dataType:'json',
+	 				success:function(data){
+	 					var path= 'resources/files/'+a.toString().substring(0,1)+'/'+data.userImgNew;
+	 					var txt = '<img src="'+path+'" style="width:100%;border-radius:20px;"/>';
+	 					infoPopUp2(txt);
+	 				}
+	 			});
+	 		}
+	 	}
+	 	
+		/* $(document).on('click',"#imgTest",function(){
+			alert("loanding")
+	        var testimg = $("#imgTest");
+	        alert(testimg.exif("Orientation"));
+			
+	        testimg.addClass("rotate90");
+	        
+			
+		});     */
+		
+		function addPhotoList(){
+			$('#photoListAddDiv').slideDown();
+		}
+		
+		function photoListAdd(){
+			var params = $('#photoListAddForm').serialize();
+			var listSubject = $('#shListSubject').val().trim();
+			
+			if(listSubject == null || listSubject == ''){
+				alert("제목을 입력하세요.");
+				return;
+			}
+			
+			if(confirm('사진목록을 추가하시겠습니까?') == true){
+				$.ajax({
+					url : 'addPhotoList',
+					data : params,
+					dataType : 'json',
+					type : 'post',
+					success:function(data){
+						if(data.check =='success'){
+							alert("목록이 추가되었습니다.");
+							if(confirm('사진을 등록하러 이동하시겠습니까?') == true){
+								photoOpen(data.shListType);
+							}else{
+								window.location.reload(true);
+							}
+						}else{
+							alert('등록에 실패하였습니다');
+							return;
+						}
+					}
+				});
+			}
+		}
+		
+		function deletePhotoList(shListNo){		
+			if(confirm('정말로 삭제하시겠습니까?') == true){
+				$.ajax({
+					url : 'deletePhotoList',
+					data : {'shListNo':shListNo},
+					dataType:'json',
+					type:'post',
+					success:function(data){
+						if(data.check =='success'){
+							alert("삭제되었습니다.");
+							window.location.reload(true);
+						}else{
+							alert('삭제에 실패하였습니다');
+							return;
+						}
+					}
+				})
+			}
+			
+		}
 		</script>
 </head>
 <body>
@@ -2141,12 +2379,12 @@
 	    			
 	    			<td style="width:35%;height:35px;">
 	    				<select style="height:35px;" onchange="userList(this.value)" data-native-menu="false">
-	    					<option value="1">1반(${joinCountList.get(0)}/58)</option>
+	    					<option value="1" selected="selected">1반(${joinCountList.get(0)}/58)</option>
 	    					<option value="2">2반(${joinCountList.get(1)}/54)</option>
 	    					<option value="3">3반(${joinCountList.get(2)}/55)</option> 
 	    					<option value="4">4반(${joinCountList.get(3)}/57)</option>
 	    					<option value="5">5반(${joinCountList.get(4)}/56)</option>
-	    					<option value="6" selected="selected">6반(${joinCountList.get(5)}/60)</option>
+	    					<option value="6">6반(${joinCountList.get(5)}/60)</option>
 	    					<option value="7">7반(${joinCountList.get(6)}/57)</option>
 	    					<option value="8">8반(${joinCountList.get(7)}/58)</option>
 	    				</select>
@@ -2187,20 +2425,20 @@
 				<table style="width:100%;">
 					<tr>
 						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/6/3607.jpg" style="width:58px;height:58px;border-radius:10px;">
+							<img src="resources/files/1/3134.jpg" style="width:58px;height:58px;border-radius:10px;" onclick="biggerImg('134',1)">
 						</td>
 						<!-- <td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 							<img src="resources/files/6/3632new.jpg" style="width:58px;height:58px;border-radius:10px;">
 						</td> -->
 						<td colspan="2" style="border-bottom:1px dotted #ddd;">
-							<font style="color:#030066;font-weight:bold;">반대표 김대영</font><br/>
+							<font style="color:#030066;font-weight:bold;">반대표 안병모</font><br/>
 							<font style="font-size:13px;font-weight:bold;">전북&nbsp;전주시</font>
 						</td>
 						<td style="text-align:right;border-bottom:1px dotted #ddd;">
-							<a href="tel:'010-2708-6900'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
+							<a href="tel:'010-2657-7184'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
 						</td>
 					</tr>
-					<tr>
+					<!-- <tr>
 						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 							<img src="resources/files/6/3632.jpg" style="width:58px;height:58px;border-radius:10px;">
 						</td>
@@ -2214,20 +2452,20 @@
 						<td style="text-align:right;border-bottom:1px dotted #ddd;">
 							<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
 						</td>
-					</tr>
+					</tr> -->
 					<c:forEach var="userList" items="${userList}">
-						<c:if test="${userList.userId.substring(0,1) eq '6' and userList.userId ne '632' and userList.userId ne '607'}">
+						<c:if test="${userList.userId.substring(0,1) eq '1' and userList.userId ne '134'}">
 						<tr>
 							<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 								<c:choose>
 									<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">
 										</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 									</c:when>
 									<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:58px;height:58px;border-radius:10px;">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:58px;height:58px;border-radius:10px;">
 										</td><td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:58px;height:58px;border-radius:10px;">
+										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" onclick="biggerImg('${userList.userId}',2)" style="width:58px;height:58px;border-radius:10px;">
 										</td><td style="border-bottom:1px dotted #ddd;">
 									</c:when>
 									<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">
@@ -2247,8 +2485,11 @@
 									<c:when test="${userList.userHp != null && userList.userHp != ''}">
 										<a href="tel:'${userList.userHp}'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
 									</c:when>
+									<c:when test="${userList.userHp != null && userList.mmsCheck == 1}">
+										<a href="#" onclick="modifyPhone('${userList.userId}')"><img src="resources/img/edit.jpg" style="width:40px;height:40px;"/></a>
+									</c:when>
 									<c:otherwise>
-										
+										<a href="#" onclick="modifyPhone('${userList.userId}')"><img src="resources/img/edit.jpg" style="width:40px;height:40px;"/></a>
 									</c:otherwise>
 								</c:choose>
 							</td>
@@ -2256,6 +2497,53 @@
 						</c:if>
 					</c:forEach>
 				</table>
+				
+				<!-- <table style="width:100%">
+					<tr>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3848new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:1px dotted #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">회장 최기호(8반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">떡보의 하루 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:1px dotted #ddd;">
+							<a href="sms:010-2607-0689"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-2607-0689'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3845new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:1px dotted #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">총무 정윤승(8반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">금강여행사 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:1px dotted #ddd;">
+							<a href="sms:010-9476-4884"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-9476-4884'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:3px solid #ddd;"><img src="resources/files/admin/omg.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:50%;border-bottom:3px solid #ddd;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">재무 오민권(6반)</font><br/><br/>
+							<font style="font-weight:bold;font-size:14px;">(주)한국정보통계 대표</font><br/>
+							<font style="font-weight:bold;font-size:14px;">전북 전주 거주</font>
+						</td>
+						<td style="width:20%;text-align:center;border-bottom:3px solid #ddd;">
+							<a href="sms:010-3673-1951"><img src="resources/img/sms.jpg" style="width:35px;height:35px;"/></a><br/>
+							<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:35px;height:35px;"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:30%;border-bottom:3px solid #ddd;margin-top:8px;">
+							<font style="font-weight:bold;font-size:16px;color:black;">회비 및 <br/>후원계좌</font>
+						</td>
+						<td colspan="2" style="width:50%;border-bottom:3px solid #ddd;margin-top:8px;">
+							<font style="font-weight:bold;font-size:16px;color:#030066;">농협 오민권<br/>301-0216-9668-01</font>
+						</td>
+					</tr>
+				</table> -->
 			</div>
 		</div>
 	    
@@ -2287,56 +2575,59 @@
     			<td></td>
     			<td><input type="search" name="searchPhotoByUser" placeholder="이름"/></td>
     			<td style="text-align:right;"><a href="#" style="width:45px;text-align:right;" onclick=""><img src="resources/img/search.jpg" style="width:35px;height:35px;"/></a></td>
-    			<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
+    			<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845 or cookie.cookieId.value eq 901}">
 	    			<td style="width:36px;text-align:right;">
-	    				<a href="#" onclick="openWriteForm();"><img src="resources/img/photo.jpg" style="width:35px;height:35px;"/></a>
+	    				<a href="#" onclick="addPhotoList();"><img src="resources/img/photo.jpg" style="width:35px;height:35px;"/></a>
 	    			</td>
     			</c:if>
     		</tr>
     	</table>
+    	
+	    <div id="photoListAddDiv" style="display:none;width:100%;">	
+	    	<form id="photoListAddForm" method="post">
+	    		<table style="width:100%;">
+	    			<tr>
+	    				<th style="border-radius:15px;">제목</th>
+	    				<td><input type="text" name="shListSubject" id="shListSubject" placeholder="제목"/></td>
+	    			</tr>
+	    			<tr>
+	    				<th style="border-radius:15px;">일시</th>
+	    				<td><input type="date" name="shListDate" placeholder="날짜"/></td>
+	    			</tr>	    			
+	    		</table>
+	    		<table style="width:100%;">
+	    			<tr>
+	    				<td style="width:50%;"><a href="#" data-role="button" onclick="photoListAdd();">등록</a></td>
+	    				<td><a href="#" data-role="button" onclick="javascript:$('#photoListAddDiv').slideUp();">취소</a></td>
+	    			</tr>
+	    		</table>
+		    </form>
+		</div>
     	<table style="width:100%;font-size:15px;">
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(5);">
-    				무주 동문회
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017.07</td>
-    		</tr>
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(4);">
-    				임원진 위취임식 행사
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
-    		</tr>
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(3);">
-    				30주년 기념식 사진
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
-    		</tr>
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(2);">
-    				30주년을 준비하며
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2017</td>
-    		</tr>
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(1);">
-    				무주 동문회
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">2016</td>
-    		</tr>
-    		<tr>
-    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
-    			<td class="photoList" onclick="photoOpen(7);">
-    				추억과 졸업앨범
-    			</td>
-    			<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;"></td>
-    		</tr>
+    		<c:forEach var="list" items="${photoList }">
+    			<tr>
+	    			<td style="width:21px;border-bottom:1px solid #ddd;"><img src="resources/img/phototop.png" style="width:20px;height:20px;"/></td>
+	    			<td class="photoList" onclick="photoOpen(${list.shListType});">
+	    				${list.shListSubject }
+	    			</td>
+	    			<c:if test="${list.shListDate ne null and list.shListDate ne '' }">
+	    				<c:if test="${cookie.cookieId.value eq '632' and list.shListNo > 6}">
+	    					<td onclick="deletePhotoList(${list.shListNo})" style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">삭제</td>
+	    				</c:if>
+	    				<c:if test="${cookie.cookieId.value ne '632' }">
+	    					<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">${list.shListDate }</td>
+	    				</c:if>
+	    			</c:if>
+	    			<c:if test="${list.shListDate eq null}">
+	    				<c:if test="${cookie.cookieId.value eq '632' and list.shListNo > 6 }">
+	    					<td onclick="deletePhotoList(${list.shListNo})" style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;">삭제</td>
+	    				</c:if>
+	    				<c:if test="${cookie.cookieId.value ne '632' }">
+	    					<td style="font-size:13px;text-align:right;border-bottom:1px solid #ddd;"></td>
+	    				</c:if>    				
+	    			</c:if>
+	    		</tr>
+    		</c:forEach>
     	</table>
     	<br/>
     	<table style="width:100%;">
@@ -2377,67 +2668,6 @@
 	    <c:import url="./module/footer.jsp"></c:import>
 
 	</section>
-
-	
-	<!-- 문자 -->
-	<%-- <section id="page3" data-role="page">
-	    <header data-role="header" style="background-color:#FFBB00;height:45px;" data-tap-toggle="false" data-position="fixed">
-	    	<img src="resources/img/topimage.jpg" style="width:100%;height:60px;"/>
-	    	<a class="ui-btn-right" href="#page9" data-icon="gear" style="background-color:rgba(255,255,255,0.5);">MY</a>
-	    	<div data-role="navbar">
-	            <ul>
-	                <li><a href="#page1" data-transition="none"><font style="font-size:16px;">친구</font></a></li>
-	                <li><a href="#page2" data-transition="none"><font style="font-size:16px;">포토</font></a></li>
-	                <li><a href="#page4" data-transition="none"><font style="font-size:16px;">공지</font></a></li>
-	                <li><a href="#page7" data-transition="none"><font style="font-size:16px;">일상</font></a></li>
-	                <li><a href="#" data-transition="none"  class="ui-btn-active ui-state-persist"><font style="font-size:16px;">관리</font></a></li>
-	            </ul>
-	           
-	        </div>
-
-	    </header>                   
-	    
-	    <div class="content" data-role="content" style="margin-top:50px;">
-        	
-        	<label for="sendTel">발송번호 : </label>
-        	<input name="sendTel" id="sendTel" type="tel" placeholder="발송자 휴대폰번호 입력">
-
-			<label for="msg">메세지입력 :</label>
-       	 	<textarea name="msg" id="msg" rows="8" cols="40" height="150px;"></textarea>
-       	 	
-       	 	<label for="msg">수신자 :</label>
-       	 	<a class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-star" href="#" id="direct">직접입력</a>
-       	 	<a class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-search" href="#" id="searchUser">회원검색</a>
-        	<a class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-btn-b ui-mini" href="#" id="sendAllBtn">전체발송</a>
-        	
-        	<div id="directForm" style="display:none;">
-        		<input name="userHp" id="userHp" type="tel" placeholder="수신자 휴대폰번호 입력 예)01022223333" >
-        		<a class="ui-shadow ui-btn ui-corner-all ui-btn-b" href="#" id="sendMmsDirectBtn">문자발송</a>
-        	</div>
-        	
-        	<div id="searchForm" style="display:none;">
-	        	<label class="select" for="searchKey">조건선택</label>
-		        <select name="searchKey" id="searchKey" data-native-menu="false">
-		            <option>이름/번호선택</option>
-		            <option value="name">이름</option>
-		            <option value="hp">휴대폰번호</option>
-		            <option value="local">지역</option>   
-		        </select>
-		        <div id="valueDetail">
-		        	<input type="text" name="searchValue" id="searchValue" placeholder="상세조건을 입력해주세요"/>
-		        </div>
-		        <div>
-		        	<a class="ui-shadow ui-btn ui-corner-all ui-btn-b" href="#" id="searchBtn">검색</a>
-		        </div>
-			</div>
-			<div id="resultDiv">
-			
-			</div>
-	    </div>
-	    
-	    <c:import url="./module/footer.jsp"></c:import>
-
-	</section> --%>
 	
 	<!-- 공지 > 목록-->
 	<section id="page4" data-role="page">
@@ -2631,76 +2861,6 @@
 									</tr>
 								</tbody>
 							</table>
-							
-							
-							<%-- <a href="#" class="contentJoinBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
-							
-							<form id="${noticeList.noNum}Form">
-								<input type="hidden" name="noNum" value="${noticeList.noNum }" id="hiddenNoNum">
-								<div id="hiddenTable" style="display:none;">
-									<h3 style="text-align:center;background-color:#F6F6F6;">상세일정</h3>
-									<table data-role="table" class="ui-responsive" border="1">
-										<thead>
-											<tr>
-												<th>- 내용</th>
-												<th>- 발인일시</th>
-												<th>- 장소</th>
-												<th>${noticeList.coPlace }</th>
-												<th>- 조문일시</th>
-												<th>- 참여여부</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>${noticeList.coContent }</td>
-												<td>${noticeList.coHanddate }</td>
-												<td></td>
-												<td></td>
-												<td><input type="date" name="joDate" id="joDate"/></td>
-												<td>
-													<div data-role="controlgroup" data-type="horizontal">
-														<a href="#" data-role="button" class="joinBtn">직접참여</a>
-														<a href="#" data-role="button" class="notJoinBtn">불참</a>
-														<input type="hidden" name="joJoinShape" id="joJoinShape"/>
-										            </div>
-										        </td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div id="hiddenTable2" style="display:none;">
-									<h3 style="text-align:center;background-color:#F6F6F6;">대납안내</h3>
-									<table data-role="table" border="1">
-										<thead>
-											<tr>
-												<th>- 이름</th>
-												<th>- 계좌번호</th>
-												<th>- 금액</th>
-												
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>${noticeList.coPayName }</td>
-												<td>${noticeList.coPayAccount }</td>
-												<td>
-													<div>
-														<a href="#" data-role="button" data-inline="true" class="3">3만원</a>
-														<a href="#" data-role="button" data-inline="true" class="5">5만원</a>
-														<a href="#" data-role="button" data-inline="true" class="10">10만원</a>
-														<a href="#" data-role="button" data-inline="true" class="etc">직접입력</a>
-														<div style="display:none;" id="hiddenMoney">
-															<input type="tel" id="moneyInput" placeholder="금액입력"/>
-														</div>
-														<input type="hidden" name="joMoney" id="joMoney"/>
-													</div>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<a href="#" data-role="button" style="background-color:green;color:white;display:none;" class="contentSubmitBtn">등록</a>
-							</form> 참여체크로직 끝--%>
 						</div>
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 2 }">
@@ -2754,80 +2914,9 @@
 									</tr>
 								</thead>
 								<tbody>
-									<%-- <tr>
-										<td colspan="3">
-											<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
-												<button type="button" style="width:49%;float:left;">수정</button>
-								    			<button type="button" style="width:49%;float:left;">삭제</button>
-											</c:if>
-										</td>
-									</tr> --%>
+									
 								</tbody>
 							</table>
-							
-							
-							<%-- <a href="#" class="eventJoinCheckBtn" data-role="button" data-icon="edit" style="background-color:green;color:white;">참여/불참 체크</a>
-						
-							<form id="${noticeList.noNum}Form">
-								<input type="hidden" name="noNum" value="${noticeList.noNum }" id="hiddenNoNum">
-								<div id="hiddenTable" style="display:none;">
-									<h3 style="text-align:center;background-color:#F6F6F6;">상세일정</h3>
-									<table data-role="table" class="ui-responsive">
-										<thead>
-											<tr>
-												<th>- 내용</th>
-												<th>- 행사일시</th>
-												<th>- 장소</th>
-												<th>${noticeList.coPlace }</th>
-												<th>- 참여여부</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>${noticeList.coContent }</td>
-												<td>${noticeList.coEventDate }</td>
-												<td></td>
-												<td></td>
-												<td>
-													<div data-role="controlgroup" data-type="horizontal">
-														<a href="#" data-role="button" class="eventJoinBtn">참여</a>
-														<a href="#" data-role="button" class="eventNotJoinBtn">불참</a>
-														<input type="hidden" name="joJoinShape" id="joJoinShape"/>
-										            </div>
-										        </td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div id="hiddenTable2" style="display:none;">
-									<h3 style="text-align:center;background-color:#F6F6F6;">회비납부안내</h3>
-									<table data-role="table" class="ui-responsive">
-										<thead>
-											<tr>
-												<th>- 이름</th>
-												<th>- 계좌번호</th>
-												<th>- 금액</th>
-												
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>${noticeList.coPayName }</td>
-												<td>${noticeList.coPayAccount }</td>
-												<td>
-													<div>
-														<a href="#" data-role="button" data-inline="true" class="directPay">직접납부</a>
-														<a href="#" data-role="button" data-inline="true" class="accountPay">계좌이체</a>
-														<input type="hidden" name="payType" id="payType"/>
-													</div>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<a href="#" data-role="button" style="background-color:green;color:white;display:none;" class="eventSubmitBtn">등록</a>
-							</form> 행사공지 참여체크--%>
-							
 						</div>
 	        		</c:if>
 	        		<c:if test="${noticeList.noType eq 3 }">
@@ -3296,9 +3385,10 @@
 			        			<tr>
 			        				<td colspan="2">
 			        					<select name="searchKey" id="searchKey" data-native-menu="false" style="width:100%;">
-								            <option>반/지역 선택</option>
+								            <option>반/지역/이름 선택</option>
+								            <option value="name">이름</option>  
 								            <option value="class">반</option> 
-								            <option value="local">지역</option> 
+								            <option value="local">지역</option>						            
 								        </select>
 			        				</td>
 			        			</tr>
@@ -3343,10 +3433,28 @@
 								<th class="duesTr">목록</th>
 							</tr>
 							<tr>
-								<td class="statTd">2017-09</td>
-								<td class="statTd">${mmsCountList.get(0) }</td>
-								<td class="statTd"><number class="numberInput">${mmsCountList.get(0) * 55 }</number></td>
-								<td class="statTd" onclick="showMmsList(9);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+								<td class="statTd">2017-12</td>
+								<c:if test="${mmsCountList.get(3) == 0 }">
+									<td class="statTd">-</td>
+									<td class="statTd">-</td>
+								</c:if>
+								<c:if test="${mmsCountList.get(3) > 0 }">
+									<td class="statTd">${mmsCountList.get(3)}</td>
+									<td class="statTd"><number class="numberInput">${mmsCountList.get(3) * 55 }</number></td>
+								</c:if>
+								<td class="statTd" onclick="showMmsList(12);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+							<tr>
+								<td class="statTd">2017-11</td>
+								<c:if test="${mmsCountList.get(2) == 0 }">
+									<td class="statTd">-</td>
+									<td class="statTd">-</td>
+								</c:if>
+								<c:if test="${mmsCountList.get(2) > 0 }">
+									<td class="statTd">${mmsCountList.get(2)}</td>
+									<td class="statTd"><number class="numberInput">${mmsCountList.get(2) * 55 }</number></td>
+								</c:if>
+								<td class="statTd" onclick="showMmsList(11);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
 							</tr>
 							<tr>
 								<td class="statTd">2017-10</td>
@@ -3359,6 +3467,12 @@
 									<td class="statTd"><number class="numberInput">${mmsCountList.get(1) * 55 }</number></td>
 								</c:if>
 								<td class="statTd" onclick="showMmsList(10);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
+							</tr>
+							<tr>
+								<td class="statTd">2017-09</td>
+								<td class="statTd">${mmsCountList.get(0) }</td>
+								<td class="statTd"><number class="numberInput">${mmsCountList.get(0) * 55 }</number></td>
+								<td class="statTd" onclick="showMmsList(9);"><img src="resources/img/list.jpg" style="width:35px;height:35px;"/></td>
 							</tr>
 						</table>
 					</div>
@@ -3375,56 +3489,83 @@
 						<tr>
 							<th class="duesTr">반</th>
 							<th class="duesTr">총원</th>
+							<th class="duesTr">HP</th>
 							<th class="duesTr">접속</th>
+							<th class="duesTr">접속률</th>
 							<th class="duesTr">목록</th>
 						</tr>
 						<tr>
 							<td class="statTd">1반</td>
-							<td class="statTd">59명</td>
-							<td class="statTd">${joinCountList.get(0)}명</td>
+							<td class="statTd">59</td>
+							<td class="statTd">46</td>
+							<td class="statTd">${joinCountList.get(0)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(0) / 46 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(1);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
 						</tr>
 						<tr>
 							<td class="statTd">2반</td>
-							<td class="statTd">54명</td>
-							<td class="statTd">${joinCountList.get(1)}명</td>
+							<td class="statTd">54</td>
+							<td class="statTd">33</td>
+							<td class="statTd">${joinCountList.get(1)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(1) / 33 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(2);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
 						</tr>
 						<tr>
 							<td class="statTd">3반</td>
-							<td class="statTd">55명</td>
-							<td class="statTd">${joinCountList.get(2)}명</td>
+							<td class="statTd">55</td>
+							<td class="statTd">39</td>
+							<td class="statTd">${joinCountList.get(2)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(2) / 39 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(3);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
 						</tr>
 						<tr>
 							<td class="statTd">4반</td>
-							<td class="statTd">57명</td>
-							<td class="statTd">${joinCountList.get(3)}명</td>
+							<td class="statTd">57</td>
+							<td class="statTd">40</td>
+							<td class="statTd">${joinCountList.get(3)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(3) / 40 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(4);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
 						</tr>
 						<tr>
 							<td class="statTd">5반</td>
-							<td class="statTd">56명</td>
-							<td class="statTd">${joinCountList.get(4)}명</td>
+							<td class="statTd">56</td>
+							<td class="statTd">36</td>
+							<td class="statTd">${joinCountList.get(4)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(4) / 36 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(5);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
 						</tr>
 						<tr>	
 							<td class="statTd">6반</td>
-							<td class="statTd">60명</td>
-							<td class="statTd">${joinCountList.get(5)}명</td>
+							<td class="statTd">60</td>
+							<td class="statTd">51</td>
+							<td class="statTd">${joinCountList.get(5)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(5) / 51 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(6);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>
 						</tr>
 						<tr>
 							<td class="statTd">7반</td>
-							<td class="statTd">57명</td>
-							<td class="statTd">${joinCountList.get(6)}명</td>
+							<td class="statTd">57</td>
+							<td class="statTd">39</td>
+							<td class="statTd">${joinCountList.get(6)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(6) / 39 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(7);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
 						</tr>
 						<tr>
 							<td class="statTd">8반</td>
-							<td class="statTd">58명</td>
-							<td class="statTd">${joinCountList.get(7)}명</td>
+							<td class="statTd">58</td>
+							<td class="statTd">38</td>
+							<td class="statTd">${joinCountList.get(7)}</td>
+							<td class="statTd"><fmt:formatNumber value="${joinCountList.get(7) / 38 * 100}" pattern=".0"/></td>
 							<td class="statTd"><a href="#" onclick="statDetail(8);"><img src="resources/img/list.jpg" style="width:30px;height:30px;"/></a></td>	
+						</tr>
+						<tr>
+							<th class="duesTr">합계</td>
+							<td class="statTd">456</td>
+							<td class="statTd">360</td>
+							<c:set var="sum" value="${joinCountList.get(0)+joinCountList.get(1)+joinCountList.get(2)+joinCountList.get(3)+joinCountList.get(4)+joinCountList.get(5)+joinCountList.get(6)+joinCountList.get(7)}"/>
+							<td class="statTd">${joinCountList.get(0)+joinCountList.get(1)+joinCountList.get(2)+joinCountList.get(3)+joinCountList.get(4)+joinCountList.get(5)+joinCountList.get(6)+joinCountList.get(7)}</td>
+							<td class="statTd"><fmt:formatNumber value="${sum / 360 * 100}" pattern=".0"/></td>
+							<td class="statTd">-</td>	
 						</tr>
 					</table>
 				</div>
@@ -3507,6 +3648,7 @@
 	    <div class="content" data-role="content" style="margin-top:50px;">
 	    	<div style="width:100%;font-size:15px;">
 	    	<form id="userModifyForm" enctype="multipart/form-data" method="post">
+	    		<h4 style="font-size:13px;font-weight:bold;color:#030066;">*사진방향은 업로드시 자동조절 됩니다.</h4>
 		    	<table style="width:100%;margin-top:10px;">
 		    		<tr>
 		    			<c:if test="${user.userImgOld eq null && user.userImgNew eq null}">
@@ -3545,16 +3687,17 @@
 	 				</c:if>
 				</div>
 		    	
+		    	<!-- <img src="resources/files/img/testimg.png" id="imgTest" exif="true" alt="" /> -->
 		    	<table style="width:100%;">
 		    		<tr>
 		    			<td style="width:13%;"><img src="resources/img/name.png" style="width:25px;height:25px;"/></td>
-		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="3">
+		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="5">
 		    				${user.userName }
 		    			</td>
 		    		</tr>
 		    		<tr>
 		    			<td style="width:13%;"><img src="resources/img/hp.png" style="width:25px;height:25px;"/></td>
-		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="3">
+		    			<td style="border-bottom:1px solid #ddd;font-weight:bold;" colspan="5">
 		    				<input type="tel" name="userHp" id="userHpModify" value="${user.userHp }"/>
 		    			</td>
 		    		</tr>
@@ -3572,17 +3715,19 @@
 		    				</c:if>
 		    			</td>
 		    			<td>
-		    				<input type="number" name="userBirthMonth" placeholder="월" value="${user.userBirthMonth }"/>
+		    				<input type="number" name="userBirthMonth" placeholder="월" value="${user.userBirthMonth }" style="text-align:center;"/>
 		    			</td>
+		    			<td>월</td>
 		    			<td>
-		    				<input type="number" name="userBirthDay" placeholder="일" value="${user.userBirthDay }"/>
+		    				<input type="number" name="userBirthDay" placeholder="일" value="${user.userBirthDay }" style="text-align:center;"/>
 		    			</td>
+		    			<td>일</td>
 		    		</tr>
 		    		<tr>
 		    			<td style="width:13%;"><img src="resources/img/address.png" style="width:30px;height:30px;"/></td>
-		    			<td style="font-weight:bold;padding-top:7px;" colspan="3">
+		    			<td style="font-weight:bold;padding-top:7px;" colspan="5">
 		    				<font style="border:1px solid #FF5E00;width:100px;height:33px;padding:5px;text-align:center;border-radius:5px;color:#000042;" onclick="execDaumPostCode();">주소찾기</font>
-		    				<input type="text" name="userAddress" id="userAddressModify" value="${user.userAddress }"/>
+		    				<input type="text" name="userAddress" id="userAddressModify" value="${user.userAddress }" />
 		    				<c:if test="${user.userSangseAdd eq null or user.userSangseAdd eq '' }">
 		    					<input type="text" name="userSangseAdd" id="sangseAdd" style="display:none;"/>
 		    				</c:if>
@@ -3592,12 +3737,12 @@
 		    			</td>
 		    		</tr>
 		    		<tr>
-		    			<td colspan="4"><button type="button" onclick="userModify();" style="width:100%">개인정보수정</button></td>
+		    			<td colspan="6"><button type="button" onclick="userModify();" style="width:100%">개인정보수정</button></td>
 		    		</tr>
 		    	</table>
-	    	
 	    	</form>
 	    	</div>
+	    	
 		</div>
 	    
 	    <c:import url="./module/footer.jsp"></c:import>

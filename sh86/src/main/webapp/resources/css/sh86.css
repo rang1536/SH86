@@ -1,0 +1,131 @@
+@charset "utf-8";
+
+	.statTd{
+		text-align:center;
+		font-weight:bold;
+		border-bottom:1px solid #ddd;
+	}
+	
+	.statTd2{
+		text-align:center;
+		font-weight:bold;
+		border-bottom:1px solid #ddd;
+		height:32px;
+	}
+	
+	th{
+		background-color:#ddd;
+		font-weight:bold;
+		width:20%;	
+	} 
+	
+	.img-round{
+		width:80%;
+		height:110px;
+	}
+	
+	.fileInputDiv {
+	    position:relative;
+	    width:100%;
+	    height:40px;
+	    overflow:hidden;
+	}
+	.fileInputImgBtn {
+	    padding:0 0 0 5px;
+	    width:35px;
+	    height:35px;
+	    float:right;
+	}
+	.fileInputHidden {
+	    font-size:29px;
+	    position:absolute;
+	    right:0px;
+	    top:0px;
+	    opacity:0;
+	    filter: alpha(opacity=0);
+	    -ms-filter: alpha(opacity=0);
+	    cursor:pointer;
+	}
+	
+	.filePreviewDiv {
+	    position:relative;
+	    width:100%;
+	    height:109px;
+	    overflow:hidden;
+	}
+	.fileView {
+	    padding:0 0 0 5px;
+	    width:80%;
+	    height:110px;
+	    border-radius: 70px;
+		-moz-border-radius : 70px;
+		-khtml-border-radius : 70px;
+		-webkit-border-radius : 70px;
+	}
+	
+	.inputNone{
+		border:0px;
+	}
+	
+	.topList{
+			border:1px solid #ddd;
+			border-radius:5px;
+			text-align:center;
+			font-weight:bold;
+	}
+	
+	.topList2{
+		border:2px solid #ddd;
+		width:20%;
+		height:30px;
+		border-radius:5px;
+		text-align:center;
+	}
+	
+	.topList3{
+		border:2px solid #ddd;
+		height:30px;
+		border-radius:5px;
+		text-align:center;
+		font-weight:bold;
+	}
+	.topList4{
+		border:2px solid #ddd;
+		width:25%;
+		height:30px;
+		border-radius:5px;
+		text-align:center;
+		font-weight:bold;
+	}
+	.subject{
+		border-bottom:3px solid #ddd;
+		font-weight:bold;
+		font-size:15px;
+		width:100%;
+	}
+	
+	.photoList{
+		font-weight:bold;
+		color:#000000;
+		border-bottom:1px solid #ddd;
+		padding:7px;
+		
+	}
+	
+	.songListTd{
+		width:25%;
+		text-align:center;
+	}
+	
+	.duesTable{
+		color:#030066;
+	}
+	
+	.duesTr{
+		background-color:#FFA648;
+	}
+	
+	.noticeH3{
+		font-size:15px;
+		font-weight:bold;
+	}

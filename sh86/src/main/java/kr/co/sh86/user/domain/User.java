@@ -33,9 +33,24 @@ public class User {
 	private String phoneNumber;
 	private int result;
 	private String sendDate;
+	private int mmsCheck;
+	private String mmsSendDate;
 	
 	
 	
+	
+	public int getMmsCheck() {
+		return mmsCheck;
+	}
+	public void setMmsCheck(int mmsCheck) {
+		this.mmsCheck = mmsCheck;
+	}
+	public String getMmsSendDate() {
+		return mmsSendDate;
+	}
+	public void setMmsSendDate(String mmsSendDate) {
+		this.mmsSendDate = mmsSendDate;
+	}
 	public String getSendDate() {
 		return sendDate;
 	}
@@ -233,7 +248,8 @@ public class User {
 				+ ", userLastDate=" + userLastDate + ", userDues2017=" + userDues2017 + ", user30th=" + user30th
 				+ ", user30thKibu=" + user30thKibu + ", userBirthMonth=" + userBirthMonth + ", userBirthDay="
 				+ userBirthDay + ", joJoinShape=" + joJoinShape + ", userSangseAdd=" + userSangseAdd + ", destName="
-				+ destName + ", phoneNumber=" + phoneNumber + ", result=" + result + "]";
+				+ destName + ", phoneNumber=" + phoneNumber + ", result=" + result + ", sendDate=" + sendDate
+				+ ", mmsCheck=" + mmsCheck + ", mmsSendDate=" + mmsSendDate + "]";
 	}
 	
 }

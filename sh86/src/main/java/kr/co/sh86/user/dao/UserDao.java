@@ -19,6 +19,7 @@ import kr.co.sh86.user.domain.MmsReport;
 import kr.co.sh86.user.domain.MmsStat;
 import kr.co.sh86.user.domain.Notice;
 import kr.co.sh86.user.domain.NoticeView;
+import kr.co.sh86.user.domain.PhotoList;
 import kr.co.sh86.user.domain.Sinbo;
 import kr.co.sh86.user.domain.SinboDb;
 import kr.co.sh86.user.domain.UploadFileDTO;
@@ -68,6 +69,7 @@ public class UserDao {
 	public List<User> selectAllUserForMms(){
 		return sqlSession.selectList("UserDao.selectAllUserForMms");
 	}
+	
 	//문자 - 발송
 	public int sendMmsToSelected(Mms mms) {
 		return sqlSession.insert("UserDao.sendMmsToSelected", mms);
@@ -157,6 +159,16 @@ public class UserDao {
 		return sqlSession.selectOne("UserDao.selectCountByJoin", num);
 	}
 	
+	//1번이라도 접속했던 유저카운트
+	public int selectTotalCountByClass(String num) {
+		return sqlSession.selectOne("UserDao.selectTotalCountByClass", num);
+	}
+		
+	//1번이라도 접속했던 유저카운트
+	public int selectHpCountByClass(String num) {
+		return sqlSession.selectOne("UserDao.selectHpCountByClass", num);
+	}
+		
 	//친구 - 회원조회(이름)
 	public List<User> selectUserByUserName(String userName){
 		return sqlSession.selectList("UserDao.selectUserByUserName", userName);
@@ -419,5 +431,55 @@ public class UserDao {
 	//문자발송 성공여부조회 - 건별
 	public List<User> selectUserSuccessByDateTime(String sendDate){
 		return sqlSession.selectList("UserDao.selectUserSuccessByDateTime", sendDate);
+	}
+	
+	//selectUserId
+	public User selectUserId(User user) {
+		return sqlSession.selectOne("UserDao.selectUserId", user);
+	}
+	
+	//selectNewImgName
+	public String selectNewImgName(String userId) {
+		return sqlSession.selectOne("UserDao.selectNewImgName", userId);
+	}
+	
+	//selectPhotoList
+	public List<PhotoList> selectPhotoList() {
+		return sqlSession.selectList("UserDao.selectPhotoList");
+	}
+	
+	// 포토목록 타입 마지막값 조회
+	public int selectPhotoListType() {
+		return sqlSession.selectOne("UserDao.selectPhotoListType");
+	}
+	
+	//insertPhotoList
+	public int insertPhotoList(PhotoList photoList) {
+		return sqlSession.insert("UserDao.insertPhotoList", photoList);
+	}
+	
+	//deletePhotoList
+	public int deletePhotoList(int shListNo) {
+		return sqlSession.delete("UserDao.deletePhotoList", shListNo);
+	}
+	
+	//updateMmsCheck
+	public int updateMmsCheck(User user) {
+		return sqlSession.update("UserDao.updateMmsCheck", user);
+	}
+	
+	//selectReportByMmsNo
+	public MmsReport selectReportByMmsNo(int mmsNo) {
+		return sqlSession.selectOne("UserDao.selectReportByMmsNo", mmsNo);
+	}
+	
+	//selectUserByMmsRetry
+	public User selectUserByMmsRetry(User user) {
+		return sqlSession.selectOne("UserDao.selectUserByMmsRetry",user);
+	}
+	
+	// login-selectLoginInfo
+	public List<User> selectLoginInfo(Map<String, Object> params){
+		return sqlSession.selectList("UserDao.selectLoginInfo", params);
 	}
 }

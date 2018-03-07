@@ -85,23 +85,27 @@
 	    	</table>	
 	    	<table style="width:100%;">
 	    		<c:if test="${userList.get(0).userId.substring(0,1) eq '6'}">
-	    			<tr>
-						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/6/3632.jpg" style="width:40px;height:40px;border-radius:10px;">
-						</td>
-						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/6/3632new.jpg" style="width:40px;height:40px;border-radius:10px;">
-						</td>
-						<td style="border-bottom:1px dotted #ddd;">
-							<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>
-							<font style="font-size:13px;font-weight:bold;">${userList.get(28).userJoinCheck}회 접속</font><br/>
-							<font style="font-size:13px;font-weight:bold;">${userList.get(28).userLastDate}</font>
-						</td>
-						<td style="text-align:right;border-bottom:1px dotted #ddd;">
-							<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
-						</td>
-					</tr>
-				</c:if>
+	    			<c:forEach var="userList" items="${userList }">
+	    				<c:if test="${userList.userId eq '632' }">
+		    				<tr>
+								<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
+									<img src="resources/files/6/3632.jpg" style="width:40px;height:40px;border-radius:10px;">
+								</td>
+								<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
+									<img src="resources/files/6/3632new.jpg" style="width:40px;height:40px;border-radius:10px;">
+								</td>
+								<td style="border-bottom:1px dotted #ddd;">
+									<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>
+									<font style="font-size:13px;font-weight:bold;">${userList.userJoinCheck}회 접속</font><br/>
+									<font style="font-size:13px;font-weight:bold;">${userList.userLastDate}</font>
+								</td>
+								<td style="text-align:right;border-bottom:1px dotted #ddd;">
+									<a href="tel:'010-3673-1951'"><img src="resources/img/call.jpg" style="width:40px;height:40px;"/></a>
+								</td>
+							</tr>
+						</c:if>
+	    			</c:forEach>
+	    		</c:if>
 				<c:if test="${userList.get(0).userId.substring(0,1) eq '8'}">
 	    			<tr>
 						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">

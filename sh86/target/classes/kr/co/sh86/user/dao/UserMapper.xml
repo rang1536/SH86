@@ -58,6 +58,28 @@
 		USER_ID LIKE #{userId}||'%'
 </select>
 
+<!-- 반별 전체카운트 -->
+<select id="selectTotalCountByClass" parameterType="String" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_ID LIKE #{userId}||'%'
+</select>
+
+<!-- 반별 핸드폰보유자수 -->
+<select id="selectHpCountByClass" parameterType="String" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_ID LIKE #{userId}||'%'
+	AND 
+		USER_HP IS NOT NULL
+</select>
+
 <!-- 모든공지사항 조회 -->
 <select id="selectAllNotice" resultType="kr.co.sh86.user.domain.NoticeView">
 	SELECT
@@ -185,6 +207,9 @@
 		</if>
 		<if test="userAddress neq null and !userAddress.equals('')">
 			AND USER_ADDRESS LIKE '%'||#{userAddress}||'%'
+		</if>
+		<if test="userName neq null and !userName.equals('')">
+			AND USER_NAME LIKE '%'||#{userName}||'%'
 		</if>
 		AND USER_HP IS NOT NULL
 	</trim>		
@@ -462,7 +487,7 @@
 		user_name LIKE '%'||#{userName}||'%'
 	OR
 		user_cityname LIKE '%'||#{userName}||'%'
-	ORDER BY user_name
+	ORDER BY user_id
 </select>
 
 <!-- 친구 > 회원검색(이름) -->
@@ -477,7 +502,8 @@
 		user_img_pass,
 		user_img_old,
 		user_img_new,
-		user_joincheck
+		user_joincheck,
+		mmscheck
 	FROM
 		SH86.SH_USER
 	WHERE
@@ -531,6 +557,7 @@
 		<if test="userSangseAdd != null and userSangseAdd != ''">
 			,USER_SANGSEADD = #{userSangseAdd}
 		</if>
+		<if test="mmsCheck != null and mmsCheck !=''">,MMSCHECK=#{mmsCheck}</if>
 	WHERE
 		USER_ID = #{userId}
 </update>
@@ -559,14 +586,18 @@
 		file_no,
 		file_originalname,
 		file_path,
-		file_name,
-		album_no)
+		file_name
+		<if test="albumNo !=null and albumNo != ''">,album_no</if>
+		<if test="photoType !=null and photoType != ''">,photo_type</if>
+		)
 	VALUES(
 		PHOTO_SEQ.NEXTVAL,
 		#{fileOriginalName},
 		#{filePath},
-		#{fileName},
-		#{albumNo})
+		#{fileName}
+		<if test="albumNo !=null and albumNo != ''">,#{albumNo}</if>
+		<if test="photoType !=null and photoType != ''">,#{photoType}</if>
+		)
 	
 </insert>
 
@@ -1027,6 +1058,7 @@
 		SH86.SH_USER
 	WHERE
 		user_id LIKE #{classNum}||'%'
+	ORDER BY user_name
 </select>
 
 <!-- 관리 - 회비2017(반 별 합계) -->
@@ -1131,7 +1163,7 @@
 	FROM
 		XROSHOT.SDK_MMS_REPORT
 	WHERE
-		SUBJECT LIKE '신흥고86'||'%'
+		SUBJECT LIKE '신흥고'||'%'
 	AND 
 		SEND_DATE LIKE #{sendDate}||'%'
 </select>
@@ -1174,6 +1206,26 @@
 		SH86.SH_MMS_REPORT
 	WHERE
 		mms_senddate LIKE #{sendDate}||'%'
+	ORDER BY MMS_NO DESC
+</select>
+
+<!-- 문자발송 이력조회  -->
+<select id="selectReportByMmsNo" parameterType="int" resultType="kr.co.sh86.user.domain.MmsReport">
+	SELECT
+		*
+	FROM 
+		SH86.SH_MMS_REPORT
+	WHERE
+		mms_no = #{mmsNo}
+</select>
+
+<select id="selectCountConnectByMms" parameterType="Map" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		SH86.SH_USER
+	WHERE
+		USER_LASTDATE &gt;= #{startDate} 
 </select>
 
 <!-- 문자발송 시간대기준 상세발송성공여부 확인 -->
@@ -1189,4 +1241,98 @@
 		SEND_DATE LIKE #{sendDate}||'%'
 	
 </select>
+
+<!-- 문자발송후 이상번호 체크 -->
+<update id="updateMmsCheck" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE SH86.SH_USER
+	SET
+		MMSCHECK = #{mmsCheck}
+		<if test="mmsSendDate !=null and mmsSendDate !=''">,MMS_SENDDATE = #{mmsSendDate}</if>
+	WHERE
+		USER_ID = #{userId}
+</update>
+
+<!-- 유저아이디 조회  -->
+<select id="selectUserId" parameterType="kr.co.sh86.user.domain.User" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		USER_ID,
+		MMSCHECK,
+		MMS_SENDDATE,
+		USER_LASTDATE
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_NAME = #{destName}
+	<if test="phoneNumber != null and phoneNumber !=''">AND USER_HP = #{phoneNumber}</if>	
+</select>
+
+<!-- 유저 조회  -->
+<select id="selectUserByMmsRetry" parameterType="kr.co.sh86.user.domain.User" resultType="kr.co.sh86.user.domain.User">
+	SELECT
+		*
+	FROM
+		SH86.SH_USER
+	WHERE
+		USER_NAME = #{destName}
+	<if test="phoneNumber != null and phoneNumber !=''">AND USER_HP = #{phoneNumber}</if>	
+</select>
+
+<!-- 유저 새이미지명 조회 -->
+<select id="selectNewImgName" parameterType="String" resultType="String">
+	SELECT
+		user_img_new
+	FROM 
+		SH86.SH_USER
+	WHERE
+		user_id = #{userId}
+</select>
+
+<!-- 사진제목 리스트 조회 -->
+<select id="selectPhotoList" resultType="kr.co.sh86.user.domain.PhotoList">
+	SELECT
+		*
+	FROM
+		SH86.SH_PHOTOLIST
+	ORDER BY SH_LIST_NO DESC
+</select>
+
+<!-- 목록타입 최종값 조회 -->
+<select id="selectPhotoListType" resultType="int">
+ 	SELECT
+ 		MAX(sh_list_type)
+ 	FROM
+ 		SH86.SH_PHOTOLIST
+</select>
+
+<!-- 사진목록 등록 -->
+<insert id="insertPhotoList" parameterType="kr.co.sh86.user.domain.PhotoList">
+	INSERT INTO SH86.SH_PHOTOLIST(
+		sh_list_no,
+		sh_list_subject
+		<if test="shListDate != null and shListDate != ''">,sh_list_date</if>
+		,sh_list_type)
+	VALUES(
+		SH_PHOTOLIST_SEQ.NEXTVAL,
+		#{shListSubject}
+		<if test="shListDate != null and shListDate != ''">,#{shListDate}</if>
+		,#{shListType})
+</insert>
+
+<!-- 사진목록 삭제 -->
+<delete id="deletePhotoList" parameterType="int">
+	DELETE
+	FROM
+		SH86.SH_PHOTOLIST
+	WHERE
+		SH_LIST_NO = #{shListNo}
+</delete>
+
+<!-- 로그인 -->
+<select id="selectLoginInfo" parameterType="Map" resultType="kr.co.sh86.user.domain.User">
+	SELECT *
+	FROM SH86.SH_USER
+	WHERE user_id like #{userClass}||'%'
+	AND user_name = #{userName}
+</select>
+
 </mapper>
