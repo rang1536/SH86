@@ -28,6 +28,7 @@ import kr.co.sh86.user.domain.UploadFileDTO;
 import kr.co.sh86.user.domain.User;
 import kr.co.sh86.util.UtilDate;
 import kr.co.sh86.util.UtilFile;
+import kr.co.sh86.util.UtilSendPush;
 
 @Service
 public class UserService {
@@ -240,10 +241,10 @@ public class UserService {
 	//문자 > 전체발송
 	public int sendMmsAllServ(String msg) {
 		final int scheduleType = 0;
-		final String subject = "신흥고 86회 동문회";
+		final String subject = "알림";
 		final String callback = "01036731951"; //발송번호는 등록된 번호만 가능. 추후 대표님 폰등은 필요하면 따로 등록.
 		String destInfo = null;
-		msg += "\n http://sh86.kr/?userId=";
+		/*msg += "\n http://sh86.kr/?userId=";*/
 		int destCount = 1; // 수신자목록 개수 최대:100
 		int result = 0;
 		String mmsMsg = null;
@@ -1225,6 +1226,55 @@ public class UserService {
 			map.put("loginCheck", "fail");
 		}
 		
+		return map;
+	}
+	
+	//토큰저장
+	public Map<String, Object> modifyTokenServ(String userId, String token){
+		Map<String, Object> map = new HashMap<String, Object>();
+		User user = new User();
+		user.setUserId(userId);
+		user.setToken(token);
+		
+		int result = userDao.updateToken(user);
+		if(result == 1) {
+			System.out.println("토큰저장 성공!!");
+			map.put("result", "success");
+		}else{
+			System.out.println("토큰저장 실패!!");
+			map.put("result", "fail");
+		}
+		
+		/*UtilSendPush sendPush = new UtilSendPush();
+		String title = "SH86 알림";
+		String content = "푸쉬발송 테스트";
+		
+		sendPush.androidSendPush(token, "applyList", title, content);*/
+		
+		return map;
+	}
+	
+	public void sendPush2(String token) {
+		UtilSendPush sendPush = new UtilSendPush();
+		String title = "SH86 알림";
+		String msg="테스트";
+		
+		/*sendPush.androidSendPush(token, "applyList", title, msg);*/
+	}
+	public Map<String, Object> sendPush(String msg, int badge) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		UtilSendPush sendPush = new UtilSendPush();
+		String title = "SH86 알림";
+		
+		//토큰조회
+		List<String> tokenList = userDao.selectTokenAll();
+		if(tokenList != null) {
+			for(int i=0; i<tokenList.size(); i++) {
+				sendPush.androidSendPush(tokenList.get(i), "applyList", title, msg, badge);
+			}
+			
+		}
+		map.put("result", "success");
 		return map;
 	}
 }

@@ -177,7 +177,7 @@
 	
 	
 	<script>
-	
+		var imgUrl = 'http://sh86.kr/';
 		function footerBanner(){
 			window.location.href = 'https://www.dcake.co.kr/';
 		}
@@ -984,7 +984,7 @@
                 console.log($('#imgInp').val())
                 $("#blah").css('display','');
             });
-            
+		   
             function readURL2(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
@@ -1191,12 +1191,12 @@
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							if(result.userImgOld != null && result.userImgNew == null){
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
-								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">';
 							}else if(result.userImgOld != null && result.userImgNew != null){
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="border-bottom:1px dotted #ddd;">';
 							}else if(result.userImgOld == null && result.userImgNew == null){
 								html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
@@ -1407,7 +1407,7 @@
 						if(data[0].userId.substring(0,1) == '8'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3826.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(826,1)">';
+							html += '<img src="'+imgUrl+'resources/files/8/3826.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(826,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1422,10 +1422,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,1)">';
+							html += '<img src="'+imgUrl+'resources/files/8/3848.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,2)">';
+							html += '<img src="'+imgUrl+'resources/files/8/3848new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(848,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">회장 최기호</font><br/>';
@@ -1437,10 +1437,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3845.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,1)">';
+							html += '<img src="'+imgUrl+'resources/files/8/3845.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/8/3845new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,2)">';
+							html += '<img src="'+imgUrl+'resources/files/8/3845new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(845,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">총무 정윤승</font><br/>';
@@ -1452,7 +1452,7 @@
 						}else if(data[0].userId.substring(0,1) == '6'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/3607.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(607,1)">';
+							html += '<img src="'+imgUrl+'resources/files/6/3607.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(607,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1467,10 +1467,10 @@
 							
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,1)">';
+							html += '<img src="'+imgUrl+'resources/files/6/3632.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,1)">';
 							html += '</td>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/6/20170815_2.JPG" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,2)">';
+							html += '<img src="'+imgUrl+'resources/files/6/20170815_2.JPG" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(632,2)">';
 							html += '</td>';
 							html += '<td style="border-bottom:1px dotted #ddd;">';
 							html += '<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>';
@@ -1482,7 +1482,7 @@
 						}else if(data[0].userId.substring(0,1) == '1'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/1/3134.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(134,1)">';
+							html += '<img src="'+imgUrl+'resources/files/1/3134.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(134,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1497,7 +1497,7 @@
 						}else if(data[0].userId.substring(0,1) == '2'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/2/3224.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(224,1)">';
+							html += '<img src="'+imgUrl+'resources/files/2/3224.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(224,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1512,7 +1512,7 @@
 						}else if(data[0].userId.substring(0,1) == '3'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/3/3324.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(324,1)">';
+							html += '<img src="'+imgUrl+'resources/files/3/3324.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(324,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1527,7 +1527,7 @@
 						}else if(data[0].userId.substring(0,1) == '4'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/4/3406.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(406,1)">';
+							html += '<img src="'+imgUrl+'resources/files/4/3406.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(406,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1542,7 +1542,7 @@
 						}else if(data[0].userId.substring(0,1) == '5'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/5/3548.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(548,1)">';
+							html += '<img src="'+imgUrl+'resources/files/5/3548.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(548,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1557,7 +1557,7 @@
 						}else if(data[0].userId.substring(0,1) == '7'){
 							html += '<tr>';
 							html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
-							html += '<img src="resources/files/7/3717.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(717,1)">';
+							html += '<img src="'+imgUrl+'resources/files/7/3717.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg(717,1)">';
 							html += '</td>';
 							/* html += '<td style="width:61px;border-bottom:1px dotted #ddd;">';
 							html += '<img src="resources/files/6/3632new.jpg" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">';
@@ -1575,12 +1575,12 @@
 								html += '<tr>';
 								html += '<td style="width:61px;border-bottom:1px dotted #ddd;height:75px;">';
 								if(result.userImgOld != null && result.userImgNew == null){
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
+									html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
 									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">';
 								}else if(result.userImgOld != null && result.userImgNew != null){
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
+									html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',1);">'
 									html += '</td><td style="width:61px;border-bottom:1px dotted #ddd;">';
-									html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',2);">'
+									html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:60px;height:60px;margin-top:10px;border-radius:10px;" onclick="biggerImg('+result.userId+',2);">'
 									html += '</td><td style="border-bottom:1px dotted #ddd;">';
 								}else if(result.userImgOld == null && result.userImgNew == null){
 									html += '</td><td colspan="2" style="border-bottom:1px dotted #ddd;">'
@@ -1923,7 +1923,7 @@
 							html += '<input type="hidden" id="albumPath" value="'+result.userId.substring(0,1)+'"/><br/>';
 							html += '<table style="width:100%;border-top:2px solid #ddd;">';
 							html += '<tr>';
-							html += '<td style="width:25px;"><img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:30px;height:30px;border-radius:10px;"/></td>';
+							html += '<td style="width:25px;"><img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:30px;height:30px;border-radius:10px;"/></td>';
 							html += '<td style="width:45px;font-size:15px;font-weight:bold;">'+result.userName+'</td>';
 							html += '<td style="font-size:14px;">'+result.albumRegDate+'</td>';
 							html += '<td style="width:10%;"><a href="tel:'+result.userHp+'"><img src="resources/img/call.jpg" style="width:25px;height:25px;"/></a></td>';
@@ -1932,9 +1932,9 @@
 							$.each(result.fileList, function(i, photoList){
 								html += '<input type="hidden" id="fileName" value="'+photoList.fileName+'"/>';
 								if(photoList.fileName == 'birthday.PNG'){
-									html += '<img src="resources/files/'+photoList.filePath+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
+									html += '<img src="'+imgUrl+'resources/files/'+photoList.filePath+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
 								}else{
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+photoList.fileName+'" style="width:100%;height:180px;border-radius:10px;"/>';
 								}
 							});
 							html += '<h4 id="albumMsgH4">'+result.albumMsg+'</h4>';
@@ -1972,11 +1972,11 @@
 								html += '<tr>';
 								if(commentList.userImgNew != null && commentList.userImgOld != null){
 									html += '<td style="border-top:1px solid #ddd;width:50px;">';
-									html += '<img src="resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
+									html += '<img src="'+imgUrl+'resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
 									html += '</td>';
 								}else if(commentList.userImgNew == null && commentList.userImgOld != null){
 									html += '<td style="border-top:1px solid #ddd;width:50px;">';
-									html += '<img src="resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
+									html += '<img src="'+imgUrl+'resources/files/'+commentList.userId.substring(0,1)+'/'+commentList.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
 									html += '</td>';
 								}else if(commentList.userImgNew == null && commentList.userImgOld == null){
 									html += '<td style="border-top:1px solid #ddd;width:50px;">';
@@ -2092,12 +2092,12 @@
 							html += '<tr>';
 							html += '<td style="width:43px;border-bottom:1px dotted #ddd;height:42px;">';
 							if(result.userImgOld != null && result.userImgNew == null){
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="border-bottom:1px dotted #ddd;">'
 							}else if(result.userImgOld != null && result.userImgNew != null){
 								/* html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgOld+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="width:43px;border-bottom:1px dotted #ddd;">'; */
-								html += '<img src="resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
+								html += '<img src="'+imgUrl+'resources/files/'+result.userId.substring(0,1)+'/'+result.userImgNew+'" style="width:42px;height:42px;margin-top:10px;border-radius:10px;">'
 								html += '</td><td style="border-bottom:1px dotted #ddd;">';
 							}else if(result.userImgOld == null && result.userImgNew == null){
 								html += '</td><td style="border-bottom:1px dotted #ddd;">'
@@ -2191,7 +2191,7 @@
 					html += '<tr>';
 					if(data.userImgOld != null){
 						html += '<td colspan="2" style="text-align:center;">';
-						html += '<img src="resources/files/'+data.userId.substring(0,1)+'/'+data.userImgOld+'" style="width:70px;height70px;"/>';
+						html += '<img src="'+imgUrl+'resources/files/'+data.userId.substring(0,1)+'/'+data.userImgOld+'" style="width:70px;height70px;"/>';
 						html += '</td></tr><tr>';
 					}			
 					html += '<td colspan="2" style="font-size:15px;font-weight:bold;color:black;text-align:center;">'+data.userName+' 님의 폰번호를 등록해주세요!!</td>';
@@ -2261,7 +2261,7 @@
 	 	
 	 	function biggerImg(a,b){
 	 		if(b ==1){
-	 			var path = 'resources/files/'+a.toString().substring(0,1)+'/3'+a.toString()+'.jpg';
+	 			var path = imgUrl+'resources/files/'+a.toString().substring(0,1)+'/3'+a.toString()+'.jpg';
 	 			var txt = '<img src="'+path+'" style="width:100%;border-radius:20px;"/>'
 	 			infoPopUp2(txt);
 	 		}else if(b == 2){
@@ -2271,7 +2271,7 @@
 	 				type:'post',
 	 				dataType:'json',
 	 				success:function(data){
-	 					var path= 'resources/files/'+a.toString().substring(0,1)+'/'+data.userImgNew;
+	 					var path= imgUrl+'resources/files/'+a.toString().substring(0,1)+'/'+data.userImgNew;
 	 					var txt = '<img src="'+path+'" style="width:100%;border-radius:20px;"/>';
 	 					infoPopUp2(txt);
 	 				}
@@ -2425,7 +2425,7 @@
 				<table style="width:100%;">
 					<tr>
 						<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/1/3134.jpg" style="width:58px;height:58px;border-radius:10px;" onclick="biggerImg('134',1)">
+							<img src="http://sh86.kr/resources/files/1/3134.jpg" style="width:58px;height:58px;border-radius:10px;" onclick="biggerImg('134',1)">
 						</td>
 						<!-- <td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 							<img src="resources/files/6/3632new.jpg" style="width:58px;height:58px;border-radius:10px;">
@@ -2459,13 +2459,13 @@
 							<td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
 								<c:choose>
 									<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">
+										<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:60px;height:60px;margin-top:10px;border-radius:10px;">
 										</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 									</c:when>
 									<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:58px;height:58px;border-radius:10px;">
+										<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" onclick="biggerImg('${userList.userId}',1)" style="width:58px;height:58px;border-radius:10px;">
 										</td><td style="width:61px;height:76px;border-bottom:1px dotted #ddd;">
-										<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" onclick="biggerImg('${userList.userId}',2)" style="width:58px;height:58px;border-radius:10px;">
+										<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" onclick="biggerImg('${userList.userId}',2)" style="width:58px;height:58px;border-radius:10px;">
 										</td><td style="border-bottom:1px dotted #ddd;">
 									</c:when>
 									<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">
@@ -2817,10 +2817,10 @@
 								<tr>
 									<td>
 										<c:if test="${noticeList.userImgOld ne null}">
-											<img src="resources/files/${noticeList.coTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
+											<img src="http://sh86.kr/resources/files/${noticeList.coTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
 										</c:if>
 										<c:if test="${noticeList.userImgNew ne null}">
-											<img src="resources/files/${noticeList.coTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
+											<img src="http://sh86.kr/resources/files/${noticeList.coTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
 										</c:if>
 									</td>
 									<td colspan="2" style="text-align:right;">
@@ -2869,8 +2869,8 @@
 							<table style="width:100%">
 								<tr>
 									<td>
-										<img src="resources/files/6/3632.jpg" style="width:35px;height:35px;"/>
-										<img src="resources/files/6/3632new.jpg" style="width:35px;height:35px;"/>
+										<img src="http://sh86.kr/resources/files/6/3632.jpg" style="width:35px;height:35px;"/>
+										<img src="http://sh86.kr/resources/files/6/3632new.jpg" style="width:35px;height:35px;"/>
 									</td>
 									<td>
 										<c:if test="${cookie.cookieId.value eq 632 or cookie.cookieId.value eq 848 or cookie.cookieId.value eq 845}">
@@ -2927,10 +2927,10 @@
 	        					<tr>
 	        						<td>
 										<c:if test="${noticeList.userImgOld ne null}">
-											<img src="resources/files/${noticeList.noTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
+											<img src="http://sh86.kr/resources/files/${noticeList.noTargetClass}/${noticeList.userImgOld}" style="width:35px;height:35px;"/>
 										</c:if>
 										<c:if test="${noticeList.userImgNew ne null}">
-											<img src="resources/files/${noticeList.noTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
+											<img src="http://sh86.kr/resources/files/${noticeList.noTargetClass}/${noticeList.userImgNew}" style="width:35px;height:35px;"/>
 										</c:if>
 									</td>
 									<td colspan="2" style="text-align:right;">
@@ -3078,7 +3078,7 @@
 		    			<br/>
 		    			<table style="width:100%;border-top:2px solid #ddd;">
 		    				<tr>
-		    					<td style="width:25px;"><img src="resources/files/${albumList.userId.substring(0,1)}/${albumList.userImgOld}" style="width:30px;height:30px;border-radius:10px;"/></td>
+		    					<td style="width:25px;"><img src="http://sh86.kr/resources/files/${albumList.userId.substring(0,1)}/${albumList.userImgOld}" style="width:30px;height:30px;border-radius:10px;"/></td>
 		    					<td style="width:45px;font-size:15px;font-weight:bold;">${albumList.userName }</td>
 		    					<td style="font-size:14px;">${albumList.albumRegDate}</td>
 		    					<td style="width:10%;"><a href="tel:'${albumList.userHp}'"><img src="resources/img/call.jpg" style="width:25px;height:25px;"/></a></td>
@@ -3088,10 +3088,10 @@
 		    			<c:forEach var="photoList" items="${albumList.fileList }">
 		    				<input type="hidden" id="fileName" value="${photoList.fileName}"/>
 		    				<c:if test="${photoList.fileName eq 'birthday.PNG'}">
-		    					<img src="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+		    					<img src="http://sh86.kr/resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
 		    				</c:if>
 		    				<c:if test="${photoList.fileName ne 'birthday.PNG'}">
-		    					<img src="resources/files/${albumList.userId.substring(0,1)}/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+		    					<img src="http://sh86.kr/resources/files/${albumList.userId.substring(0,1)}/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
 		    				</c:if>
 		    			</c:forEach>
 		    			
@@ -3141,12 +3141,12 @@
 			    						<c:choose>
 			    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">
@@ -3576,7 +3576,7 @@
 			<div id="allUserViewDiv">
 				<table style="width:100%">
 					<tr>
-						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3848new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="http://sh86.kr/resources/files/admin/3848new.jpg" style="width:100px;height:100px;"/></td>
 						<td style="width:50%;border-bottom:1px dotted #ddd;">
 							<font style="font-weight:bold;font-size:16px;color:#030066;">회장 최기호(8반)</font><br/><br/>
 							<font style="font-weight:bold;font-size:14px;">떡보의 하루 대표</font><br/>
@@ -3588,7 +3588,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="resources/files/admin/3845new.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:30%;border-bottom:1px dotted #ddd;"><img src="http://sh86.kr/resources/files/admin/3845new.jpg" style="width:100px;height:100px;"/></td>
 						<td style="width:50%;border-bottom:1px dotted #ddd;">
 							<font style="font-weight:bold;font-size:16px;color:#030066;">총무 정윤승(8반)</font><br/><br/>
 							<font style="font-weight:bold;font-size:14px;">금강여행사 대표</font><br/>
@@ -3600,7 +3600,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="width:30%;border-bottom:3px solid #ddd;"><img src="resources/files/admin/omg.jpg" style="width:100px;height:100px;"/></td>
+						<td style="width:30%;border-bottom:3px solid #ddd;"><img src="http://sh86.kr/resources/files/admin/omg.jpg" style="width:100px;height:100px;"/></td>
 						<td style="width:50%;border-bottom:3px solid #ddd;">
 							<font style="font-weight:bold;font-size:16px;color:#030066;">재무 오민권(6반)</font><br/><br/>
 							<font style="font-weight:bold;font-size:14px;">(주)한국정보통계 대표</font><br/>
@@ -3656,18 +3656,18 @@
 		    				<td colspan="2" style="text-align:center;"><img src="resources/img/ready.jpg" id="filePreviewImg" style="width:40%;height:116px;"/></td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld ne null && user.userImgNew eq null}">
-		 					<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		 					<td style="width:50%;text-align:center;"><img src="http://sh86.kr/resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
 		    				<td style="width:50%;text-align:center;">
 		    					<img src="#" id="filePreviewImg2" style="display:none;width:80%;height:116px;"/>
 		    				</td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld ne null && user.userImgNew ne null}">
-		 					<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
-		    				<td style="width:50%;text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round" id="filePreviewImg3"/></td>
+		 					<td style="width:50%;text-align:center;"><img src="http://sh86.kr/resources/files/${user.userId.substring(0,1)}/${user.userImgOld}" class="img-round"/></td>
+		    				<td style="width:50%;text-align:center;"><img src="http://sh86.kr/resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round" id="filePreviewImg3"/></td>
 		 				</c:if>
 		 				<c:if test="${user.userImgOld eq null && user.userImgNew ne null}">
 		 					<%-- <td style="width:50%;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" class="img-round"/></td> --%>
-		    				<td colspan="2" style="text-align:center;"><img src="resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" id="filePreviewImg4" style="width:40%;height:116px;"/></td>
+		    				<td colspan="2" style="text-align:center;"><img src="http://sh86.kr/resources/files/${user.userId.substring(0,1)}/${user.userImgNew}" id="filePreviewImg4" style="width:40%;height:116px;"/></td>
 		 				</c:if>
 		    		</tr>
 		    	</table>

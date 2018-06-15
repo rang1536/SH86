@@ -195,7 +195,7 @@
 			    		</div>
 		    		</c:if>
 		    		
-		    		<img src="resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+		    		<img src="http://sh86.kr/resources/files/${photoList.filePath }/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
 	    			
 	    			<%-- <div style="font-size:14px;padding-top:10px;margin-bottom:10px;">
 	    				<img src="resources/img/good.jpg" style="width:14px;height:14px;"/>
@@ -218,12 +218,12 @@
 		    						<c:choose>
 		    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
 		    								<td style="border-top:1px solid #ddd;width:50px;">
-				    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+				    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 				    						</td>
 		    							</c:when>
 		    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld eq null}">
 		    								<td style="border-top:1px solid #ddd;width:50px;">
-				    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+				    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 				    						</td>
 		    							</c:when>
 		    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">

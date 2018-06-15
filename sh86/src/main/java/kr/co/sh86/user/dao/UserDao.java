@@ -482,4 +482,14 @@ public class UserDao {
 	public List<User> selectLoginInfo(Map<String, Object> params){
 		return sqlSession.selectList("UserDao.selectLoginInfo", params);
 	}
+	
+	//토큰저장
+	public int updateToken(User user) {
+		return sqlSession.update("UserDao.updateToken", user);
+	}
+	
+	//토큰조회
+	public List<String> selectTokenAll(){
+		return sqlSession.selectList("UserDao.selectTokenAll");
+	}
 }

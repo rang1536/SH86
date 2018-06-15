@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -573,9 +575,18 @@ public class UserRestController {
 	//로그인
 	@RequestMapping(value="/login", method= {RequestMethod.GET, RequestMethod.POST})
 	public Map<String, Object> loginCtrl(@RequestParam(value="userClass")String userClass,
-			@RequestParam(value="userName")String userName){	
+			@RequestParam(value="userName")String userName, 
+			HttpServletResponse response){	
 		System.out.println("외부접속 로그인!!");
 		Map<String, Object> map = userService.loginServ(userClass, userName);
+		
+		if(map.get("loginCheck").equals("login")) {
+			Cookie cookie = new Cookie("cookieId",((String) map.get("userId")));
+			cookie.setPath("/");
+			cookie.setMaxAge(60*60*24*30);
+			
+			response.addCookie(cookie);
+		}
 		return map;
 	}
 	
@@ -588,5 +599,51 @@ public class UserRestController {
 		
 		
 		return upload;
+	}
+	
+	//makeCookie
+	@RequestMapping(value="/makeCookie", method=RequestMethod.POST)
+	public Map<String, Object> makeCookieCtrl(@RequestParam(value="userId")String userId,
+			HttpServletResponse response, HttpServletRequest request){
+		Map<String, Object> map = new HashMap<String, Object>();
+		Cookie cookie = new Cookie("cookieId",((String) map.get("userId")));
+		cookie.setPath("/");
+		cookie.setMaxAge(60*60*24*30);
+		
+		response.addCookie(cookie);
+		
+		map.put("result", "success");
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(int i=0; i<cookies.length; i++) {
+				System.out.println("쿠키저장 확인 : "+cookies[i].getValue());
+			}
+		}
+		
+		
+		return map;
+	}
+	
+	//토큰저장
+	@RequestMapping(value="/tokenAdd", method=RequestMethod.POST)
+	public Map<String, Object> tokenAddCtrl(@RequestParam(value="userId")String userId,
+			@RequestParam(value="userToken")String token){
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("유저넘버 확인 : "+userId);
+		System.out.println("토큰 확인 : "+token);
+		
+		map = userService.modifyTokenServ(userId, token);
+		return map;
+	}
+	
+	//푸쉬발송
+	@RequestMapping(value="/pushMsg", method=RequestMethod.POST)
+	public Map<String, Object> pushMsgCtrl(@RequestParam(value="msg")String msg,
+			@RequestParam(value="badge", defaultValue="0")int badge){
+		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println("푸쉬메세지 확인 : "+msg);
+		System.out.println("뱃지카운트 : "+badge);
+		map = userService.sendPush(msg, badge);
+		return map;
 	}
 }

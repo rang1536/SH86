@@ -89,10 +89,10 @@
 	    				<c:if test="${userList.userId eq '632' }">
 		    				<tr>
 								<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-									<img src="resources/files/6/3632.jpg" style="width:40px;height:40px;border-radius:10px;">
+									<img src="http://sh86.kr/resources/files/6/3632.jpg" style="width:40px;height:40px;border-radius:10px;">
 								</td>
 								<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-									<img src="resources/files/6/3632new.jpg" style="width:40px;height:40px;border-radius:10px;">
+									<img src="http://sh86.kr/resources/files/6/3632new.jpg" style="width:40px;height:40px;border-radius:10px;">
 								</td>
 								<td style="border-bottom:1px dotted #ddd;">
 									<font style="color:#030066;font-weight:bold;">재무 오민권</font><br/>
@@ -109,10 +109,10 @@
 				<c:if test="${userList.get(0).userId.substring(0,1) eq '8'}">
 	    			<tr>
 						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/8/3848.jpg" style="width:40px;height:40px;border-radius:10px;">
+							<img src="http://sh86.kr/resources/files/8/3848.jpg" style="width:40px;height:40px;border-radius:10px;">
 						</td>
 						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/8/3848new.jpg" style="width:40px;height:40px;border-radius:10px;">
+							<img src="http://sh86.kr/resources/files/8/3848new.jpg" style="width:40px;height:40px;border-radius:10px;">
 						</td>
 						<td style="border-bottom:1px dotted #ddd;">
 							<font style="color:#030066;font-weight:bold;">회장 최기호</font><br/>
@@ -125,10 +125,10 @@
 					</tr>
 					<tr>
 						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/8/3845.jpg" style="width:40px;height:40px;border-radius:10px;">
+							<img src="http://sh86.kr/resources/files/8/3845.jpg" style="width:40px;height:40px;border-radius:10px;">
 						</td>
 						<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-							<img src="resources/files/8/3845new.jpg" style="width:40px;height:40px;border-radius:10px;">
+							<img src="http://sh86.kr/resources/files/8/3845new.jpg" style="width:40px;height:40px;border-radius:10px;">
 						</td>
 						<td style="border-bottom:1px dotted #ddd;">
 							<font style="color:#030066;font-weight:bold;">총무 정윤승</font><br/>
@@ -148,13 +148,13 @@
 									<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
 										<c:choose>
 											<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
 												</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 											</c:when>
 											<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
 												</td><td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
 												</td><td style="border-bottom:1px dotted #ddd;">
 											</c:when>
 											<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">
@@ -191,13 +191,13 @@
 									<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
 										<c:choose>
 											<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
 												</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 											</c:when>
 											<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
 												</td><td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-												<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
+												<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
 												</td><td style="border-bottom:1px dotted #ddd;">
 											</c:when>
 											<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">
@@ -232,13 +232,13 @@
 								<td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
 									<c:choose>
 										<c:when test="${userList.userImgOld ne null and userList.userImgNew eq null}">
-											<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
+											<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;margin-top:10px;border-radius:10px;">
 											</td><td colspan="2" style="border-bottom:1px dotted #ddd;">
 										</c:when>
 										<c:when test="${userList.userImgOld ne null and userList.userImgNew ne null}">
-											<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
+											<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgOld}" style="width:40px;height:40px;border-radius:10px;">
 											</td><td style="width:41px;height:45px;border-bottom:1px dotted #ddd;">
-											<img src="resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
+											<img src="http://sh86.kr/resources/files/${userList.userId.substring(0,1)}/${userList.userImgNew}" style="width:40px;height:40px;border-radius:10px;">
 											</td><td style="border-bottom:1px dotted #ddd;">
 										</c:when>
 										<c:when test="${userList.userImgOld eq null and userList.userImgNew eq null}">

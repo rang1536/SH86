@@ -135,11 +135,11 @@
 					html += '<tr>';
 					if(comment.userImgNew != null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="http://sh86.kr/resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="http://sh86.kr/resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld == null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
@@ -470,12 +470,12 @@
 			    						<c:choose>
 			    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">

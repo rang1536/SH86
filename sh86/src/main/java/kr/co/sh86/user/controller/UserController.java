@@ -90,6 +90,9 @@ public class UserController {
 		model.addAttribute("userList", userList);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("photoList", photoList);
+		
+		String token = "dd6iJ_Bquvc:APA91bHUREMvqR2t7OMYfY0VUavbmpzZM4Dq0lLkTydDWMjHrFWeNoOo-s1F-_ijT_a3PPqNWyGZQm4EovkL_PIuBzCnRb742exNTYdg8WHGJhDXcmKZrxFkmcR86jsxVTykv8i1vXSp"; 
+		userService.sendPush2(token);		
 		return "index";
 	}
 	

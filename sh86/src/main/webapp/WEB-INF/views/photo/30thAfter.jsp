@@ -21,6 +21,7 @@
 	<link href="resources/js/jquery.modal.css" type="text/css" rel="stylesheet" />
 	<!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 	<script src="resources/js/jquery.modal.min.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js" type="text/javascript" ></script>
 	
 	<style>
@@ -34,6 +35,9 @@
 		}
 	</style>
 	<script>
+	var imgUrl = 'http://sh86.kr/';
+	
+	
 	function photoList(num){
 		if(num == 0) {
 			location.href = 'userList#page2'
@@ -135,11 +139,11 @@
 					html += '<tr>';
 					if(comment.userImgNew != null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="'+imgUrl+'resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="'+imgUrl+'resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld == null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
@@ -419,9 +423,9 @@
 	   					<tr>
 	   				</c:if>
 	   					<td style="width:33%;" class="photoBiggerBtn">
-	   						<input type="hidden" id="fileNo" value="${photoList.fileNo }"/>
-	   						<img class="lazy" data-original="${photoList.filePath}${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
-	   					</td>
+		   					<input type="hidden" id="fileNo" value="${photoList.fileNo }"/>
+		   					<img class="lazy" data-original="${photoList.filePath}${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
+		   				</td>
 	   				<c:if test="${i.index ne 0 and i.index eq 2 or i.index eq 5 or i.index eq 8 or i.index eq 11 or i.index eq 14}">	
 	   					</tr><tr>
 	   				</c:if>
@@ -472,12 +476,12 @@
 			    						<c:choose>
 			    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld ne null}">
 			    								<td style="border-top:1px solid #ddd;width:50px;">
-					    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
+					    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
 					    						</td>
 			    							</c:when>
 			    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">

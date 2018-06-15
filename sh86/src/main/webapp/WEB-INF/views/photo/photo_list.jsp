@@ -159,7 +159,7 @@
 				var html = '<div style="width:100%" id="photoListDivPop">';
 				html += '<input type="hidden" id="fileNoPop" value="'+fileNo+'"/>';
 				html += '<input type="hidden" id="photoType" value="'+photoType+'"/>';
-				html += '<img src="resources/files/photolist/'+photo.fileName+'" style="width:100%;border-radius:20px;"/>';
+				html += '<img src="http://sh86.kr/resources/files/photolist/'+photo.fileName+'" style="width:100%;border-radius:20px;"/>';
 				html += '<table style="width:100%;"><tr><td style="width:16px;">'
 				html += '<img src="resources/img/like.png" style="width:14px;height:14px;"/>';
 				html += '</td><td style="width:60px;">좋아요 <font style="font-weight:bold;" id="goodCountTagPop">'+photo.photoGoods+'</font></td>';
@@ -175,11 +175,11 @@
 					html += '<tr>';
 					if(comment.userImgNew != null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="http://sh86.kr/resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgNew+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld != null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
-						html += '<img src="resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
+						html += '<img src="http://sh86.kr/resources/files/'+comment.userId.substring(0,1)+'/'+comment.userImgOld+'" style="width:40px;height:40px;border-radius:10px;" />';
 						html += '</td>';
 					}else if(comment.userImgNew == null && comment.userImgOld == null){
 						html += '<td style="border-top:1px solid #ddd;width:50px;">';
@@ -574,7 +574,7 @@
 		   				</c:if>
 		   					<td style="width:33%;" class="photoBiggerBtn">
 		   						<input type="hidden" id="fileNo" value="${photoList.fileNo }"/>
-		   						<img src="resources/files/photolist/${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
+		   						<img src="http://sh86.kr/resources/files/photolist/${photoList.fileName}" style="width:100%;height:90px;border-radius:10px;"/>
 		   					</td>
 		   				<c:if test="${i.index ne 0 and i.index eq 2 or i.index eq 5 or i.index eq 8 or i.index eq 11 or i.index eq 14}">	
 		   					</tr><tr>
@@ -597,7 +597,7 @@
 				    		
 				    		<%-- <div class="photoBiggerBtn">
 					    		<input type="hidden" id="fileNo" value="${photoList.fileNo }"/> --%>
-					    		<img src="resources/files/photolist/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
+					    		<img src="http://sh86.kr/resources/files/photolist/${photoList.fileName}" style="width:100%;border-radius:10px;"/>
 				    		<!-- </div> -->
 			    			<%-- <div style="font-size:14px;padding-top:10px;margin-bottom:10px;" class="goodCountPlusBtn">
 			    				<img src="resources/img/good.jpg" style="width:14px;height:14px;"/>
@@ -625,12 +625,12 @@
 				    						<c:choose>
 				    							<c:when test="${commentList.userImgNew ne null and commentList.userImgOld ne null}">
 				    								<td style="border-top:1px solid #ddd;width:50px;">
-						    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
+						    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgNew}" style="width:40px;height:40px;border-radius:10px;" />
 						    						</td>
 				    							</c:when>
 				    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld ne null}">
 				    								<td style="border-top:1px solid #ddd;width:50px;">
-						    							<img src="resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
+						    							<img src="http://sh86.kr/resources/files/${commentList.userId.substring(0,1)}/${commentList.userImgOld}" style="width:40px;height:40px;border-radius:10px;" />
 						    						</td>
 				    							</c:when>
 				    							<c:when test="${commentList.userImgNew eq null and commentList.userImgOld eq null}">

@@ -1335,4 +1335,18 @@
 	AND user_name = #{userName}
 </select>
 
+<!-- 토큰저장 -->
+<update id="updateToken" parameterType="kr.co.sh86.user.domain.User">
+	UPDATE SH86.SH_USER
+	SET token = #{token}
+	WHERE user_id = #{userId}
+</update>
+
+<!-- 토큰조회 -->
+<select id="selectTokenAll" resultType="String">
+	SELECT token
+	FROM SH86.SH_USER
+	WHERE token is not null
+</select>
+
 </mapper>

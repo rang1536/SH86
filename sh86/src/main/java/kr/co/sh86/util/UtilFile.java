@@ -59,7 +59,8 @@ public class UtilFile {
 	//단일파일 업로드
 	public UploadFileDTO singleUploadFile(MultipartHttpServletRequest request, String classNum, String type){
 		//호스팅
-		/*String rootPath = "/home/hosting_users/kis0488/tomcat/webapps/ROOT/resources/files/"+classNum+"/";*/
+		/*String rootPath = "/home/hosting_users/kis0488/tomcat/webapps/resources/files/"+classNum+"/";*/
+		/*String rootPath = "http:///sh86.kr/resources/files/"+classNum+"/";*/
 		
 		//로컬
 		String rootPath = "C:\\Users\\206\\git\\SH86\\sh86\\src\\main\\webapp\\resources\\files\\"+classNum+"\\";
@@ -103,7 +104,15 @@ public class UtilFile {
 			
 			BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(imgBytes)); //새로 생성해줘야 bufferedImage가 널이 아니다.
 			BufferedImage bi = rotateImageForMobile(bis, orientation);
-			makeJPG(bi, new File(rootPath+multipartFile.getOriginalFilename().replace("-", "")));
+			
+			//분홍배경 색상 원색상으로 보정
+			int w = bi.getWidth();
+			int h = bi.getHeight();
+			BufferedImage biNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+			int[] rgb = bi.getRGB(0, 0, w, h, null, 0, w);
+			biNew.setRGB(0, 0, w, h, rgb, 0, w);
+			
+			makeJPG(biNew, new File(rootPath+multipartFile.getOriginalFilename().replace("-", "")));
 			/*ByteArrayInputStream byteIS = new ByteArrayInputStream(imgBytes);*/
 			
 		} catch (IOException e1) {
